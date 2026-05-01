@@ -1,19 +1,11 @@
 const words = ['Web Architecture', 'עיצוב אתרים', 'Branding', 'מיתוג', 'UI / UX', 'Visual Identity', 'Design Systems', 'חוויית משתמש']
 
 function MarqueeTrack({ reverse = false }: { reverse?: boolean }) {
-  // 4x duplication guarantees seamless loop at any screen width
   const items = [...words, ...words, ...words, ...words]
   return (
-    <div
-      style={{
-        display: 'flex',
-        width: 'max-content',
-        animation: `marquee${reverse ? 'Reverse' : ''} 32s linear infinite`,
-        willChange: 'transform',
-      }}
-    >
+    <div className={reverse ? 'marquee-track-reverse' : 'marquee-track'}>
       {items.map((item, i) => (
-        <span key={i} style={{ display: 'flex', alignItems: 'center' }}>
+        <span key={i} style={{ display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
           <span
             className="font-heading font-bold uppercase whitespace-nowrap"
             style={{
@@ -30,7 +22,7 @@ function MarqueeTrack({ reverse = false }: { reverse?: boolean }) {
           >
             {item}
           </span>
-          <span style={{ color: 'var(--orange)', opacity: i % 3 === 0 ? 0.8 : 0.3, fontSize: '0.4rem' }}>✦</span>
+          <span style={{ color: 'var(--orange)', opacity: i % 3 === 0 ? 0.8 : 0.3, fontSize: '0.4rem', flexShrink: 0 }}>✦</span>
         </span>
       ))}
     </div>
@@ -48,17 +40,8 @@ export default function Marquee() {
         background: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,92,26,0.018) 100%)',
       }}
     >
-      {/* Left fade mask */}
-      <div
-        className="pointer-events-none absolute left-0 top-0 bottom-0 z-10"
-        style={{ width: 100, background: 'linear-gradient(to right, var(--bg), transparent)' }}
-      />
-      {/* Right fade mask */}
-      <div
-        className="pointer-events-none absolute right-0 top-0 bottom-0 z-10"
-        style={{ width: 100, background: 'linear-gradient(to left, var(--bg), transparent)' }}
-      />
-
+      <div className="pointer-events-none absolute left-0 top-0 bottom-0 z-10" style={{ width: 100, background: 'linear-gradient(to right, var(--bg), transparent)' }} />
+      <div className="pointer-events-none absolute right-0 top-0 bottom-0 z-10" style={{ width: 100, background: 'linear-gradient(to left, var(--bg), transparent)' }} />
       <MarqueeTrack />
     </div>
   )

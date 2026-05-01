@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xzzbnwqr' // החלף בקישור שלך מ-formspree.io
+
 const navLinks = [
   { label: 'אודות', href: '#about' },
   { label: 'עבודות', href: '#portfolio' },
@@ -68,7 +70,7 @@ export default function Footer() {
               color: '#fff',
               margin: 0,
             }}>
-              בואו נהפוך
+              נהפוך יחד
               <br />
               <em style={{
                 fontStyle: 'italic',
@@ -90,7 +92,7 @@ export default function Footer() {
               color: 'rgba(255,255,255,0.7)',
               maxWidth: 320,
             }}>
-              כל פרויקט מתחיל בשיחה אחת. תשאיר פרטים ואחזור אליך תוך 24 שעות.
+              כל פרויקט מתחיל בשיחה אחת. שלח/י פרטים ואחזור אליך תוך 24 שעות.
             </p>
 
             {/* Mini email form */}
@@ -117,7 +119,14 @@ export default function Footer() {
                     onBlur={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.15)')}
                   />
                   <button
-                    onClick={() => email && setSent(true)}
+                    onClick={() => {
+                      if (!email) return
+                      fetch(FORMSPREE_ENDPOINT, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                        body: JSON.stringify({ email }),
+                      }).finally(() => setSent(true))
+                    }}
                     style={{
                       background: '#fff',
                       color: 'var(--orange)',

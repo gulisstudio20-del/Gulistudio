@@ -74,8 +74,7 @@ export default function Header() {
           className="font-heading font-bold uppercase flex items-center gap-1.5"
           style={{ color: 'var(--text)', fontSize: '1rem', letterSpacing: '0.06em', textDecoration: 'none' }}
         >
-          <span style={{ color: 'var(--orange)' }}>GULI</span>
-          STUDIO
+          <span style={{ color: 'var(--orange)' }}>GULI</span>STUDIO
         </a>
 
         {/* Desktop Nav */}
@@ -123,7 +122,7 @@ export default function Header() {
             e.currentTarget.style.color = 'var(--orange)'
           }}
         >
-          בואי נדבר
+          נדבר
         </a>
 
         {/* Mobile hamburger */}
@@ -199,7 +198,7 @@ export default function Header() {
                 className="mt-4 text-center font-heading font-semibold text-sm tracking-[0.15em] uppercase py-4 rounded-full"
                 style={{ background: 'var(--orange)', color: '#fff' }}
               >
-                בואי נבנה משהו יחד
+                נבנה משהו יחד
               </motion.a>
             </motion.div>
           </motion.div>

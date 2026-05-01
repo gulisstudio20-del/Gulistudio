@@ -10,7 +10,7 @@ const stats = [
 const values = [
   { icon: '✦', title: 'דיוק', desc: 'כל פרט חשוב. כל פיקסל במקום.' },
   { icon: '◈', title: 'מהירות', desc: 'קוד נקי = אתר מהיר = לקוחות שנשארים.' },
-  { icon: '◎', title: 'שיתוף פעולה', desc: 'אתה מכיר את העסק שלך, אני מכירה את הדיגיטל.' },
+  { icon: '◎', title: 'שיתוף פעולה', desc: 'את/ה מכיר/ה את העסק שלך, אני מכיר/ה את הדיגיטל.' },
 ]
 
 export default function About() {
@@ -240,7 +240,7 @@ export default function About() {
                 e.currentTarget.style.gap = '8px'
               }}
             >
-              בואו נדבר
+              נדבר
               <span>↗</span>
             </a>
           </div>
