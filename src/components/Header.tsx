@@ -71,10 +71,10 @@ export default function Header() {
         {/* Logo */}
         <a
           href="#"
-          className="font-heading font-bold uppercase flex items-center gap-1.5"
+          className="font-heading font-bold uppercase"
           style={{ color: 'var(--text)', fontSize: '1rem', letterSpacing: '0.06em', textDecoration: 'none' }}
         >
-          <span style={{ color: 'var(--orange)' }}>GULI</span>STUDIO
+          GULI <span style={{ color: 'var(--orange)' }}>STUDIO</span>
         </a>
 
         {/* Desktop Nav */}
@@ -103,27 +103,8 @@ export default function Header() {
           </ul>
         </nav>
 
-        {/* Desktop CTA */}
-        <a
-          href="#contact"
-          className="hidden md:inline-flex items-center gap-2 font-heading font-semibold text-xs tracking-[0.15em] uppercase transition-all duration-300"
-          style={{
-            color: 'var(--orange)',
-            border: '1px solid rgba(255,92,26,0.3)',
-            padding: '8px 18px',
-            borderRadius: 999,
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.background = 'var(--orange)'
-            e.currentTarget.style.color = '#fff'
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.background = 'transparent'
-            e.currentTarget.style.color = 'var(--orange)'
-          }}
-        >
-          נדבר
-        </a>
+        {/* spacer for layout balance */}
+        <div className="hidden md:block w-[80px]" />
 
         {/* Mobile hamburger */}
         <button

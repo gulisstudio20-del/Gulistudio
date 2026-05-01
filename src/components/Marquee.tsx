@@ -3,7 +3,15 @@ const words = ['Web Architecture', 'עיצוב אתרים', 'Branding', 'מית�
 function MarqueeTrack({ reverse = false }: { reverse?: boolean }) {
   const items = [...words, ...words, ...words, ...words]
   return (
-    <div className={reverse ? 'marquee-track-reverse' : 'marquee-track'}>
+    <div
+      style={{
+        display: 'flex',
+        width: 'max-content',
+        direction: 'ltr',
+        animation: `${reverse ? 'marqueeReverse' : 'marquee'} 32s linear infinite`,
+        willChange: 'transform',
+      }}
+    >
       {items.map((item, i) => (
         <span key={i} style={{ display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
           <span
@@ -12,11 +20,7 @@ function MarqueeTrack({ reverse = false }: { reverse?: boolean }) {
               fontSize: 'clamp(1.3rem, 2.2vw, 1.8rem)',
               letterSpacing: '0.06em',
               padding: '0 2rem',
-              color: i % 3 === 0
-                ? 'var(--orange)'
-                : i % 3 === 1
-                ? 'transparent'
-                : 'rgba(0,0,0,0.08)',
+              color: i % 3 === 0 ? 'var(--orange)' : i % 3 === 1 ? 'transparent' : 'rgba(0,0,0,0.08)',
               WebkitTextStroke: i % 3 === 1 ? '1px rgba(0,0,0,0.18)' : 'none',
             }}
           >
@@ -40,8 +44,8 @@ export default function Marquee() {
         background: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,92,26,0.018) 100%)',
       }}
     >
-      <div className="pointer-events-none absolute left-0 top-0 bottom-0 z-10" style={{ width: 100, background: 'linear-gradient(to right, var(--bg), transparent)' }} />
-      <div className="pointer-events-none absolute right-0 top-0 bottom-0 z-10" style={{ width: 100, background: 'linear-gradient(to left, var(--bg), transparent)' }} />
+      <div className="pointer-events-none absolute left-0 top-0 bottom-0 z-10" style={{ width: 120, background: 'linear-gradient(to right, var(--bg), transparent)' }} />
+      <div className="pointer-events-none absolute right-0 top-0 bottom-0 z-10" style={{ width: 120, background: 'linear-gradient(to left, var(--bg), transparent)' }} />
       <MarqueeTrack />
     </div>
   )

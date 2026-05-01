@@ -506,7 +506,7 @@ export default function Portfolio() {
               transform: 'translateY(20px)',
             }}
           >
-            Made by Guli
+            Made by Avigail
           </p>
           <h2
             data-reveal
@@ -529,14 +529,11 @@ export default function Portfolio() {
             color: 'var(--text-lt)',
             opacity: 0,
             transform: 'translateY(20px)',
-            maxWidth: '20ch',
             textAlign: 'right',
             lineHeight: 1.6,
           }}
         >
-          לחצו על פרויקט
-          <br />
-          לפרטים נוספים
+          לחצו על פרויקט לפרטים נוספים
         </p>
       </div>
 
@@ -562,38 +559,39 @@ export default function Portfolio() {
       {/* CTA */}
       <div
         data-reveal
-        className="flex justify-center mt-14 transition-all duration-700"
+        className="flex justify-center mt-16 transition-all duration-700"
         style={{ opacity: 0, transform: 'translateY(20px)' }}
       >
         <a
           href="#contact"
+          className="btn-shimmer"
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: 10,
-            fontSize: '0.85rem',
+            gap: 12,
+            fontSize: '0.8rem',
             fontWeight: 700,
-            letterSpacing: '0.16em',
+            letterSpacing: '0.18em',
             textTransform: 'uppercase',
-            color: 'var(--text-lt)',
-            borderBottom: '1px solid var(--border)',
-            paddingBottom: 4,
-            transition: 'color 0.25s, border-color 0.25s, gap 0.25s',
+            color: '#fff',
+            background: 'var(--orange)',
+            padding: '18px 44px',
+            borderRadius: 999,
             textDecoration: 'none',
+            boxShadow: '0 8px 32px rgba(255,92,26,0.35), 0 2px 8px rgba(255,92,26,0.2)',
+            transition: 'transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s',
           }}
           onMouseEnter={e => {
-            e.currentTarget.style.color = 'var(--orange)'
-            e.currentTarget.style.borderColor = 'var(--orange)'
-            e.currentTarget.style.gap = '16px'
+            e.currentTarget.style.transform = 'translateY(-3px) scale(1.03)'
+            e.currentTarget.style.boxShadow = '0 16px 48px rgba(255,92,26,0.45), 0 4px 12px rgba(255,92,26,0.25)'
           }}
           onMouseLeave={e => {
-            e.currentTarget.style.color = 'var(--text-lt)'
-            e.currentTarget.style.borderColor = 'var(--border)'
-            e.currentTarget.style.gap = '10px'
+            e.currentTarget.style.transform = 'translateY(0) scale(1)'
+            e.currentTarget.style.boxShadow = '0 8px 32px rgba(255,92,26,0.35), 0 2px 8px rgba(255,92,26,0.2)'
           }}
         >
-          רוצים אתר כזה?
-          <span>בואו נדבר ↗</span>
+          <span>רוצים אתר כזה? נדבר</span>
+          <span style={{ fontSize: '1.1rem', lineHeight: 1 }}>↗</span>
         </a>
       </div>
     </section>
