@@ -69,7 +69,7 @@ function ProjectRow({
         onClick={onToggle}
         aria-expanded={isOpen}
         aria-controls={`panel-${project.id}`}
-        className="w-full group"
+        className="w-full group project-row-trigger"
         style={{
           display: 'grid',
           gridTemplateColumns: '52px 1fr auto',
@@ -81,7 +81,6 @@ function ProjectRow({
           cursor: 'pointer',
           textAlign: 'right',
           direction: 'rtl',
-          transition: 'padding 0.2s',
         }}
       >
         {/* Number */}
@@ -102,12 +101,12 @@ function ProjectRow({
         <div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap' }}>
             <span
+              className="project-row-title"
               style={{
                 fontWeight: 800,
                 fontSize: 'clamp(1.15rem, 2.2vw, 1.75rem)',
                 letterSpacing: '-0.02em',
                 color: isOpen ? 'var(--orange)' : 'var(--text)',
-                transition: 'color 0.3s',
                 lineHeight: 1.2,
               }}
             >
@@ -171,8 +170,8 @@ function ProjectRow({
             stroke={isOpen ? '#fff' : 'var(--text-mid)'}
             strokeWidth="2"
             strokeLinecap="round"
-            animate={{ rotate: isOpen ? 45 : 0 }}
-            transition={{ duration: 0.35, ease }}
+            animate={{ rotate: isOpen ? 225 : 0 }}
+            transition={{ duration: 0.55, ease }}
           >
             <path d="M12 5v14M5 12h14" />
           </motion.svg>
@@ -259,7 +258,13 @@ function ProjectRow({
               </div>
 
               {/* ── Content: desc + what + palette ── */}
-              <div
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  hidden: {},
+                  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.15 } },
+                }}
                 style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
@@ -267,7 +272,11 @@ function ProjectRow({
                 }}
               >
                 {/* Description card */}
-                <div
+                <motion.div
+                  variants={{
+                    hidden: { opacity: 0, y: 18 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease } },
+                  }}
                   style={{
                     background: 'linear-gradient(160deg, #fff 0%, rgba(0,0,0,0.015) 100%)',
                     border: '1px solid var(--border)',
@@ -296,10 +305,14 @@ function ProjectRow({
                   >
                     {project.desc}
                   </p>
-                </div>
+                </motion.div>
 
                 {/* What I did card */}
-                <div
+                <motion.div
+                  variants={{
+                    hidden: { opacity: 0, y: 18 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease } },
+                  }}
                   style={{
                     background: 'linear-gradient(160deg, #fff 0%, rgba(0,0,0,0.015) 100%)',
                     border: '1px solid var(--border)',
@@ -345,10 +358,14 @@ function ProjectRow({
                       </li>
                     ))}
                   </ul>
-                </div>
+                </motion.div>
 
                 {/* Palette card */}
-                <div
+                <motion.div
+                  variants={{
+                    hidden: { opacity: 0, y: 18 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease } },
+                  }}
                   style={{
                     background: 'linear-gradient(160deg, #fff 0%, rgba(0,0,0,0.015) 100%)',
                     border: '1px solid var(--border)',
@@ -405,8 +422,8 @@ function ProjectRow({
                       </span>
                     ))}
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
 
               {/* ── Live site link ── */}
               {project.url && (

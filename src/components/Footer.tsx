@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xzzbnwqr' // החלף בקישור שלך מ-formspree.io
 
@@ -12,12 +12,33 @@ const navLinks = [
 export default function Footer() {
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
+  const footerRef = useRef<HTMLElement>(null)
+  const watermarkRef = useRef<HTMLDivElement>(null)
+
+  // Subtle parallax on the giant GS watermark — moves -20px once footer enters viewport
+  useEffect(() => {
+    const onScroll = () => {
+      const el = footerRef.current
+      const wm = watermarkRef.current
+      if (!el || !wm) return
+      const rect = el.getBoundingClientRect()
+      const vh = window.innerHeight
+      // entry progress: 0 when footer top below viewport bottom, 1 once footer fully scrolled in
+      const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh + rect.height * 0.6)))
+      const offset = -20 * progress
+      wm.style.transform = `translateY(calc(-50% + ${offset}px))`
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   return (
-    <footer style={{ background: 'var(--orange)', color: '#fff', position: 'relative', overflow: 'hidden' }}>
+    <footer ref={footerRef} style={{ background: 'var(--orange)', color: '#fff', position: 'relative', overflow: 'hidden' }}>
 
       {/* Giant watermark number */}
       <div
+        ref={watermarkRef}
         aria-hidden
         style={{
           position: 'absolute',
@@ -33,6 +54,8 @@ export default function Footer() {
           userSelect: 'none',
           pointerEvents: 'none',
           zIndex: 0,
+          willChange: 'transform',
+          transition: 'transform 0.6s cubic-bezier(0.16,1,0.3,1)',
         }}
       >
         GS
@@ -119,6 +142,7 @@ export default function Footer() {
                     onBlur={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.15)')}
                   />
                   <button
+                    className="btn-shimmer"
                     onClick={() => {
                       if (!email) return
                       fetch(FORMSPREE_ENDPOINT, {
@@ -138,11 +162,17 @@ export default function Footer() {
                       textTransform: 'uppercase',
                       cursor: 'pointer',
                       borderRadius: '0 2px 2px 0',
-                      transition: 'opacity 0.2s',
+                      transition: 'transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s',
                       whiteSpace: 'nowrap',
                     }}
-                    onMouseEnter={e => (e.currentTarget.style.opacity = '0.88')}
-                    onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.transform = 'translateY(-1px)'
+                      e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.18)'
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.transform = 'translateY(0)'
+                      e.currentTarget.style.boxShadow = 'none'
+                    }}
                   >
                     שלח ←
                   </button>
@@ -238,8 +268,9 @@ export default function Footer() {
             ))}
           </nav>
 
-          <p style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.05em' }}>
-            © {new Date().getFullYear()} GULISTUDIO
+          <p style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.05em', display: 'flex', flexDirection: 'column', gap: 2, textAlign: 'right' }}>
+            <span>© {new Date().getFullYear()} GULISTUDIO</span>
+            <span style={{ color: 'rgba(255,255,255,0.18)' }}>Built with care in Israel 🇮🇱</span>
           </p>
         </div>
       </div>

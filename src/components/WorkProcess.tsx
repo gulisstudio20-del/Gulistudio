@@ -124,14 +124,13 @@ export default function WorkProcess() {
                   paddingTop: 8,
                   paddingBottom: isLast ? 0 : 56,
                 }}>
-                  <span style={{
+                  <span className="process-num" style={{
                     fontSize: 'clamp(3.5rem, 6vw, 5rem)',
                     fontWeight: 900,
                     fontFamily: "'Inter', sans-serif",
                     letterSpacing: '-0.05em',
                     lineHeight: 1,
                     color: isActive ? 'var(--orange)' : 'rgba(0,0,0,0.07)',
-                    transition: 'color 0.35s ease',
                     userSelect: 'none',
                   }}>
                     {step.number}
@@ -141,19 +140,21 @@ export default function WorkProcess() {
                 {/* Divider line column */}
                 <div style={{ position: 'relative' }}>
                   {/* Dot */}
-                  <div style={{
-                    position: 'absolute',
-                    top: 14,
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: isActive ? 10 : 7,
-                    height: isActive ? 10 : 7,
-                    borderRadius: '50%',
-                    background: isActive ? 'var(--orange)' : 'rgba(0,0,0,0.2)',
-                    transition: 'all 0.3s ease',
-                    zIndex: 2,
-                    boxShadow: isActive ? '0 0 0 4px rgba(255,92,26,0.15)' : 'none',
-                  }} />
+                  <div
+                    className={isActive ? 'dot-pulse' : ''}
+                    style={{
+                      position: 'absolute',
+                      top: 14,
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      width: isActive ? 10 : 7,
+                      height: isActive ? 10 : 7,
+                      borderRadius: '50%',
+                      background: isActive ? 'var(--orange)' : 'rgba(0,0,0,0.2)',
+                      transition: 'all 0.4s cubic-bezier(0.16,1,0.3,1)',
+                      zIndex: 2,
+                    }}
+                  />
                   {/* Line */}
                   {!isLast && (
                     <div style={{
@@ -173,7 +174,24 @@ export default function WorkProcess() {
                   paddingTop: 6,
                   paddingBottom: isLast ? 0 : 56,
                   borderBottom: isLast ? 'none' : '1px solid rgba(0,0,0,0.05)',
+                  position: 'relative',
                 }}>
+                  {/* Horizontal accent line — draws in from right to left when section enters */}
+                  <span
+                    aria-hidden
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      right: 0,
+                      width: 56,
+                      height: 1,
+                      background: 'var(--orange)',
+                      transformOrigin: 'right center',
+                      transform: sectionVisible ? 'scaleX(1)' : 'scaleX(0)',
+                      transition: `transform 0.7s cubic-bezier(0.16,1,0.3,1) ${delay + 0.15}s`,
+                      opacity: 0.7,
+                    }}
+                  />
                   <h3 style={{
                     fontSize: '1.25rem',
                     fontWeight: 700,

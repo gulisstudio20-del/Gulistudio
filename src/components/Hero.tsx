@@ -56,7 +56,7 @@ export default function Hero() {
       {/* Watermark letter */}
       <div
         aria-hidden
-        className="pointer-events-none absolute select-none"
+        className="pointer-events-none absolute select-none float-slow"
         style={{
           bottom: '-8%',
           right: '-3%',
@@ -88,17 +88,27 @@ export default function Hero() {
           className="flex flex-col items-center"
         >
           {/* Availability badge */}
-          <motion.div variants={item} className="flex items-center gap-2.5 justify-center mb-8">
+          <motion.div variants={item} className="flex items-center justify-center mb-8">
             <span
-              className="text-xs tracking-[0.22em] uppercase"
-              style={{ color: 'var(--text-lt)', fontWeight: 500 }}
+              className="flex items-center gap-2.5"
+              style={{
+                background: 'rgba(255,92,26,0.07)',
+                border: '1px solid rgba(255,92,26,0.18)',
+                borderRadius: 999,
+                padding: '6px 16px 6px 12px',
+              }}
             >
-              פתוחה לפרויקטים חדשים
+              <span
+                className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                style={{ background: 'var(--orange)', animation: 'pulse 2s infinite' }}
+              />
+              <span
+                className="text-xs tracking-[0.22em] uppercase"
+                style={{ color: 'var(--orange)', fontWeight: 600 }}
+              >
+                פתוחה לפרויקטים חדשים
+              </span>
             </span>
-            <span
-              className="w-2 h-2 rounded-full flex-shrink-0"
-              style={{ background: 'var(--orange)', animation: 'pulse 2s infinite' }}
-            />
           </motion.div>
 
           {/* H1 */}
@@ -130,6 +140,7 @@ export default function Hero() {
           {/* Divider */}
           <motion.div
             variants={item}
+            className="divider-pulse"
             style={{
               width: 48,
               height: 2,
@@ -162,9 +173,10 @@ export default function Hero() {
           <motion.div variants={item} className="flex gap-4 mt-10 justify-center flex-wrap">
             <motion.a
               href="#contact"
-              whileHover={{ y: -3, scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="font-heading font-semibold text-sm tracking-[0.18em] uppercase"
+              whileHover={{ y: -4, scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 18, mass: 0.6 }}
+              className="font-heading font-semibold text-sm tracking-[0.18em] uppercase btn-shimmer"
               style={{
                 background: 'var(--orange)',
                 color: '#fff',
@@ -180,8 +192,9 @@ export default function Hero() {
             </motion.a>
             <motion.a
               href="#portfolio"
-              whileHover={{ y: -3, scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
+              whileHover={{ y: -4, scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 18, mass: 0.6 }}
               className="font-heading font-semibold text-sm tracking-[0.18em] uppercase"
               style={{
                 background: 'rgba(0,0,0,0.04)',
@@ -210,21 +223,36 @@ export default function Hero() {
       >
         <a
           href="#about"
-          className="flex flex-col items-center gap-2 group"
+          className="flex flex-col items-center gap-3 group"
           style={{ color: 'var(--text-lt)' }}
         >
-          <span style={{ fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase' }}>גלול למטה</span>
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            style={{ animation: 'bounceDown 1.8s ease-in-out infinite' }}
+          <span style={{ fontSize: '0.58rem', letterSpacing: '0.32em', textTransform: 'uppercase', fontWeight: 500 }}>גלול</span>
+          {/* Refined mouse / line scroll indicator */}
+          <span
+            aria-hidden
+            style={{
+              position: 'relative',
+              display: 'inline-block',
+              width: 1,
+              height: 36,
+              background: 'rgba(0,0,0,0.12)',
+              overflow: 'hidden',
+              borderRadius: 1,
+            }}
           >
-            <path d="M12 5v14M5 12l7 7 7-7" />
-          </svg>
+            <span
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: 14,
+                background: 'var(--orange)',
+                borderRadius: 1,
+                animation: 'scroll-trail 1.8s cubic-bezier(0.65,0,0.35,1) infinite',
+              }}
+            />
+          </span>
         </a>
       </motion.div>
     </section>

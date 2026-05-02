@@ -1,11 +1,42 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './About.css'
 
-const stats = [
-  { num: '5', label: 'פרויקטים' },
-  { num: '100%', label: 'מותאם אישית' },
+const stats: Array<{ num: string; label: string; target?: number; suffix?: string }> = [
+  { num: '5', label: 'פרויקטים', target: 5 },
+  { num: '100%', label: 'מותאם אישית', target: 100, suffix: '%' },
   { num: '✦', label: 'Web Architecture' },
 ]
+
+// Counts up to `target` once, when triggered (`run` flips to true).
+function CountUp({ target, suffix = '', duration = 1500 }: { target: number; suffix?: string; duration?: number }) {
+  const [value, setValue] = useState(0)
+  const ref = useRef<HTMLSpanElement>(null)
+  const startedRef = useRef(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !startedRef.current) {
+        startedRef.current = true
+        const start = performance.now()
+        const tick = (now: number) => {
+          const t = Math.min(1, (now - start) / duration)
+          // ease out cubic
+          const eased = 1 - Math.pow(1 - t, 3)
+          setValue(Math.round(eased * target))
+          if (t < 1) requestAnimationFrame(tick)
+        }
+        requestAnimationFrame(tick)
+        obs.disconnect()
+      }
+    }, { threshold: 0.5 })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [target, duration])
+
+  return <span ref={ref}>{value}{suffix}</span>
+}
 
 const values = [
   { icon: '✦', title: 'דיוק', desc: 'כל פרט חשוב. כל פיקסל במקום.' },
@@ -15,6 +46,30 @@ const values = [
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null)
+  const tiltRef = useRef<HTMLDivElement>(null)
+
+  // Subtle 3D tilt on the main visual card
+  useEffect(() => {
+    const el = tiltRef.current
+    if (!el) return
+    const onMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect()
+      const x = (e.clientX - rect.left) / rect.width   // 0..1
+      const y = (e.clientY - rect.top) / rect.height   // 0..1
+      const rotY = (x - 0.5) * 8   // max 4deg either side
+      const rotX = (0.5 - y) * 8
+      el.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg)`
+    }
+    const onLeave = () => {
+      el.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)'
+    }
+    el.addEventListener('mousemove', onMove)
+    el.addEventListener('mouseleave', onLeave)
+    return () => {
+      el.removeEventListener('mousemove', onMove)
+      el.removeEventListener('mouseleave', onLeave)
+    }
+  }, [])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -50,6 +105,7 @@ export default function About() {
         >
           {/* Main card */}
           <div
+            ref={tiltRef}
             className="relative w-full"
             style={{
               aspectRatio: '3/3.6',
@@ -58,6 +114,9 @@ export default function About() {
               overflow: 'hidden',
               border: '1px solid rgba(0,0,0,0.06)',
               boxShadow: '0 20px 60px rgba(0,0,0,0.09), inset 0 1px 0 rgba(255,255,255,0.85)',
+              transition: 'transform 0.4s cubic-bezier(0.16,1,0.3,1)',
+              transformStyle: 'preserve-3d',
+              willChange: 'transform',
             }}
           >
             {/* Corner accents */}
@@ -113,8 +172,8 @@ export default function About() {
             >
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                 {values.map(v => (
-                  <div key={v.title} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                    <span style={{ color: 'var(--orange)', fontSize: '0.75rem', marginTop: 3, flexShrink: 0 }}>{v.icon}</span>
+                  <div key={v.title} className="value-item" style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                    <span className="value-icon" style={{ color: 'var(--orange)', fontSize: '0.75rem', marginTop: 3, flexShrink: 0 }}>{v.icon}</span>
                     <div>
                       <span style={{ fontWeight: 700, fontSize: '0.82rem', color: 'var(--text)', marginRight: 6 }}>{v.title}</span>
                       <span style={{ fontSize: '0.78rem', color: 'var(--text-lt)' }}>{v.desc}</span>
@@ -198,7 +257,9 @@ export default function About() {
                     color: 'var(--orange)',
                   }}
                 >
-                  {s.num}
+                  {s.target !== undefined
+                    ? <CountUp target={s.target} suffix={s.suffix ?? ''} />
+                    : s.num}
                 </span>
                 <span
                   style={{
