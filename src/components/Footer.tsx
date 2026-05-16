@@ -175,32 +175,32 @@ export default function Footer() {
         zIndex: 0,
       }}>GS</div>
 
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: 1320, margin: '0 auto', padding: '0 36px' }}>
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: 1320, margin: '0 auto', padding: '0 20px' }}>
 
         {/* Top */}
         <div style={{
-          padding: '90px 0 70px',
+          padding: '60px 0 48px',
           borderBottom: '1px solid rgba(255,255,255,0.15)',
-          display: 'grid',
-          gridTemplateColumns: '1fr 1.1fr',
-          gap: 80, alignItems: 'start',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 40,
         }}>
-          {/* Left — heading */}
+          {/* Heading */}
           <div>
-            <span style={{ display: 'block', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: 28, fontFamily: 'var(--f-latin)' }}>
+            <span style={{ display: 'block', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: 20, fontFamily: 'var(--f-latin)' }}>
               ✦ מוכנים להתחיל?
             </span>
             <h2 style={{
               fontFamily: 'var(--f-hebrew)', fontWeight: 900,
-              fontSize: 'clamp(50px,8vw,110px)',
-              lineHeight: 1.0, letterSpacing: '-0.03em',
-              color: '#fff', margin: '0 0 28px',
+              fontSize: 'clamp(36px,8vw,90px)',
+              lineHeight: 1.05, letterSpacing: '-0.03em',
+              color: '#fff', margin: '0 0 16px',
             }}>
               נהפוך יחד<br />
               <em style={{ fontFamily: 'var(--f-serif)', fontWeight: 400, fontStyle: 'italic', color: 'rgba(255,255,255,0.85)' }}>רעיון</em>
               {' '}לאתר
             </h2>
-            <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, maxWidth: 340, textAlign: 'center' }}>
+            <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, maxWidth: 340 }}>
               הפרוייקט החדש שלכם במרחק שיחה אחת — תשאירו הודעה ואחזור אליכם בהקדם.
             </p>
           </div>
@@ -216,9 +216,9 @@ export default function Footer() {
                 <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 16 }}>אחזור אליכם בהקדם.</p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: '40px 44px', background: 'rgba(0,0,0,0.18)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: 'var(--r-lg)', backdropFilter: 'blur(8px)' }}>
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14, padding: '28px 24px', background: 'rgba(0,0,0,0.18)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: 'var(--r-lg)', backdropFilter: 'blur(8px)' }}>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 14 }}>
                   {[
                     { name: 'name', label: 'שם', type: 'text', placeholder: 'ישראל ישראלי' },
                     { name: 'email', label: 'אימייל', type: 'email', placeholder: 'hello@example.com' },
@@ -289,8 +289,8 @@ export default function Footer() {
 
         {/* Mid — links */}
         <div style={{
-          display: 'flex', justifyContent: 'center', gap: 80,
-          padding: '50px 0',
+          display: 'flex', justifyContent: 'center', gap: 40, flexWrap: 'wrap',
+          padding: '36px 0',
           borderBottom: '1px solid rgba(255,255,255,0.1)',
         }}>
           {/* קשר */}
@@ -330,9 +330,9 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div style={{
-          padding: '28px 0',
-          display: 'flex', alignItems: 'center',
-          justifyContent: 'space-between', gap: 24,
+          padding: '20px 0',
+          display: 'flex', alignItems: 'center', flexWrap: 'wrap',
+          justifyContent: 'space-between', gap: 12,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ fontFamily: 'var(--f-latin)', fontWeight: 900, letterSpacing: '0.2em', fontSize: 13, color: '#fff' }}>GULISTUDIO</span>

@@ -118,7 +118,6 @@ export default function Hero() {
         <motion.div variants={item} style={{ display: 'flex', gap: 12, marginTop: 36, flexWrap: 'wrap', justifyContent: 'center' }}>
           <a href="#contact" className="btn btn--primary">
             <span>בואו נבנה ביחד</span>
-            <svg viewBox="0 0 24 24" width={18} height={18} fill="none" stroke="currentColor" strokeWidth={2}><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
           </a>
           <a href="#work" className="btn btn--ghost">
             <span>תיק עבודות</span>
@@ -133,7 +132,7 @@ export default function Hero() {
         fontFamily: 'var(--f-latin)', fontSize: 10, letterSpacing: '0.16em',
         color: 'var(--mute)', textTransform: 'uppercase', textAlign: 'right',
       }} className="hidden md:flex">
-        {[['LAT', '32.0853°N'], ['LON', '34.7818°E'], ['STUDIO', 'Tel Aviv']].map(([k, v]) => (
+        {[['LAT', '32.0853°N'], ['LON', '34.7818°E']].map(([k, v]) => (
           <div key={k} style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
             <span style={{ color: 'var(--mute-2)', minWidth: 50 }}>{k}</span>
             <span style={{ color: 'var(--ink-2)', fontWeight: 600 }}>{v}</span>
@@ -162,7 +161,7 @@ export default function Hero() {
           fontFamily: 'var(--f-hebrew)', fontSize: 12, color: 'var(--mute)', letterSpacing: '0.1em',
         }}
       >
-        <span>גלול</span>
+        <span>גללו למטה</span>
         <span style={{ position: 'relative', display: 'block', width: 1, height: 56, background: 'var(--line-2)', overflow: 'hidden', borderRadius: 1 }}>
           <span style={{
             position: 'absolute', top: -20, left: 0, width: 1, height: 20,

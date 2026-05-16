@@ -10,6 +10,7 @@ const navLinks = [
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50)
@@ -17,28 +18,100 @@ export default function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    const update = () => setIsMobile(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+
+  const baseHeader: React.CSSProperties = {
+    position: 'fixed',
+    top: 0, left: 0, right: 0,
+    zIndex: 80,
+    background: scrolled
+      ? 'rgba(246,244,239,0.95)'
+      : 'linear-gradient(to bottom, var(--bg) 60%, rgba(246,244,239,0))',
+    backdropFilter: scrolled ? 'blur(20px)' : 'none',
+    WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
+    borderBottom: scrolled ? '1px solid var(--line)' : '1px solid transparent',
+    transition: 'background 0.4s, border-color 0.4s, backdrop-filter 0.4s',
+  }
+
+  if (isMobile) {
+    return (
+      <header style={{ ...baseHeader, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* Logo — right */}
+        <a href="#hero" style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'var(--f-latin)', letterSpacing: '0.04em', fontSize: 15, fontWeight: 700, textDecoration: 'none', color: 'var(--ink)' }}>
+          <span style={{ display: 'inline-grid', placeItems: 'center', width: 28, height: 28, background: 'var(--ink)', color: '#fff', borderRadius: 6, fontFamily: 'var(--f-latin)', fontWeight: 700, fontSize: 14 }}>G</span>
+        </a>
+
+        {/* Center brand */}
+        <a href="#hero" style={{ fontFamily: 'var(--f-latin)', letterSpacing: '0.04em', fontSize: 14, fontWeight: 700, textDecoration: 'none', color: 'var(--ink)', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+          <strong style={{ color: 'var(--ink)' }}>GULI</strong>
+          <em style={{ fontStyle: 'normal', color: 'var(--accent)', marginInlineStart: 2 }}>STUDIO</em>
+        </a>
+
+        {/* Hamburger — left */}
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="תפריט"
+          style={{ display: 'flex', flexDirection: 'column', gap: 5, width: 24, height: 20, justifyContent: 'center', background: 'transparent', border: 0, padding: 0, cursor: 'pointer' }}
+        >
+          {[0, 1, 2].map(i => (
+            <span key={i} style={{
+              display: 'block', height: 1, width: '100%',
+              background: 'var(--ink)',
+              transition: 'transform 0.25s, opacity 0.2s',
+              transform: menuOpen && i === 0 ? 'rotate(45deg) translate(4px,4px)' :
+                         menuOpen && i === 2 ? 'rotate(-45deg) translate(4px,-4px)' : 'none',
+              opacity: menuOpen && i === 1 ? 0 : 1,
+            }} />
+          ))}
+        </button>
+
+        {/* Mobile menu */}
+        {menuOpen && (
+          <div style={{
+            position: 'absolute', top: '100%', left: 0, right: 0,
+            background: 'rgba(246,244,239,0.97)',
+            backdropFilter: 'blur(20px)',
+            borderBottom: '1px solid var(--line)',
+            padding: '24px 24px 32px',
+            display: 'flex', flexDirection: 'column', gap: 20,
+          }}>
+            {navLinks.map(link => (
+              <a key={link.href} href={link.href}
+                onClick={() => setMenuOpen(false)}
+                style={{ fontSize: 18, fontWeight: 600, color: 'var(--ink-2)' }}
+              >
+                {link.label}
+              </a>
+            ))}
+            <a href="#contact" onClick={() => setMenuOpen(false)} style={{
+              marginTop: 8, textAlign: 'center', fontWeight: 600, fontSize: 15,
+              padding: '16px', borderRadius: 'var(--r-pill)',
+              background: 'var(--accent)', color: '#fff',
+            }}>
+              נבנה משהו יחד
+            </a>
+          </div>
+        )}
+      </header>
+    )
+  }
+
+  // Desktop — original layout
   return (
-    <header
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 80,
-        padding: '18px 36px',
-        display: 'grid',
-        gridTemplateColumns: '1fr auto 1fr',
-        alignItems: 'center',
-        gap: 24,
-        background: scrolled
-          ? 'rgba(246,244,239,0.95)'
-          : 'linear-gradient(to bottom, var(--bg) 60%, rgba(246,244,239,0))',
-        backdropFilter: scrolled ? 'blur(20px)' : 'none',
-        WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
-        borderBottom: scrolled ? '1px solid var(--line)' : '1px solid transparent',
-        transition: 'background 0.4s, border-color 0.4s, backdrop-filter 0.4s',
-      }}
-    >
+    <header style={{
+      ...baseHeader,
+      padding: '18px 36px',
+      display: 'grid',
+      gridTemplateColumns: '1fr auto 1fr',
+      alignItems: 'center',
+      gap: 24,
+    }}>
       {/* Brand — right (RTL start) */}
       <a href="#hero" style={{ display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'var(--f-latin)', letterSpacing: '0.04em', fontSize: 15, fontWeight: 700, textDecoration: 'none', color: 'var(--ink)', justifySelf: 'start' }}>
         <span style={{
@@ -55,18 +128,16 @@ export default function Header() {
       </a>
 
       {/* Desktop nav pill — center */}
-      <nav
-        className="hidden md:flex"
-        style={{
-          alignItems: 'center', gap: 4, padding: 6,
-          background: 'rgba(255,255,255,0.72)',
-          backdropFilter: 'blur(14px)',
-          WebkitBackdropFilter: 'blur(14px)',
-          borderRadius: 'var(--r-pill)',
-          border: '1px solid var(--line)',
-          boxShadow: 'var(--shadow-sm)',
-        }}
-      >
+      <nav style={{
+        display: 'flex',
+        alignItems: 'center', gap: 4, padding: 6,
+        background: 'rgba(255,255,255,0.72)',
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
+        borderRadius: 'var(--r-pill)',
+        border: '1px solid var(--line)',
+        boxShadow: 'var(--shadow-sm)',
+      }}>
         {navLinks.map(link => (
           <a key={link.href} href={link.href} style={{
             padding: '10px 20px', borderRadius: 'var(--r-pill)',
@@ -93,61 +164,10 @@ export default function Header() {
       </nav>
 
       {/* Status meta — left (RTL end) */}
-      <div className="hidden md:flex" style={{ alignItems: 'center', gap: 8, fontFamily: 'var(--f-latin)', fontSize: 12, letterSpacing: '0.06em', color: 'var(--mute)', textTransform: 'uppercase', justifySelf: 'end' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'var(--f-latin)', fontSize: 12, letterSpacing: '0.06em', color: 'var(--mute)', textTransform: 'uppercase', justifySelf: 'end' }}>
         <span className="status-dot" aria-hidden="true" />
         <span>פתוחה לפרויקטים · 2026</span>
       </div>
-
-      {/* Mobile hamburger */}
-      <button
-        className="md:hidden"
-        onClick={() => setMenuOpen(!menuOpen)}
-        aria-label="תפריט"
-        style={{ display: 'flex', flexDirection: 'column', gap: 5, width: 24, height: 20, justifyContent: 'center' }}
-      >
-        {[0, 1, 2].map(i => (
-          <span key={i} style={{
-            display: 'block', height: 1, width: '100%',
-            background: 'var(--ink)',
-            transition: 'transform 0.25s, opacity 0.2s',
-            transform: menuOpen && i === 0 ? 'rotate(45deg) translate(4px,4px)' :
-                       menuOpen && i === 2 ? 'rotate(-45deg) translate(4px,-4px)' : 'none',
-            opacity: menuOpen && i === 1 ? 0 : 1,
-          }} />
-        ))}
-      </button>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div
-          className="md:hidden"
-          style={{
-            position: 'absolute', top: '100%', left: 0, right: 0,
-            background: 'rgba(246,244,239,0.97)',
-            backdropFilter: 'blur(20px)',
-            borderBottom: '1px solid var(--line)',
-            padding: '24px 36px 32px',
-            display: 'flex', flexDirection: 'column', gap: 20,
-          }}
-        >
-          {navLinks.map(link => (
-            <a key={link.href} href={link.href}
-              onClick={() => setMenuOpen(false)}
-              style={{ fontSize: 18, fontWeight: 600, color: 'var(--ink-2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-            >
-              {link.label}
-              <span style={{ color: 'var(--accent)', fontSize: 14 }}>↗</span>
-            </a>
-          ))}
-          <a href="#contact" onClick={() => setMenuOpen(false)} style={{
-            marginTop: 8, textAlign: 'center', fontWeight: 600, fontSize: 15,
-            padding: '16px', borderRadius: 'var(--r-pill)',
-            background: 'var(--accent)', color: '#fff',
-          }}>
-            נבנה משהו יחד
-          </a>
-        </div>
-      )}
     </header>
   )
 }

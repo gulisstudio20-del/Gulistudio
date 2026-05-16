@@ -24,49 +24,47 @@ export default function FAQ() {
   }, [])
 
   return (
-    <section ref={sectionRef} style={{ position: 'relative', zIndex: 1, padding: '120px 36px', maxWidth: 1320, margin: '0 auto' }}>
+    <section ref={sectionRef} style={{ position: 'relative', zIndex: 1, padding: '80px 20px', maxWidth: 1320, margin: '0 auto' }}>
 
-      <div data-reveal style={{ marginBottom: 32 }}>
+      <div data-reveal style={{ marginBottom: 24 }}>
         <span className="eyebrow">✦ FAQ · 06</span>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 80, alignItems: 'start' }}>
-        <h2 data-reveal className="h-display">שאלות שכולם שואלות בדרך כלל.</h2>
+      <h2 data-reveal className="h-display" style={{ marginBottom: 36 }}>שאלות שכולם שואלות בדרך כלל.</h2>
 
-        <ul data-reveal style={{ borderTop: '1px solid var(--line-2)', listStyle: 'none', padding: 0, margin: 0 }}>
-          {faqs.map((faq, i) => (
-            <li key={i} style={{ borderBottom: '1px solid var(--line-2)' }}>
-              <button
-                onClick={() => setOpen(open === i ? null : i)}
-                aria-expanded={open === i}
-                style={{
-                  display: 'flex', width: '100%', alignItems: 'center',
-                  justifyContent: 'space-between', gap: 24,
-                  padding: '24px 4px', fontSize: 18, fontWeight: 600,
-                  textAlign: 'start', background: 'transparent', border: 0, cursor: 'pointer',
-                  color: open === i ? 'var(--accent)' : 'var(--ink)',
-                  transition: 'color .25s',
-                }}
-              >
-                <span>{faq.q}</span>
-                <span style={{ position: 'relative', display: 'inline-block', width: 16, height: 16, flexShrink: 0 }}>
-                  <span style={{ position: 'absolute', inset: 0, margin: 'auto', width: 16, height: 2, background: 'currentColor', display: 'block' }} />
-                  <span style={{ position: 'absolute', inset: 0, margin: 'auto', width: 2, height: 16, background: 'currentColor', display: 'block', transition: 'transform .3s', transform: open === i ? 'scaleY(0)' : 'scaleY(1)' }} />
-                </span>
-              </button>
-              <div style={{
-                display: 'grid',
-                gridTemplateRows: open === i ? '1fr' : '0fr',
-                transition: 'grid-template-rows .4s cubic-bezier(.2,.8,.2,1)',
-              }}>
-                <p style={{ overflow: 'hidden', margin: 0, paddingBottom: open === i ? 24 : 0, paddingInlineEnd: 40, fontSize: 15, color: 'var(--mute)', lineHeight: 1.7 }}>
-                  {faq.a}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <ul data-reveal style={{ borderTop: '1px solid var(--line-2)', listStyle: 'none', padding: 0, margin: 0 }}>
+        {faqs.map((faq, i) => (
+          <li key={i} style={{ borderBottom: '1px solid var(--line-2)' }}>
+            <button
+              onClick={() => setOpen(open === i ? null : i)}
+              aria-expanded={open === i}
+              style={{
+                display: 'flex', width: '100%', alignItems: 'flex-start',
+                justifyContent: 'space-between', gap: 16,
+                padding: '20px 4px', fontSize: 'clamp(15px,3.5vw,18px)', fontWeight: 600,
+                textAlign: 'start', background: 'transparent', border: 0, cursor: 'pointer',
+                color: open === i ? 'var(--accent)' : 'var(--ink)',
+                transition: 'color .25s', lineHeight: 1.4,
+              }}
+            >
+              <span style={{ flex: 1 }}>{faq.q}</span>
+              <span style={{ position: 'relative', display: 'inline-block', width: 16, height: 16, flexShrink: 0, marginTop: 4 }}>
+                <span style={{ position: 'absolute', inset: 0, margin: 'auto', width: 16, height: 2, background: 'currentColor', display: 'block' }} />
+                <span style={{ position: 'absolute', inset: 0, margin: 'auto', width: 2, height: 16, background: 'currentColor', display: 'block', transition: 'transform .3s', transform: open === i ? 'scaleY(0)' : 'scaleY(1)' }} />
+              </span>
+            </button>
+            <div style={{
+              display: 'grid',
+              gridTemplateRows: open === i ? '1fr' : '0fr',
+              transition: 'grid-template-rows .4s cubic-bezier(.2,.8,.2,1)',
+            }}>
+              <p style={{ overflow: 'hidden', margin: 0, paddingBottom: open === i ? 20 : 0, paddingInlineEnd: 24, fontSize: 'clamp(13px,3vw,15px)', color: 'var(--mute)', lineHeight: 1.7 }}>
+                {faq.a}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
     </section>
   )
 }

@@ -48,13 +48,13 @@ export default function About() {
   }, [])
 
   return (
-    <section id="about" ref={sectionRef} style={{ position: 'relative', zIndex: 1, padding: '120px 36px', maxWidth: 1320, margin: '0 auto' }}>
+    <section id="about" ref={sectionRef} style={{ position: 'relative', zIndex: 1, padding: '80px 20px', maxWidth: 1320, margin: '0 auto' }}>
 
       <div data-reveal style={{ marginBottom: 32 }}>
         <span className="eyebrow">✦ ABOUT · 01</span>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px,1fr))', gap: 80, alignItems: 'start' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px,1fr))', gap: 48, alignItems: 'start' }}>
 
         {/* Text */}
         <div>
@@ -139,10 +139,10 @@ export default function About() {
             {/* Stats */}
             <div style={{
               position: 'relative', zIndex: 1,
-              display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16,
-              padding: 24, background: 'rgba(255,255,255,0.65)',
+              display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10,
+              padding: 16, background: 'rgba(255,255,255,0.65)',
               border: '1px solid var(--line)', borderRadius: 'var(--r-md)',
-              marginBottom: 28, backdropFilter: 'blur(6px)',
+              marginBottom: 20, backdropFilter: 'blur(6px)',
             }}>
               {[
                 { label: 'פרויקטים', target: 24, suffix: '+', color: 'var(--accent)' },
@@ -150,8 +150,8 @@ export default function About() {
                 { label: 'שנות ניסיון', target: 5, suffix: '+', color: 'var(--mute)' },
               ].map(s => (
                 <div key={s.label} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  <span style={{ fontFamily: 'var(--f-latin)', fontSize: 10, letterSpacing: '0.18em', color: 'var(--mute)', textTransform: 'uppercase' }}>{s.label}</span>
-                  <span style={{ fontFamily: 'var(--f-latin)', fontSize: 42, fontWeight: 700, color: s.color, lineHeight: 1, letterSpacing: '-0.03em' }}>
+                  <span style={{ fontFamily: 'var(--f-latin)', fontSize: 9, letterSpacing: '0.12em', color: 'var(--mute)', textTransform: 'uppercase' }}>{s.label}</span>
+                  <span style={{ fontFamily: 'var(--f-latin)', fontSize: 'clamp(28px,5vw,42px)', fontWeight: 700, color: s.color, lineHeight: 1, letterSpacing: '-0.03em' }}>
                     <CountUp target={s.target} suffix={s.suffix} />
                   </span>
                 </div>
