@@ -378,9 +378,9 @@ export default function Portfolio() {
       </div>
 
       {/* Footer CTA */}
-      <div data-reveal style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: '48px 0 0', marginTop: 48, borderTop: '1px solid var(--line)' }}>
-        <p style={{ margin: 0, fontSize: 20, fontWeight: 600, color: 'var(--ink)' }}>רוצות שפרויקט שלך יהיה הבא?</p>
-        <a href="#contact" className="btn btn--primary" style={{ alignSelf: 'flex-start', fontSize: 15, padding: '14px 28px' }}>
+      <div data-reveal style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, padding: '48px 0 0', marginTop: 48, borderTop: '1px solid var(--line)', textAlign: 'center' }}>
+        <p style={{ margin: 0, fontSize: 20, fontWeight: 600, color: 'var(--ink)' }}>רוצה שהפרויקט הבא יהיה האתר שלך?</p>
+        <a href="#contact" className="btn btn--primary" style={{ fontSize: 15, padding: '14px 28px' }}>
           <span>בואו נדבר</span>
           <svg viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="currentColor" strokeWidth={2}><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
         </a>

@@ -196,7 +196,7 @@ export default function Footer() {
               lineHeight: 1.05, letterSpacing: '-0.03em',
               color: '#fff', margin: '0 0 16px',
             }}>
-              נהפוך יחד<br />
+              בואו נהפוך<br />
               <em style={{ fontFamily: 'var(--f-serif)', fontWeight: 400, fontStyle: 'italic', color: 'rgba(255,255,255,0.85)' }}>רעיון</em>
               {' '}לאתר
             </h2>
@@ -302,7 +302,7 @@ export default function Footer() {
                   style={{ fontSize: 15, color: 'rgba(255,255,255,0.7)', textDecoration: 'none', transition: 'color .2s' }}
                   onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
                   onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
-                >@gulistudio</a>
+                >Instagram</a>
               </li>
             </ul>
           </div>

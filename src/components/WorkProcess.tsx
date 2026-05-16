@@ -40,16 +40,19 @@ export default function WorkProcess() {
     return () => obs.disconnect()
   }, [])
 
-  // Mobile only: scroll-based number coloring
+  // Mobile only: scroll-based number coloring — triggers when li enters center of screen
   useEffect(() => {
     if (!isMobile) return
     const observers: IntersectionObserver[] = []
     numRefs.current.forEach((el, i) => {
       if (!el) return
+      // observe the parent li, not just the number span, for a more stable trigger
+      const li = el.closest('li')
+      if (!li) return
       const obs = new IntersectionObserver(([entry]) => {
         if (entry.isIntersecting) setScrollActive(i)
-      }, { threshold: 0.6 })
-      obs.observe(el)
+      }, { threshold: 0.5, rootMargin: '-20% 0px -20% 0px' })
+      obs.observe(li)
       observers.push(obs)
     })
     return () => observers.forEach(o => o.disconnect())
