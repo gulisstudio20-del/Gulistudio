@@ -1,169 +1,198 @@
 import { useEffect, useRef, useState } from 'react'
 
-const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xzzbnwqr' // החלף בקישור שלך מ-formspree.io
+const WEB3FORMS_KEY = '2881ff54-8e38-43d3-af24-fbd128e3842f'
+
+const serviceChips = ['אתר תדמית', 'חנות', 'מיתוג', 'UI/UX', 'אחר']
+
+type FormState = { name: string; email: string; phone: string; service: string; message: string }
+
+function validate(form: FormState): Record<string, string> {
+  const e: Record<string, string> = {}
+  if (form.name.trim().length < 2) e.name = 'נא להזין שם מלא'
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) e.email = 'נא להזין אימייל תקין'
+  if (!/^[0-9+\-\s()]{7,15}$/.test(form.phone.trim())) e.phone = 'נא להזין מספר טלפון תקין'
+  if (form.message.trim().length < 5) e.message = 'נא לכתוב על הפרויקט'
+  return e
+}
+
+const inputStyle = {
+  padding: '15px 18px',
+  border: '1px solid var(--line-2)',
+  borderRadius: 12,
+  background: '#fff',
+  fontFamily: 'var(--f-hebrew)',
+  fontSize: 16,
+  color: 'var(--ink)',
+  outline: 'none',
+  transition: 'border-color .2s, box-shadow .2s',
+  width: '100%',
+}
+
+const labelStyle: React.CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 8,
+  fontSize: 13,
+  fontWeight: 600,
+  letterSpacing: '0.04em',
+  color: 'var(--mute)',
+}
 
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null)
-  const [form, setForm] = useState({ name: '', email: '', message: '' })
+  const empty: FormState = { name: '', email: '', phone: '', service: 'אתר תדמית', message: '' }
+  const [form, setForm] = useState<FormState>(empty)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el, i) => {
-              setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)' }, i * 120)
-            })
-            observer.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.1 }
-    )
-    if (sectionRef.current) observer.observe(sectionRef.current)
-    return () => observer.disconnect()
+    const els = sectionRef.current?.querySelectorAll<HTMLElement>('[data-reveal]')
+    if (!els) return
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); obs.unobserve(e.target) } })
+    }, { threshold: 0.1 })
+    els.forEach(el => obs.observe(el))
+    return () => obs.disconnect()
   }, [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    const errs = validate(form)
+    if (Object.keys(errs).length > 0) { setFieldErrors(errs); return }
+    setFieldErrors({})
     setStatus('sending')
     try {
-      const res = await fetch(FORMSPREE_ENDPOINT, {
+      const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: `פנייה חדשה מהאתר — ${form.service}`,
+          from_name: form.name,
+          ...form,
+        }),
       })
-      if (res.ok) {
-        setStatus('sent')
-        setForm({ name: '', email: '', message: '' })
-      } else {
-        setStatus('error')
-      }
-    } catch {
-      setStatus('error')
-    }
+      const data = await res.json()
+      setStatus(data.success ? 'sent' : 'error')
+      if (data.success) setForm(empty)
+    } catch { setStatus('error') }
   }
 
-  return (
-    <section id="contact" ref={sectionRef} className="py-32 px-6 md:px-10 max-w-[1400px] mx-auto">
+  const set = (field: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setForm(p => ({ ...p, [field]: e.target.value }))
+    if (fieldErrors[field]) setFieldErrors(p => { const n = { ...p }; delete n[field]; return n })
+  }
 
-      <div className="pb-10 mb-16 border-b" style={{ borderColor: 'var(--border)' }}>
-        <p data-reveal className="text-xs tracking-[5px] uppercase mb-4 transition-all duration-700" style={{ color: 'var(--orange)', opacity: 0, transform: 'translateY(20px)' }}>
-          Get In Touch
-        </p>
-        <h2 data-reveal className="font-heading font-bold uppercase leading-none transition-all duration-700" style={{ fontSize: 'clamp(2.4rem, 6vw, 5rem)', color: 'var(--text)', opacity: 0, transform: 'translateY(20px)' }}>
-          נבנה
-          <br />
-          <span style={{ color: 'var(--orange)' }}>משהו ביחד</span>
+  const focusStyle = (hasError: boolean) => ({
+    onFocus: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      e.currentTarget.style.borderColor = hasError ? '#b3261e' : 'var(--accent)'
+      e.currentTarget.style.boxShadow = hasError ? '0 0 0 4px rgba(179,38,30,0.12)' : '0 0 0 4px var(--accent-glow)'
+    },
+    onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      e.currentTarget.style.borderColor = hasError ? '#b3261e' : 'var(--line-2)'
+      e.currentTarget.style.boxShadow = 'none'
+    },
+  })
+
+  return (
+    <section id="contact" ref={sectionRef} style={{ position: 'relative', zIndex: 1, padding: '120px 36px', maxWidth: 860, margin: '0 auto' }}>
+
+      <div data-reveal style={{ marginBottom: 50 }}>
+        <span className="eyebrow" style={{ marginBottom: 18, display: 'inline-block' }}>✦ GET IN TOUCH</span>
+        <h2 className="h-display" style={{ marginTop: 18 }}>
+          נבנה <em>משהו יחד</em>
         </h2>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-20">
-
-        {/* Left */}
-        <div>
-          <p data-reveal className="leading-relaxed mb-10 transition-all duration-700" style={{ color: 'var(--text-mid)', opacity: 0, transform: 'translateY(20px)' }}>
-            יש לך פרויקט? רעיון? מותג שמחכה להיוולד?
-            <br />
-            אני כאן.
-          </p>
-
-          <div data-reveal className="flex flex-col gap-5 mb-12 transition-all duration-700" style={{ opacity: 0, transform: 'translateY(20px)' }}>
-            {[
-              { href: 'https://instagram.com/gulistudio', label: '@gulistudio', icon: (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-              )},
-            ].map((link, i) => (
-              <a key={i} href={link.href} target="_blank" rel="noopener noreferrer"
-                className="group flex items-center gap-3 text-sm transition-colors duration-300"
-                style={{ color: 'var(--text-mid)' }}
-                onMouseEnter={e => (e.currentTarget.style.color = 'var(--text)')}
-                onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-mid)')}
-              >
-                <span className="w-8 h-8 flex items-center justify-center border transition-all duration-300"
-                  style={{ borderColor: 'var(--border)' }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--orange)')}
-                  onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}
-                >
-                  {link.icon}
-                </span>
-                {link.label}
-              </a>
-            ))}
-          </div>
-
-          <div data-reveal className="p-5 border transition-all duration-700" style={{ borderColor: 'rgba(255,92,26,0.2)', background: 'rgba(255,92,26,0.03)', opacity: 0, transform: 'translateY(20px)' }}>
-            <div className="flex items-center gap-2.5">
-              <span className="w-2 h-2 rounded-full" style={{ background: 'var(--orange)', animation: 'pulse 2s infinite' }} />
-              <span className="text-xs tracking-widest uppercase" style={{ color: 'var(--orange)' }}>פתוח לפרויקטים</span>
+      <div data-reveal>
+        {status === 'sent' ? (
+          <div style={{ padding: 80, textAlign: 'center', background: 'var(--paper)', border: '1px solid var(--line)', borderRadius: 'var(--r-lg)' }}>
+            <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'var(--accent-soft)', border: '1px solid var(--accent)', display: 'grid', placeItems: 'center', margin: '0 auto 24px' }}>
+              <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth={2}><polyline points="20 6 9 17 4 12"/></svg>
             </div>
+            <p style={{ fontWeight: 700, fontSize: 22, color: 'var(--ink)', marginBottom: 10 }}>ההודעה נשלחה!</p>
+            <p style={{ color: 'var(--mute)', fontSize: 17 }}>אחזור אליך בהקדם.</p>
           </div>
-        </div>
+        ) : (
+          <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '48px 52px', background: 'var(--paper)', border: '1px solid var(--line)', borderRadius: 'var(--r-lg)', boxShadow: 'var(--shadow-sm)' }}>
 
-        {/* Right — Form */}
-        <div data-reveal className="transition-all duration-700" style={{ opacity: 0, transform: 'translateY(20px)' }}>
-          {status === 'sent' ? (
-            <div className="h-full flex flex-col items-center justify-center gap-4 text-center">
-              <div className="w-14 h-14 flex items-center justify-center" style={{ border: '1px solid var(--orange)', background: 'rgba(255,92,26,0.05)' }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ color: 'var(--orange)' }}>
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </div>
-              <p className="font-heading font-semibold text-lg" style={{ color: 'var(--text)' }}>ההודעה נשלחה!</p>
-              <p className="text-sm" style={{ color: 'var(--text-lt)' }}>אחזור אליך בהקדם 🧡</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-7">
-              {[
-                { name: 'name', label: 'שם', type: 'text', placeholder: 'ישראל ישראלי' },
-                { name: 'email', label: 'אימייל', type: 'email', placeholder: 'hello@example.com' },
-              ].map(f => (
-                <div key={f.name} className="flex flex-col gap-2">
-                  <label className="text-xs tracking-widest uppercase" style={{ color: 'var(--text-lt)' }}>{f.label}</label>
-                  <input
-                    type={f.type}
-                    placeholder={f.placeholder}
-                    required
-                    value={form[f.name as keyof typeof form]}
-                    onChange={e => setForm(p => ({ ...p, [f.name]: e.target.value }))}
-                    className="bg-transparent border-b py-3 text-sm outline-none transition-colors duration-300"
-                    style={{ borderColor: 'var(--border)', color: 'var(--text)' }}
-                    onFocus={e => (e.currentTarget.style.borderColor = 'var(--orange)')}
-                    onBlur={e => (e.currentTarget.style.borderColor = 'var(--border)')}
-                  />
-                </div>
-              ))}
-              <div className="flex flex-col gap-2">
-                <label className="text-xs tracking-widest uppercase" style={{ color: 'var(--text-lt)' }}>הודעה</label>
-                <textarea
-                  rows={4}
-                  placeholder="ספר/י לי על הפרויקט..."
-                  required
-                  value={form.message}
-                  onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
-                  className="bg-transparent border-b py-3 text-sm outline-none resize-none transition-colors duration-300"
-                  style={{ borderColor: 'var(--border)', color: 'var(--text)' }}
-                  onFocus={e => (e.currentTarget.style.borderColor = 'var(--orange)')}
-                  onBlur={e => (e.currentTarget.style.borderColor = 'var(--border)')}
+            {/* שם + אימייל */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+              <label style={labelStyle}>
+                שם *
+                <input
+                  type="text" placeholder="ישראל ישראלי"
+                  value={form.name} onChange={set('name')}
+                  style={{ ...inputStyle, borderColor: fieldErrors.name ? '#b3261e' : 'var(--line-2)' }}
+                  {...focusStyle(!!fieldErrors.name)}
                 />
+                {fieldErrors.name && <span style={{ color: '#b3261e', fontSize: 13, marginTop: 2 }}>{fieldErrors.name}</span>}
+              </label>
+              <label style={labelStyle}>
+                אימייל *
+                <input
+                  type="email" placeholder="hello@example.com"
+                  value={form.email} onChange={set('email')}
+                  style={{ ...inputStyle, borderColor: fieldErrors.email ? '#b3261e' : 'var(--line-2)' }}
+                  {...focusStyle(!!fieldErrors.email)}
+                />
+                {fieldErrors.email && <span style={{ color: '#b3261e', fontSize: 13, marginTop: 2 }}>{fieldErrors.email}</span>}
+              </label>
+            </div>
+
+            {/* טלפון */}
+            <label style={labelStyle}>
+              טלפון *
+              <input
+                type="tel" placeholder="050-000-0000"
+                value={form.phone} onChange={set('phone')}
+                style={{ ...inputStyle, borderColor: fieldErrors.phone ? '#b3261e' : 'var(--line-2)' }}
+                {...focusStyle(!!fieldErrors.phone)}
+              />
+              {fieldErrors.phone && <span style={{ color: '#b3261e', fontSize: 13, marginTop: 2 }}>{fieldErrors.phone}</span>}
+            </label>
+
+            {/* סוג פרויקט */}
+            <label style={labelStyle}>
+              סוג פרויקט
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 4 }}>
+                {serviceChips.map(chip => (
+                  <button key={chip} type="button" onClick={() => setForm(p => ({ ...p, service: chip }))}
+                    style={{
+                      padding: '10px 18px',
+                      border: `1px solid ${form.service === chip ? 'var(--ink)' : 'var(--line-2)'}`,
+                      borderRadius: 'var(--r-pill)', fontSize: 15,
+                      background: form.service === chip ? 'var(--ink)' : '#fff',
+                      color: form.service === chip ? '#fff' : 'var(--ink-2)',
+                      transition: 'all .2s', cursor: 'pointer',
+                    }}
+                  >{chip}</button>
+                ))}
               </div>
-              {status === 'error' && (
-                <p className="text-sm" style={{ color: '#e53e3e' }}>משהו השתבש. נסה שוב או כתב ישירות ל-gulisstudio20@gmail.com</p>
-              )}
-              <button
-                type="submit"
-                disabled={status === 'sending'}
-                className="mt-1 w-full py-4 font-heading font-semibold text-xs tracking-[4px] uppercase transition-all duration-300"
-                style={{ background: 'var(--orange)', color: '#fff', borderRadius: 4, opacity: status === 'sending' ? 0.7 : 1, cursor: status === 'sending' ? 'wait' : 'pointer' }}
-                onMouseEnter={e => { if (status !== 'sending') { e.currentTarget.style.opacity = '0.88'; e.currentTarget.style.transform = 'translateY(-1px)' } }}
-                onMouseLeave={e => { e.currentTarget.style.opacity = status === 'sending' ? '0.7' : '1'; e.currentTarget.style.transform = 'translateY(0)' }}
-              >
-                {status === 'sending' ? 'שולח...' : 'שלח הודעה ↗'}
-              </button>
-            </form>
-          )}
-        </div>
+            </label>
+
+            {/* הודעה */}
+            <label style={labelStyle}>
+              ספר/י לי על הפרויקט *
+              <textarea
+                rows={5} placeholder="מה מחפשים? מה חסר?"
+                value={form.message} onChange={set('message')}
+                style={{ ...inputStyle, resize: 'vertical', borderColor: fieldErrors.message ? '#b3261e' : 'var(--line-2)' }}
+                {...focusStyle(!!fieldErrors.message)}
+              />
+              {fieldErrors.message && <span style={{ color: '#b3261e', fontSize: 13, marginTop: 2 }}>{fieldErrors.message}</span>}
+            </label>
+
+            {status === 'error' && (
+              <p style={{ color: '#b3261e', fontSize: 15 }}>משהו השתבש. נסה שוב או כתוב ישירות ל-gulisstudio20@gmail.com</p>
+            )}
+
+            <button type="submit" disabled={status === 'sending'} className="btn btn--primary" style={{ width: '100%', justifyContent: 'center', padding: '20px 18px', fontSize: 17, opacity: status === 'sending' ? 0.7 : 1, cursor: status === 'sending' ? 'wait' : 'pointer' }}>
+              <span>{status === 'sending' ? 'שולח...' : 'שלח הודעה'}</span>
+              <svg viewBox="0 0 24 24" width={20} height={20} fill="none" stroke="currentColor" strokeWidth={2}><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+            </button>
+          </form>
+        )}
       </div>
     </section>
   )

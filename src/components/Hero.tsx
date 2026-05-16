@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 
 const ease = [0.16, 1, 0.3, 1]
 
 const container = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.11, delayChildren: 0.15 } },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
 }
 const item = {
   hidden: { opacity: 0, y: 24 },
@@ -13,248 +13,164 @@ const item = {
 }
 
 export default function Hero() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const [glowOpacity, setGlowOpacity] = useState(1)
+  const heroRef = useRef<HTMLElement>(null)
+  const rowTopRef = useRef<HTMLSpanElement>(null)
+  const rowBotRef = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
-    const onScroll = () => {
-      const section = sectionRef.current
-      if (!section) return
-      const { bottom } = section.getBoundingClientRect()
-      setGlowOpacity(Math.max(0, Math.min(1, bottom / window.innerHeight)))
+    const hero = heroRef.current
+    if (!hero) return
+    const onMove = (e: MouseEvent) => {
+      const r = hero.getBoundingClientRect()
+      const mx = ((e.clientX - r.left) / r.width - 0.5) * 2
+      const my = ((e.clientY - r.top) / r.height - 0.5) * 2
+      if (rowTopRef.current) rowTopRef.current.style.transform = `translate(${mx * 0.04 * 30}px, ${my * 0.04 * 16}px)`
+      if (rowBotRef.current) rowBotRef.current.style.transform = `translate(${mx * -0.04 * 30}px, ${my * -0.04 * 16}px)`
     }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    const onLeave = () => {
+      if (rowTopRef.current) rowTopRef.current.style.transform = ''
+      if (rowBotRef.current) rowBotRef.current.style.transform = ''
+    }
+    hero.addEventListener('mousemove', onMove)
+    hero.addEventListener('mouseleave', onLeave)
+    return () => { hero.removeEventListener('mousemove', onMove); hero.removeEventListener('mouseleave', onLeave) }
   }, [])
 
   return (
     <section
-      ref={sectionRef}
-      className="relative min-h-screen flex flex-col overflow-hidden"
-      style={{ background: 'var(--bg)' }}
+      ref={heroRef}
+      id="hero"
+      style={{
+        position: 'relative',
+        minHeight: '100vh',
+        padding: '120px 36px 60px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        zIndex: 1,
+      }}
     >
-      {/* Background effects */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          opacity: glowOpacity,
-          background: 'radial-gradient(ellipse 70% 55% at 55% 35%, rgba(255,92,26,0.13) 0%, transparent 70%)',
-          transition: 'opacity 0.12s linear',
-        }}
-      />
-      {/* Grid lines */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(255,92,26,0.07) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,92,26,0.07) 1px, transparent 1px)`,
-          backgroundSize: '80px 80px',
-          maskImage: 'radial-gradient(ellipse 100% 90% at 50% 40%, black 0%, transparent 85%)',
-        }}
-      />
-      {/* Watermark letter */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute select-none float-slow"
-        style={{
-          bottom: '-8%',
-          right: '-3%',
-          fontWeight: 900,
-          fontSize: 'clamp(18rem, 30vw, 44rem)',
-          color: 'rgba(0,0,0,0.028)',
-          lineHeight: 1,
-          fontFamily: "'Inter', sans-serif",
-          letterSpacing: '-0.06em',
-        }}
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate="visible"
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}
       >
-        G
-      </div>
+        {/* Tag */}
+        <motion.div variants={item}>
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            padding: '9px 16px',
+            background: 'rgba(255,232,221,0.7)',
+            border: '1px solid rgba(255,77,20,0.18)',
+            borderRadius: 'var(--r-pill)',
+            fontSize: 13, color: 'var(--accent)', fontWeight: 500,
+            marginBottom: 32,
+            backdropFilter: 'blur(8px)',
+          }}>
+            <span className="status-dot" aria-hidden="true" />
+            פתוחה לפרויקטים חדשים
+          </span>
+        </motion.div>
 
-      {/* Main content — centered, full width */}
-      <div
-        className="relative z-10 flex-1 flex items-center justify-center"
-        style={{
-          width: 'min(100% - 2rem, 1100px)',
-          margin: '0 auto',
-          padding: 'clamp(6rem, 10vw, 9rem) clamp(1rem, 4vw, 3rem) clamp(3rem, 6vw, 5rem)',
-        }}
-      >
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="visible"
-          style={{ direction: 'rtl', textAlign: 'center', width: '100%' }}
-          className="flex flex-col items-center"
+        {/* Main title */}
+        <motion.h1
+          variants={item}
+          style={{
+            fontFamily: 'var(--f-latin)',
+            fontWeight: 700,
+            fontSize: 'clamp(72px, 16vw, 240px)',
+            lineHeight: 0.86,
+            letterSpacing: '-0.04em',
+            margin: 0,
+            pointerEvents: 'none',
+          }}
+          aria-label="Guli Studio"
         >
-          {/* Availability badge */}
-          <motion.div variants={item} className="flex items-center justify-center mb-8">
-            <span
-              className="flex items-center gap-2.5"
-              style={{
-                background: 'rgba(255,92,26,0.07)',
-                border: '1px solid rgba(255,92,26,0.18)',
-                borderRadius: 999,
-                padding: '6px 16px 6px 12px',
-              }}
-            >
-              <span
-                className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                style={{ background: 'var(--orange)', animation: 'pulse 2s infinite' }}
-              />
-              <span
-                className="text-xs tracking-[0.22em] uppercase"
-                style={{ color: 'var(--orange)', fontWeight: 600 }}
-              >
-                פתוחה לפרויקטים חדשים
-              </span>
-            </span>
-          </motion.div>
-
-          {/* H1 */}
-          <motion.h1
-            variants={item}
-            className="font-heading font-bold uppercase leading-[0.88] select-none"
-            style={{ fontSize: 'clamp(5rem, 14vw, 13rem)', color: 'var(--text)' }}
+          <span
+            ref={rowTopRef}
+            style={{ display: 'block', color: 'var(--ink)', willChange: 'transform', transition: 'transform 200ms cubic-bezier(.2,.8,.2,1)' }}
           >
             GULI
-            <br />
-            <span style={{ color: 'var(--orange)' }}>STU</span>
-            DIO
-          </motion.h1>
-
-          {/* Subtitle */}
-          <motion.h2
-            variants={item}
-            className="font-heading font-bold uppercase leading-none mt-4"
-            style={{
-              fontSize: 'clamp(1rem, 2.8vw, 2.4rem)',
-              color: 'transparent',
-              WebkitTextStroke: '1px rgba(0,0,0,0.18)',
-              letterSpacing: '0.12em',
-            }}
+          </span>
+          <span
+            ref={rowBotRef}
+            style={{ display: 'block', marginTop: '-0.18em', willChange: 'transform', transition: 'transform 200ms cubic-bezier(.2,.8,.2,1)' }}
           >
-            Web Architecture
-          </motion.h2>
+            <span style={{ color: 'var(--accent)' }}>STU</span>DIO
+          </span>
+        </motion.h1>
 
-          {/* Divider */}
-          <motion.div
-            variants={item}
-            className="divider-pulse"
-            style={{
-              width: 48,
-              height: 2,
-              background: 'var(--orange)',
-              borderRadius: 2,
-              margin: '28px auto',
-              opacity: 0.6,
-            }}
-          />
-
-          {/* Description */}
-          <motion.p
-            variants={item}
-            className="leading-relaxed"
-            style={{
-              color: 'var(--text-mid)',
-              fontSize: 'clamp(1rem, 1.3vw, 1.1rem)',
-              maxWidth: '42ch',
-              textAlign: 'center',
-            }}
-          >
+        {/* Sub */}
+        <motion.div variants={item} style={{ marginTop: 38, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
+          <span style={{ display: 'block', width: 38, height: 2, background: 'var(--accent)', marginBottom: 6 }} />
+          <p style={{ fontSize: 'clamp(18px,1.4vw,22px)', color: 'var(--ink-2)', margin: 0, fontWeight: 500 }}>
             בונה חוויות דיגיטליות שמרגישות כמו אמנות.
-            <br />
-            <span style={{ color: 'var(--text-lt)', fontSize: '0.88em' }}>
-              UI UX · Branding · Graphic Design
-            </span>
-          </motion.p>
-
-          {/* CTA buttons */}
-          <motion.div variants={item} className="flex gap-4 mt-10 justify-center flex-wrap">
-            <motion.a
-              href="#contact"
-              whileHover={{ y: -4, scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              transition={{ type: 'spring', stiffness: 320, damping: 18, mass: 0.6 }}
-              className="font-heading font-semibold text-sm tracking-[0.18em] uppercase btn-shimmer"
-              style={{
-                background: 'var(--orange)',
-                color: '#fff',
-                padding: '16px 36px',
-                borderRadius: 999,
-                boxShadow: '0 8px 32px rgba(255,92,26,0.3)',
-                minWidth: 190,
-                textAlign: 'center',
-                display: 'inline-block',
-              }}
-            >
-              בואו נבנה ביחד
-            </motion.a>
-            <motion.a
-              href="#portfolio"
-              whileHover={{ y: -4, scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              transition={{ type: 'spring', stiffness: 320, damping: 18, mass: 0.6 }}
-              className="font-heading font-semibold text-sm tracking-[0.18em] uppercase"
-              style={{
-                background: 'rgba(0,0,0,0.04)',
-                color: 'var(--text)',
-                border: '1px solid rgba(0,0,0,0.1)',
-                padding: '16px 36px',
-                borderRadius: 999,
-                backdropFilter: 'blur(10px)',
-                minWidth: 150,
-                textAlign: 'center',
-                display: 'inline-block',
-              }}
-            >
-              עבודות
-            </motion.a>
-          </motion.div>
+          </p>
+          <p style={{ fontFamily: 'var(--f-latin)', fontSize: 12, letterSpacing: '0.22em', color: 'var(--mute)', textTransform: 'uppercase', margin: 0 }}>
+            UI · UX · Branding · Web Architecture
+          </p>
         </motion.div>
+
+        {/* CTA */}
+        <motion.div variants={item} style={{ display: 'flex', gap: 12, marginTop: 36, flexWrap: 'wrap', justifyContent: 'center' }}>
+          <a href="#contact" className="btn btn--primary">
+            <span>בואו נבנה ביחד</span>
+            <svg viewBox="0 0 24 24" width={18} height={18} fill="none" stroke="currentColor" strokeWidth={2}><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+          </a>
+          <a href="#work" className="btn btn--ghost">
+            <span>תיק עבודות</span>
+          </a>
+        </motion.div>
+      </motion.div>
+
+      {/* Coords — bottom right */}
+      <div style={{
+        position: 'absolute', bottom: 50, right: 36,
+        display: 'flex', flexDirection: 'column', gap: 4,
+        fontFamily: 'var(--f-latin)', fontSize: 10, letterSpacing: '0.16em',
+        color: 'var(--mute)', textTransform: 'uppercase', textAlign: 'right',
+      }} className="hidden md:flex">
+        {[['LAT', '32.0853°N'], ['LON', '34.7818°E'], ['STUDIO', 'Tel Aviv']].map(([k, v]) => (
+          <div key={k} style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+            <span style={{ color: 'var(--mute-2)', minWidth: 50 }}>{k}</span>
+            <span style={{ color: 'var(--ink-2)', fontWeight: 600 }}>{v}</span>
+          </div>
+        ))}
       </div>
 
-      {/* Marquee separator line hint */}
-      <motion.div
+      {/* Watermark G */}
+      <div aria-hidden style={{
+        position: 'absolute', bottom: -120, left: -60,
+        fontFamily: 'var(--f-latin)', fontWeight: 700, fontSize: 500,
+        lineHeight: 1, color: 'rgba(10,10,10,0.035)',
+        pointerEvents: 'none', zIndex: -1, letterSpacing: '-0.05em',
+        userSelect: 'none',
+      }} className="hidden md:block">G</div>
+
+      {/* Scroll cue */}
+      <motion.a
+        href="#about"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.1 }}
-        className="relative z-10 flex justify-center pb-10"
+        transition={{ duration: 1, delay: 1.2 }}
+        style={{
+          position: 'absolute', bottom: 30, left: '50%', transform: 'translateX(-50%)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12,
+          fontFamily: 'var(--f-hebrew)', fontSize: 12, color: 'var(--mute)', letterSpacing: '0.1em',
+        }}
       >
-        <a
-          href="#about"
-          className="flex flex-col items-center gap-3 group"
-          style={{ color: 'var(--text-lt)' }}
-        >
-          <span style={{ fontSize: '0.58rem', letterSpacing: '0.32em', textTransform: 'uppercase', fontWeight: 500 }}>גלול</span>
-          {/* Refined mouse / line scroll indicator */}
-          <span
-            aria-hidden
-            style={{
-              position: 'relative',
-              display: 'inline-block',
-              width: 1,
-              height: 36,
-              background: 'rgba(0,0,0,0.12)',
-              overflow: 'hidden',
-              borderRadius: 1,
-            }}
-          >
-            <span
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                height: 14,
-                background: 'var(--orange)',
-                borderRadius: 1,
-                animation: 'scroll-trail 1.8s cubic-bezier(0.65,0,0.35,1) infinite',
-              }}
-            />
-          </span>
-        </a>
-      </motion.div>
+        <span>גלול</span>
+        <span style={{ position: 'relative', display: 'block', width: 1, height: 56, background: 'var(--line-2)', overflow: 'hidden', borderRadius: 1 }}>
+          <span style={{
+            position: 'absolute', top: -20, left: 0, width: 1, height: 20,
+            background: 'var(--accent)', borderRadius: 1,
+            animation: 'scroll-dot 2.2s ease-in-out infinite',
+          }} />
+        </span>
+      </motion.a>
     </section>
   )
 }

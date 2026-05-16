@@ -1,21 +1,122 @@
 import { useEffect, useRef, useState } from 'react'
 
-const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xzzbnwqr' // החלף בקישור שלך מ-formspree.io
+const WEB3FORMS_KEY = '2881ff54-8e38-43d3-af24-fbd128e3842f'
 
-const navLinks = [
-  { label: 'אודות', href: '#about' },
-  { label: 'עבודות', href: '#portfolio' },
-  { label: 'תהליך', href: '#process' },
-  { label: 'צור קשר', href: '#contact' },
-]
+const TERMS_CONTENT = `תנאי שימוש
+
+ברוכים הבאים ל-GULISTUDIO. השימוש באתר זה מהווה הסכמה לתנאים הבאים:
+
+1. שימוש מותר
+האתר מיועד לצפייה ולפנייה לשירותי עיצוב ובנייה של אתרי אינטרנט. אין להעתיק, לשכפל או להפיץ תכנים מהאתר ללא אישור מפורש בכתב.
+
+2. קניין רוחני
+כל התכנים, העיצובים, התמונות והטקסטים באתר הינם רכושה הבלעדי של GULISTUDIO ומוגנים בזכויות יוצרים.
+
+3. אחריות
+GULISTUDIO אינה אחראית לנזקים ישירים או עקיפים הנובעים משימוש באתר. המידע מוצג "כפי שהוא" ללא כל אחריות.
+
+4. שינויים
+אנו שומרים לעצמנו את הזכות לשנות את תנאי השימוש בכל עת. שינויים ייכנסו לתוקף מיד עם פרסומם.
+
+5. יצירת קשר
+לכל שאלה בנוגע לתנאי השימוש, ניתן לפנות אלינו דרך טופס יצירת הקשר באתר.
+
+עדכון אחרון: מאי 2026`
+
+const PRIVACY_CONTENT = `מדיניות פרטיות
+
+GULISTUDIO מחויבת לשמירה על פרטיותכם. מדיניות זו מסבירה כיצד אנו אוספים ומשתמשים במידע:
+
+1. מידע שנאסף
+אנו אוספים מידע שמוסרים לנו ישירות דרך טופס יצירת הקשר: שם, כתובת דוא"ל, מספר טלפון והודעה. איננו אוספים מידע נוסף ללא הסכמתכם.
+
+2. שימוש במידע
+המידע משמש אך ורק לצורך מתן מענה לפניותיכם וליצירת קשר עסקי. אין אנו מוכרים, מעבירים או משתפים את המידע עם צדדים שלישיים.
+
+3. אבטחת מידע
+אנו נוקטים באמצעי אבטחה סבירים להגנה על המידע שנמסר לנו. הטפסים מועברים בצורה מוצפנת.
+
+4. עוגיות (Cookies)
+האתר עשוי להשתמש בעוגיות לשיפור חוויית הגלישה. ניתן לבטל עוגיות בהגדרות הדפדפן.
+
+5. זכויותיכם
+יש לכם זכות לבקש מחיקה של המידע שנמסר לנו בכל עת על ידי פנייה אלינו ישירות.
+
+עדכון אחרון: מאי 2026`
+
+function LegalModal({ title, content, onClose }: { title: string; content: string; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [onClose])
+
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 9000,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: 'rgba(0,0,0,0.55)',
+        backdropFilter: 'blur(6px)',
+        padding: '24px',
+        animation: 'fadeInModal .25s ease',
+      }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          background: 'rgba(255,90,30,0.18)',
+          backdropFilter: 'blur(28px) saturate(160%)',
+          WebkitBackdropFilter: 'blur(28px) saturate(160%)',
+          border: '1px solid rgba(255,120,60,0.35)',
+          borderRadius: 20,
+          padding: '44px 48px',
+          maxWidth: 640, width: '100%',
+          maxHeight: '80vh',
+          overflowY: 'auto',
+          color: '#fff',
+          boxShadow: '0 24px 80px -10px rgba(255,60,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15)',
+          position: 'relative',
+        }}
+      >
+        <button
+          onClick={onClose}
+          aria-label="סגור"
+          style={{
+            position: 'absolute', top: 18, left: 18,
+            width: 36, height: 36, borderRadius: '50%',
+            background: 'rgba(255,255,255,0.15)',
+            border: '1px solid rgba(255,255,255,0.25)',
+            color: '#fff', fontSize: 18, lineHeight: 1,
+            cursor: 'pointer', display: 'grid', placeItems: 'center',
+            transition: 'background .2s',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.28)')}
+          onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.15)')}
+        >×</button>
+        <h2 style={{ fontFamily: 'var(--f-hebrew)', fontWeight: 900, fontSize: 28, color: '#fff', margin: '0 0 28px' }}>{title}</h2>
+        <pre style={{
+          fontFamily: 'var(--f-hebrew)', fontSize: 15, lineHeight: 1.9,
+          color: 'rgba(255,255,255,0.88)',
+          whiteSpace: 'pre-wrap', margin: 0,
+        }}>{content}</pre>
+      </div>
+    </div>
+  )
+}
 
 export default function Footer() {
-  const [email, setEmail] = useState('')
-  const [sent, setSent] = useState(false)
-  const footerRef = useRef<HTMLElement>(null)
+  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' })
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const [modal, setModal] = useState<null | 'terms' | 'privacy'>(null)
   const watermarkRef = useRef<HTMLDivElement>(null)
+  const footerRef = useRef<HTMLElement>(null)
 
-  // Subtle parallax on the giant GS watermark — moves -20px once footer enters viewport
   useEffect(() => {
     const onScroll = () => {
       const el = footerRef.current
@@ -23,257 +124,241 @@ export default function Footer() {
       if (!el || !wm) return
       const rect = el.getBoundingClientRect()
       const vh = window.innerHeight
-      // entry progress: 0 when footer top below viewport bottom, 1 once footer fully scrolled in
       const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh + rect.height * 0.6)))
-      const offset = -20 * progress
-      wm.style.transform = `translateY(calc(-50% + ${offset}px))`
+      wm.style.transform = `translateX(-50%) translateY(${-8 * progress}px)`
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     onScroll()
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setStatus('sending')
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: 'פנייה חדשה מה-Footer',
+          from_name: form.name,
+          ...form,
+        }),
+      })
+      const data = await res.json()
+      setStatus(data.success ? 'sent' : 'error')
+      if (data.success) setForm({ name: '', email: '', phone: '', message: '' })
+    } catch { setStatus('error') }
+  }
+
   return (
-    <footer ref={footerRef} style={{ background: 'var(--orange)', color: '#fff', position: 'relative', overflow: 'hidden' }}>
+    <>
+    {modal && (
+      <LegalModal
+        title={modal === 'terms' ? 'תנאי שימוש' : 'מדיניות פרטיות'}
+        content={modal === 'terms' ? TERMS_CONTENT : PRIVACY_CONTENT}
+        onClose={() => setModal(null)}
+      />
+    )}
+    <footer ref={footerRef} style={{ background: 'var(--accent)', color: '#fff', position: 'relative', overflow: 'hidden' }}>
 
-      {/* Giant watermark number */}
-      <div
-        ref={watermarkRef}
-        aria-hidden
-        style={{
-          position: 'absolute',
-          right: '-2%',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          fontSize: 'clamp(180px, 28vw, 380px)',
-          fontWeight: 900,
-          fontFamily: "'Inter', sans-serif",
-          letterSpacing: '-0.06em',
-          lineHeight: 1,
-          color: 'rgba(0,0,0,0.07)',
-          userSelect: 'none',
-          pointerEvents: 'none',
-          zIndex: 0,
-          willChange: 'transform',
-          transition: 'transform 0.6s cubic-bezier(0.16,1,0.3,1)',
-        }}
-      >
-        GS
-      </div>
+      {/* Decorative GS */}
+      <div aria-hidden style={{
+        position: 'absolute', top: '50%', right: '-3%',
+        transform: 'translateY(-50%)',
+        fontFamily: 'var(--f-latin)', fontWeight: 900,
+        fontSize: 'clamp(200px, 30vw, 420px)',
+        letterSpacing: '-0.06em', lineHeight: 1,
+        color: 'rgba(0,0,0,0.07)',
+        userSelect: 'none', pointerEvents: 'none',
+        zIndex: 0,
+      }}>GS</div>
 
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: 1000, margin: '0 auto', padding: '0 40px' }}>
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: 1320, margin: '0 auto', padding: '0 36px' }}>
 
-        {/* Top section */}
+        {/* Top */}
         <div style={{
-          padding: '80px 0 60px',
+          padding: '90px 0 70px',
           borderBottom: '1px solid rgba(255,255,255,0.15)',
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 60,
-          alignItems: 'end',
+          gridTemplateColumns: '1fr 1.1fr',
+          gap: 80, alignItems: 'start',
         }}>
-          {/* Left — headline */}
+          {/* Left — heading */}
           <div>
-            <p style={{
-              fontSize: '0.65rem',
-              letterSpacing: '0.3em',
-              textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.55)',
-              marginBottom: 20,
-              fontWeight: 500,
-            }}>
-              מוכן להתחיל?
-            </p>
+            <span style={{ display: 'block', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: 28, fontFamily: 'var(--f-latin)' }}>
+              ✦ מוכנים להתחיל?
+            </span>
             <h2 style={{
-              fontSize: 'clamp(2.6rem, 6vw, 5rem)',
-              fontWeight: 900,
-              fontFamily: "'Inter', sans-serif",
-              letterSpacing: '-0.04em',
-              lineHeight: 1.0,
-              color: '#fff',
-              margin: 0,
+              fontFamily: 'var(--f-hebrew)', fontWeight: 900,
+              fontSize: 'clamp(50px,8vw,110px)',
+              lineHeight: 1.0, letterSpacing: '-0.03em',
+              color: '#fff', margin: '0 0 28px',
             }}>
-              נהפוך יחד
-              <br />
-              <em style={{
-                fontStyle: 'italic',
-                fontFamily: "'Playfair Display', serif",
-                fontWeight: 700,
-                color: 'rgba(255,255,255,0.85)',
-              }}>
-                רעיון
-              </em>
+              נהפוך יחד<br />
+              <em style={{ fontFamily: 'var(--f-serif)', fontWeight: 400, fontStyle: 'italic', color: 'rgba(255,255,255,0.85)' }}>רעיון</em>
               {' '}לאתר
             </h2>
+            <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, maxWidth: 340, textAlign: 'center' }}>
+              הפרוייקט החדש שלכם במרחק שיחה אחת — תשאירו הודעה ואחזור אליכם בהקדם.
+            </p>
           </div>
 
-          {/* Right — CTA block */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-            <p style={{
-              fontSize: '0.95rem',
-              lineHeight: 1.7,
-              color: 'rgba(255,255,255,0.7)',
-              maxWidth: 320,
-            }}>
-              כל פרויקט מתחיל בשיחה אחת. שלח/י פרטים ואחזור אליך תוך 24 שעות.
-            </p>
+          {/* Right — full form */}
+          <div>
+            {status === 'sent' ? (
+              <div style={{ padding: 60, textAlign: 'center', background: 'rgba(0,0,0,0.15)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 'var(--r-lg)' }}>
+                <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.4)', display: 'grid', placeItems: 'center', margin: '0 auto 20px' }}>
+                  <svg width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={2}><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <p style={{ fontWeight: 700, fontSize: 20, color: '#fff', marginBottom: 8 }}>ההודעה נשלחה!</p>
+                <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 16 }}>אחזור אליכם בהקדם.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: '40px 44px', background: 'rgba(0,0,0,0.18)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: 'var(--r-lg)', backdropFilter: 'blur(8px)' }}>
 
-            {/* Mini email form */}
-            <div style={{ display: 'flex', gap: 0, maxWidth: 380 }}>
-              {!sent ? (
-                <>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                  {[
+                    { name: 'name', label: 'שם', type: 'text', placeholder: 'ישראל ישראלי' },
+                    { name: 'email', label: 'אימייל', type: 'email', placeholder: 'hello@example.com' },
+                  ].map(f => (
+                    <label key={f.name} style={{ display: 'flex', flexDirection: 'column', gap: 7, fontSize: 12, fontWeight: 600, letterSpacing: '0.06em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', fontFamily: 'var(--f-latin)' }}>
+                      {f.label}
+                      <input
+                        type={f.type} placeholder={f.placeholder} required
+                        value={form[f.name as 'name' | 'email']}
+                        onChange={e => setForm(p => ({ ...p, [f.name]: e.target.value }))}
+                        style={{ padding: '13px 16px', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 10, background: 'rgba(255,255,255,0.1)', fontFamily: 'var(--f-hebrew)', fontSize: 16, color: '#fff', outline: 'none', transition: 'border-color .2s, background .2s' }}
+                        onFocus={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.6)'; e.currentTarget.style.background = 'rgba(255,255,255,0.15)' }}
+                        onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)' }}
+                      />
+                    </label>
+                  ))}
+                </div>
+
+                <label style={{ display: 'flex', flexDirection: 'column', gap: 7, fontSize: 12, fontWeight: 600, letterSpacing: '0.06em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', fontFamily: 'var(--f-latin)' }}>
+                  טלפון
                   <input
-                    type="email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    placeholder="האימייל שלך"
-                    style={{
-                      flex: 1,
-                      background: 'rgba(0,0,0,0.15)',
-                      border: '1px solid rgba(255,255,255,0.2)',
-                      borderRight: 'none',
-                      color: '#fff',
-                      padding: '14px 18px',
-                      fontSize: '0.85rem',
-                      outline: 'none',
-                      borderRadius: '2px 0 0 2px',
-                    }}
-                    onFocus={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.25)')}
-                    onBlur={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.15)')}
+                    type="tel" placeholder="050-000-0000" required
+                    value={form.phone}
+                    onChange={e => setForm(p => ({ ...p, phone: e.target.value }))}
+                    style={{ padding: '13px 16px', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 10, background: 'rgba(255,255,255,0.1)', fontFamily: 'var(--f-hebrew)', fontSize: 16, color: '#fff', outline: 'none', transition: 'border-color .2s, background .2s' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.6)'; e.currentTarget.style.background = 'rgba(255,255,255,0.15)' }}
+                    onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)' }}
                   />
-                  <button
-                    className="btn-shimmer"
-                    onClick={() => {
-                      if (!email) return
-                      fetch(FORMSPREE_ENDPOINT, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-                        body: JSON.stringify({ email }),
-                      }).finally(() => setSent(true))
-                    }}
-                    style={{
-                      background: '#fff',
-                      color: 'var(--orange)',
-                      border: 'none',
-                      padding: '14px 22px',
-                      fontSize: '0.7rem',
-                      fontWeight: 800,
-                      letterSpacing: '0.12em',
-                      textTransform: 'uppercase',
-                      cursor: 'pointer',
-                      borderRadius: '0 2px 2px 0',
-                      transition: 'transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s',
-                      whiteSpace: 'nowrap',
-                    }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.transform = 'translateY(-1px)'
-                      e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.18)'
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.transform = 'translateY(0)'
-                      e.currentTarget.style.boxShadow = 'none'
-                    }}
-                  >
-                    שלח ←
-                  </button>
-                </>
-              ) : (
-                <p style={{
-                  fontSize: '0.85rem',
-                  color: '#fff',
-                  fontWeight: 600,
-                  padding: '14px 0',
-                }}>
-                  ✓ קיבלתי! אחזור אליך בקרוב.
-                </p>
-              )}
-            </div>
+                </label>
 
-            {/* Social links */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-              {[
-                { label: 'Instagram', href: 'https://instagram.com/gulistudio' },
-              ].map(s => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <label style={{ display: 'flex', flexDirection: 'column', gap: 7, fontSize: 12, fontWeight: 600, letterSpacing: '0.06em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', fontFamily: 'var(--f-latin)' }}>
+                  הודעה
+                  <textarea
+                    rows={4} placeholder="ספר/י לי על הפרויקט..."
+                    value={form.message}
+                    onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
+                    style={{ padding: '13px 16px', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 10, background: 'rgba(255,255,255,0.1)', fontFamily: 'var(--f-hebrew)', fontSize: 16, color: '#fff', resize: 'vertical', outline: 'none', transition: 'border-color .2s, background .2s' }}
+                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.6)'; e.currentTarget.style.background = 'rgba(255,255,255,0.15)' }}
+                    onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)' }}
+                  />
+                </label>
+
+                {status === 'error' && (
+                  <p style={{ color: 'rgba(255,180,160,1)', fontSize: 14 }}>משהו השתבש. נסה שוב.</p>
+                )}
+
+                <button type="submit" disabled={status === 'sending'}
                   style={{
-                    fontSize: '0.65rem',
-                    letterSpacing: '0.15em',
-                    textTransform: 'uppercase',
-                    color: 'rgba(255,255,255,0.5)',
-                    textDecoration: 'none',
-                    transition: 'color 0.2s',
+                    width: '100%', padding: '17px 20px',
+                    background: '#fff', color: 'var(--accent)',
+                    border: 'none', borderRadius: 'var(--r-pill)',
+                    fontSize: 16, fontWeight: 700, fontFamily: 'var(--f-hebrew)',
+                    cursor: status === 'sending' ? 'wait' : 'pointer',
+                    opacity: status === 'sending' ? 0.7 : 1,
+                    transition: 'opacity .2s, transform .15s',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
                   }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.5)')}
+                  onMouseEnter={e => { if (status !== 'sending') e.currentTarget.style.transform = 'translateY(-1px)' }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = '' }}
                 >
-                  {s.label}
-                </a>
-              ))}
-            </div>
+                  <span>{status === 'sending' ? 'שולח...' : 'שלח הודעה'}</span>
+                  <svg viewBox="0 0 24 24" width={18} height={18} fill="none" stroke="currentColor" strokeWidth={2}><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+
+        {/* Mid — links */}
+        <div style={{
+          display: 'flex', justifyContent: 'center', gap: 80,
+          padding: '50px 0',
+          borderBottom: '1px solid rgba(255,255,255,0.1)',
+        }}>
+          {/* קשר */}
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontFamily: 'var(--f-latin)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 16 }}>קשר</p>
+            <ul style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
+              <li>
+                <a href="https://instagram.com/gulistudio" target="_blank" rel="noopener noreferrer"
+                  style={{ fontSize: 15, color: 'rgba(255,255,255,0.7)', textDecoration: 'none', transition: 'color .2s' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
+                >@gulistudio</a>
+              </li>
+            </ul>
+          </div>
+          {/* משפטי */}
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontFamily: 'var(--f-latin)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 16 }}>משפטי</p>
+            <ul style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
+              <li>
+                <button onClick={() => setModal('terms')}
+                  style={{ fontSize: 15, color: 'rgba(255,255,255,0.7)', background: 'none', border: 'none', cursor: 'pointer', transition: 'color .2s', fontFamily: 'var(--f-hebrew)', padding: 0 }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
+                >תנאי שימוש</button>
+              </li>
+              <li>
+                <button onClick={() => setModal('privacy')}
+                  style={{ fontSize: 15, color: 'rgba(255,255,255,0.7)', background: 'none', border: 'none', cursor: 'pointer', transition: 'color .2s', fontFamily: 'var(--f-hebrew)', padding: 0 }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
+                >מדיניות פרטיות</button>
+              </li>
+            </ul>
           </div>
         </div>
 
         {/* Bottom bar */}
         <div style={{
           padding: '28px 0',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 24,
-          flexWrap: 'wrap',
+          display: 'flex', alignItems: 'center',
+          justifyContent: 'space-between', gap: 24,
         }}>
-          <div>
-            <span style={{
-              fontSize: '0.7rem',
-              fontWeight: 900,
-              letterSpacing: '0.25em',
-              textTransform: 'uppercase',
-              color: '#fff',
-            }}>
-              GULISTUDIO
-            </span>
-            <span style={{
-              marginLeft: 10,
-              fontSize: '0.6rem',
-              letterSpacing: '0.15em',
-              color: 'rgba(255,255,255,0.4)',
-              textTransform: 'uppercase',
-            }}>
-              Web Architecture
-            </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span style={{ fontFamily: 'var(--f-latin)', fontWeight: 900, letterSpacing: '0.2em', fontSize: 13, color: '#fff' }}>GULISTUDIO</span>
+            <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.05em' }}>Web Architecture</span>
           </div>
-
-          <nav style={{ display: 'flex', gap: 28, flexWrap: 'wrap' }}>
-            {navLinks.map(link => (
-              <a
-                key={link.href}
-                href={link.href}
-                style={{
-                  fontSize: '0.6rem',
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.4)',
-                  textDecoration: 'none',
-                  transition: 'color 0.2s',
-                }}
-                onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.4)')}
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-
-          <p style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.05em', display: 'flex', flexDirection: 'column', gap: 2, textAlign: 'right' }}>
-            <span>© {new Date().getFullYear()} GULISTUDIO</span>
-            <span style={{ color: 'rgba(255,255,255,0.18)' }}>Built with care in Israel 🇮🇱</span>
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', margin: 0 }}>
+            © {new Date().getFullYear()} GULISTUDIO · Built with care in Israel
           </p>
         </div>
       </div>
+
+      {/* Giant GULISTUDIO outline watermark */}
+      <div ref={watermarkRef} aria-hidden style={{
+        position: 'absolute', bottom: -20, left: '50%',
+        transform: 'translateX(-50%)',
+        fontFamily: 'var(--f-latin)', fontWeight: 900,
+        fontSize: 'clamp(60px,10vw,140px)',
+        letterSpacing: '0.15em', lineHeight: 1,
+        color: 'transparent',
+        WebkitTextStroke: '1px rgba(255,255,255,0.12)',
+        userSelect: 'none', pointerEvents: 'none',
+        whiteSpace: 'nowrap',
+        zIndex: 0,
+      }}>GULISTUDIO</div>
+
     </footer>
+    </>
   )
 }
