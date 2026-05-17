@@ -101,7 +101,7 @@ function LegalModal({ title, content, onClose }: { title: string; content: strin
         >×</button>
         <h2 style={{ fontFamily: 'var(--f-hebrew)', fontWeight: 900, fontSize: 28, color: '#fff', margin: '0 0 28px' }}>{title}</h2>
         <pre style={{
-          fontFamily: 'var(--f-hebrew)', fontSize: 15, lineHeight: 1.9,
+          fontFamily: 'var(--f-hebrew)', fontSize: 17, lineHeight: 1.9,
           color: 'rgba(255,255,255,0.88)',
           whiteSpace: 'pre-wrap', margin: 0,
         }}>{content}</pre>
@@ -187,7 +187,7 @@ export default function Footer() {
         }}>
           {/* Heading */}
           <div>
-            <span style={{ display: 'block', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: 20, fontFamily: 'var(--f-latin)' }}>
+            <span style={{ display: 'block', fontSize: 16, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: 20, fontFamily: 'var(--f-latin)' }}>
               ✦ מוכנים להתחיל?
             </span>
             <h2 style={{
@@ -200,7 +200,7 @@ export default function Footer() {
               <em style={{ fontFamily: 'var(--f-serif)', fontWeight: 400, fontStyle: 'italic', color: 'rgba(255,255,255,0.85)' }}>רעיון</em>
               {' '}לאתר
             </h2>
-            <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, maxWidth: 340 }}>
+            <p style={{ fontSize: 19, color: 'rgba(255,255,255,0.7)', lineHeight: 1.65, maxWidth: 380 }}>
               הפרוייקט החדש שלכם במרחק שיחה אחת — תשאירו הודעה ואחזור אליכם בהקדם.
             </p>
           </div>
@@ -223,7 +223,7 @@ export default function Footer() {
                     { name: 'name', label: 'שם', type: 'text', placeholder: 'ישראל ישראלי' },
                     { name: 'email', label: 'אימייל', type: 'email', placeholder: 'hello@example.com' },
                   ].map(f => (
-                    <label key={f.name} style={{ display: 'flex', flexDirection: 'column', gap: 7, fontSize: 12, fontWeight: 600, letterSpacing: '0.06em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', fontFamily: 'var(--f-latin)' }}>
+                    <label key={f.name} style={{ display: 'flex', flexDirection: 'column', gap: 7, fontSize: 16, fontWeight: 600, letterSpacing: '0.06em', color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', fontFamily: 'var(--f-latin)' }}>
                       {f.label}
                       <input
                         type={f.type} placeholder={f.placeholder} required
@@ -237,7 +237,7 @@ export default function Footer() {
                   ))}
                 </div>
 
-                <label style={{ display: 'flex', flexDirection: 'column', gap: 7, fontSize: 12, fontWeight: 600, letterSpacing: '0.06em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', fontFamily: 'var(--f-latin)' }}>
+                <label style={{ display: 'flex', flexDirection: 'column', gap: 7, fontSize: 16, fontWeight: 600, letterSpacing: '0.06em', color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', fontFamily: 'var(--f-latin)' }}>
                   טלפון
                   <input
                     type="tel" placeholder="050-000-0000" required
@@ -249,7 +249,7 @@ export default function Footer() {
                   />
                 </label>
 
-                <label style={{ display: 'flex', flexDirection: 'column', gap: 7, fontSize: 12, fontWeight: 600, letterSpacing: '0.06em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', fontFamily: 'var(--f-latin)' }}>
+                <label style={{ display: 'flex', flexDirection: 'column', gap: 7, fontSize: 16, fontWeight: 600, letterSpacing: '0.06em', color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', fontFamily: 'var(--f-latin)' }}>
                   הודעה
                   <textarea
                     rows={4} placeholder="ספר/י לי על הפרויקט..."
@@ -262,7 +262,7 @@ export default function Footer() {
                 </label>
 
                 {status === 'error' && (
-                  <p style={{ color: 'rgba(255,180,160,1)', fontSize: 14 }}>משהו השתבש. נסה שוב.</p>
+                  <p style={{ color: 'rgba(255,200,185,1)', fontSize: 16 }}>משהו השתבש. נסה שוב.</p>
                 )}
 
                 <button type="submit" disabled={status === 'sending'}
@@ -295,11 +295,11 @@ export default function Footer() {
         }}>
           {/* קשר */}
           <div style={{ textAlign: 'center' }}>
-            <p style={{ fontFamily: 'var(--f-latin)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 16 }}>קשר</p>
+            <p style={{ fontFamily: 'var(--f-latin)', fontSize: 15, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: 16 }}>קשר</p>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
               <li>
                 <a href="https://instagram.com/gulistudio" target="_blank" rel="noopener noreferrer"
-                  style={{ fontSize: 15, color: 'rgba(255,255,255,0.7)', textDecoration: 'none', transition: 'color .2s' }}
+                  style={{ fontSize: 17, color: 'rgba(255,255,255,0.75)', textDecoration: 'none', transition: 'color .2s' }}
                   onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
                   onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
                 >Instagram</a>
@@ -308,18 +308,18 @@ export default function Footer() {
           </div>
           {/* משפטי */}
           <div style={{ textAlign: 'center' }}>
-            <p style={{ fontFamily: 'var(--f-latin)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 16 }}>משפטי</p>
+            <p style={{ fontFamily: 'var(--f-latin)', fontSize: 15, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: 16 }}>משפטי</p>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
               <li>
                 <button onClick={() => setModal('terms')}
-                  style={{ fontSize: 15, color: 'rgba(255,255,255,0.7)', background: 'none', border: 'none', cursor: 'pointer', transition: 'color .2s', fontFamily: 'var(--f-hebrew)', padding: 0 }}
+                  style={{ fontSize: 17, color: 'rgba(255,255,255,0.75)', background: 'none', border: 'none', cursor: 'pointer', transition: 'color .2s', fontFamily: 'var(--f-hebrew)', padding: 0 }}
                   onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
                   onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
                 >תנאי שימוש</button>
               </li>
               <li>
                 <button onClick={() => setModal('privacy')}
-                  style={{ fontSize: 15, color: 'rgba(255,255,255,0.7)', background: 'none', border: 'none', cursor: 'pointer', transition: 'color .2s', fontFamily: 'var(--f-hebrew)', padding: 0 }}
+                  style={{ fontSize: 17, color: 'rgba(255,255,255,0.75)', background: 'none', border: 'none', cursor: 'pointer', transition: 'color .2s', fontFamily: 'var(--f-hebrew)', padding: 0 }}
                   onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
                   onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
                 >מדיניות פרטיות</button>
@@ -335,10 +335,10 @@ export default function Footer() {
           justifyContent: 'space-between', gap: 12,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ fontFamily: 'var(--f-latin)', fontWeight: 900, letterSpacing: '0.2em', fontSize: 13, color: '#fff' }}>GULISTUDIO</span>
-            <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.05em' }}>Web Architecture</span>
+            <span style={{ fontFamily: 'var(--f-latin)', fontWeight: 900, letterSpacing: '0.2em', fontSize: 16, color: '#fff' }}>GULISTUDIO</span>
+            <span style={{ fontSize: 15, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.05em' }}>Web Architecture</span>
           </div>
-          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', margin: 0 }}>
+          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.4)', margin: 0 }}>
             © {new Date().getFullYear()} GULISTUDIO · Built with care in Israel
           </p>
         </div>

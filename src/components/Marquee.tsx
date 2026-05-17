@@ -23,7 +23,7 @@ function Track() {
       {items.map((item, i) => (
         <span key={i} style={{
           fontFamily: item.type === 'muted' || item.type === 'accent' ? 'var(--f-hebrew)' : 'var(--f-latin)',
-          fontSize: item.type === 'dot' ? 12 : 'clamp(22px,3vw,42px)',
+          fontSize: item.type === 'dot' ? 16 : 'clamp(24px,3vw,44px)',
           fontWeight: item.type === 'dot' ? 400 : 600,
           letterSpacing: '-0.01em',
           color: item.type === 'dot' ? 'var(--accent)'

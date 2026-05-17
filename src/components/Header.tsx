@@ -43,12 +43,12 @@ export default function Header() {
     return (
       <header style={{ ...baseHeader, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         {/* Logo — right */}
-        <a href="#hero" style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'var(--f-latin)', letterSpacing: '0.04em', fontSize: 15, fontWeight: 700, textDecoration: 'none', color: 'var(--ink)' }}>
-          <span style={{ display: 'inline-grid', placeItems: 'center', width: 28, height: 28, background: 'var(--ink)', color: '#fff', borderRadius: 6, fontFamily: 'var(--f-latin)', fontWeight: 700, fontSize: 14 }}>G</span>
+        <a href="#hero" style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'var(--f-latin)', letterSpacing: '0.04em', fontSize: 17, fontWeight: 700, textDecoration: 'none', color: 'var(--ink)' }}>
+          <span style={{ display: 'inline-grid', placeItems: 'center', width: 32, height: 32, background: 'var(--ink)', color: '#fff', borderRadius: 6, fontFamily: 'var(--f-latin)', fontWeight: 700, fontSize: 16 }}>G</span>
         </a>
 
         {/* Center brand */}
-        <a href="#hero" style={{ fontFamily: 'var(--f-latin)', letterSpacing: '0.04em', fontSize: 14, fontWeight: 700, textDecoration: 'none', color: 'var(--ink)', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+        <a href="#hero" style={{ fontFamily: 'var(--f-latin)', letterSpacing: '0.04em', fontSize: 17, fontWeight: 700, textDecoration: 'none', color: 'var(--ink)', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
           <strong style={{ color: 'var(--ink)' }}>GULI</strong>
           <em style={{ fontStyle: 'normal', color: 'var(--accent)', marginInlineStart: 2 }}>STUDIO</em>
         </a>
@@ -90,7 +90,7 @@ export default function Header() {
               </a>
             ))}
             <a href="#contact" onClick={() => setMenuOpen(false)} style={{
-              marginTop: 8, textAlign: 'center', fontWeight: 600, fontSize: 15,
+              marginTop: 8, textAlign: 'center', fontWeight: 600, fontSize: 17,
               padding: '16px', borderRadius: 'var(--r-pill)',
               background: 'var(--accent)', color: '#fff',
             }}>
@@ -113,13 +113,13 @@ export default function Header() {
       gap: 24,
     }}>
       {/* Brand — right (RTL start) */}
-      <a href="#hero" style={{ display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'var(--f-latin)', letterSpacing: '0.04em', fontSize: 15, fontWeight: 700, textDecoration: 'none', color: 'var(--ink)', justifySelf: 'start' }}>
+      <a href="#hero" style={{ display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'var(--f-latin)', letterSpacing: '0.04em', fontSize: 18, fontWeight: 700, textDecoration: 'none', color: 'var(--ink)', justifySelf: 'start' }}>
         <span style={{
           display: 'inline-grid', placeItems: 'center',
-          width: 30, height: 30,
+          width: 34, height: 34,
           background: 'var(--ink)', color: '#fff',
           borderRadius: 7,
-          fontFamily: 'var(--f-latin)', fontWeight: 700, fontSize: 15,
+          fontFamily: 'var(--f-latin)', fontWeight: 700, fontSize: 17,
         }}>G</span>
         <span>
           <strong style={{ color: 'var(--ink)' }}>GULI</strong>
@@ -140,8 +140,8 @@ export default function Header() {
       }}>
         {navLinks.map(link => (
           <a key={link.href} href={link.href} style={{
-            padding: '10px 20px', borderRadius: 'var(--r-pill)',
-            fontSize: 15, fontWeight: 500, color: 'var(--ink-2)',
+            padding: '11px 22px', borderRadius: 'var(--r-pill)',
+            fontSize: 17, fontWeight: 500, color: 'var(--ink-2)',
             transition: 'background .2s',
           }}
             onMouseEnter={e => (e.currentTarget.style.background = 'rgba(10,10,10,0.05)')}
@@ -151,8 +151,8 @@ export default function Header() {
           </a>
         ))}
         <a href="#contact" style={{
-          padding: '10px 20px', borderRadius: 'var(--r-pill)',
-          fontSize: 15, fontWeight: 600,
+          padding: '11px 22px', borderRadius: 'var(--r-pill)',
+          fontSize: 17, fontWeight: 600,
           background: 'var(--accent)', color: '#fff',
           transition: 'background .2s',
         }}
@@ -164,7 +164,7 @@ export default function Header() {
       </nav>
 
       {/* Status meta — left (RTL end) */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'var(--f-latin)', fontSize: 12, letterSpacing: '0.06em', color: 'var(--mute)', textTransform: 'uppercase', justifySelf: 'end' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'var(--f-latin)', fontSize: 15, letterSpacing: '0.06em', color: 'var(--mute)', textTransform: 'uppercase', justifySelf: 'end' }}>
         <span className="status-dot" aria-hidden="true" />
         <span>פתוחה לפרויקטים · 2026</span>
       </div>

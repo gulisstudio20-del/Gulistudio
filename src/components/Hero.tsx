@@ -66,7 +66,7 @@ export default function Hero() {
             background: 'rgba(255,232,221,0.7)',
             border: '1px solid rgba(255,77,20,0.18)',
             borderRadius: 'var(--r-pill)',
-            fontSize: 13, color: 'var(--accent)', fontWeight: 500,
+            fontSize: 16, color: 'var(--accent)', fontWeight: 500,
             marginBottom: 32,
             backdropFilter: 'blur(8px)',
           }}>
@@ -109,7 +109,7 @@ export default function Hero() {
           <p style={{ fontSize: 'clamp(18px,1.4vw,22px)', color: 'var(--ink-2)', margin: 0, fontWeight: 500 }}>
             בונה חוויות דיגיטליות שמרגישות כמו אמנות.
           </p>
-          <p style={{ fontFamily: 'var(--f-latin)', fontSize: 12, letterSpacing: '0.22em', color: 'var(--mute)', textTransform: 'uppercase', margin: 0 }}>
+          <p style={{ fontFamily: 'var(--f-latin)', fontSize: 16, letterSpacing: '0.18em', color: 'var(--mute)', textTransform: 'uppercase', margin: 0 }}>
             UI · UX · Branding · Web Architecture
           </p>
         </motion.div>
@@ -129,7 +129,7 @@ export default function Hero() {
       <div style={{
         position: 'absolute', bottom: 50, right: 36,
         display: 'flex', flexDirection: 'column', gap: 4,
-        fontFamily: 'var(--f-latin)', fontSize: 10, letterSpacing: '0.16em',
+        fontFamily: 'var(--f-latin)', fontSize: 15, letterSpacing: '0.14em',
         color: 'var(--mute)', textTransform: 'uppercase', textAlign: 'right',
       }} className="hidden md:flex">
         {[['LAT', '32.0853°N'], ['LON', '34.7818°E']].map(([k, v]) => (
@@ -158,7 +158,7 @@ export default function Hero() {
         style={{
           position: 'absolute', bottom: 30, left: '50%', transform: 'translateX(-50%)',
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12,
-          fontFamily: 'var(--f-hebrew)', fontSize: 12, color: 'var(--mute)', letterSpacing: '0.1em',
+          fontFamily: 'var(--f-hebrew)', fontSize: 16, color: 'var(--mute)', letterSpacing: '0.1em',
         }}
       >
         <span>גללו למטה</span>

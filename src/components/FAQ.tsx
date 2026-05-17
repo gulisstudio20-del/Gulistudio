@@ -41,7 +41,7 @@ export default function FAQ() {
               style={{
                 display: 'flex', width: '100%', alignItems: 'flex-start',
                 justifyContent: 'space-between', gap: 16,
-                padding: '20px 4px', fontSize: 'clamp(15px,3.5vw,18px)', fontWeight: 600,
+                padding: '22px 4px', fontSize: 'clamp(18px,3.5vw,22px)', fontWeight: 600,
                 textAlign: 'start', background: 'transparent', border: 0, cursor: 'pointer',
                 color: open === i ? 'var(--accent)' : 'var(--ink)',
                 transition: 'color .25s', lineHeight: 1.4,
@@ -58,7 +58,7 @@ export default function FAQ() {
               gridTemplateRows: open === i ? '1fr' : '0fr',
               transition: 'grid-template-rows .4s cubic-bezier(.2,.8,.2,1)',
             }}>
-              <p style={{ overflow: 'hidden', margin: 0, paddingBottom: open === i ? 20 : 0, paddingInlineEnd: 24, fontSize: 'clamp(13px,3vw,15px)', color: 'var(--mute)', lineHeight: 1.7 }}>
+              <p style={{ overflow: 'hidden', margin: 0, paddingBottom: open === i ? 20 : 0, paddingInlineEnd: 24, fontSize: 'clamp(16px,3vw,18px)', color: 'var(--mute)', lineHeight: 1.75 }}>
                 {faq.a}
               </p>
             </div>

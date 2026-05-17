@@ -64,8 +64,8 @@ export default function Services() {
         <div>
           <p
             data-reveal
-            className="text-xs tracking-[5px] uppercase mb-3 transition-all duration-700"
-            style={{ color: 'var(--orange)', opacity: 0, transform: 'translateY(20px)', fontWeight: 700 }}
+            className="tracking-[5px] uppercase mb-3 transition-all duration-700"
+            style={{ color: 'var(--orange)', opacity: 0, transform: 'translateY(20px)', fontWeight: 700, fontSize: 16 }}
           >
             What I Do
           </p>
@@ -79,8 +79,8 @@ export default function Services() {
         </div>
         <p
           data-reveal
-          className="hidden md:block text-sm transition-all duration-700"
-          style={{ color: 'var(--text-lt)', opacity: 0, transform: 'translateY(20px)' }}
+          className="hidden md:block transition-all duration-700"
+          style={{ color: 'var(--text-lt)', opacity: 0, transform: 'translateY(20px)', fontSize: 18 }}
         >
           כל מה שצריך — תחת קורת גג אחת
         </p>
@@ -116,7 +116,7 @@ export default function Services() {
                   style={{
                     fontFamily: "'Inter', sans-serif",
                     fontWeight: 900,
-                    fontSize: '0.7rem',
+                    fontSize: '1rem',
                     color: isHovered ? 'var(--orange)' : 'rgba(0,0,0,0.2)',
                     letterSpacing: '0.05em',
                     paddingTop: 5,
@@ -141,7 +141,7 @@ export default function Services() {
                     </h3>
                     <span
                       style={{
-                        fontSize: '0.7rem',
+                        fontSize: '1rem',
                         color: 'var(--text-lt)',
                         letterSpacing: '0.05em',
                         fontWeight: 500,
@@ -154,11 +154,11 @@ export default function Services() {
                   </div>
                   <p
                     style={{
-                      fontSize: '0.88rem',
+                      fontSize: '1.15rem',
                       color: 'var(--text-mid)',
-                      lineHeight: 1.65,
+                      lineHeight: 1.7,
                       maxWidth: 480,
-                      maxHeight: isHovered ? 80 : 0,
+                      maxHeight: isHovered ? 120 : 0,
                       overflow: 'hidden',
                       opacity: isHovered ? 1 : 0,
                       transition: 'max-height 0.4s ease, opacity 0.35s ease',
@@ -172,7 +172,7 @@ export default function Services() {
                       display: 'flex',
                       gap: 6,
                       marginTop: isHovered ? 10 : 0,
-                      maxHeight: isHovered ? 40 : 0,
+                      maxHeight: isHovered ? 60 : 0,
                       overflow: 'hidden',
                       opacity: isHovered ? 1 : 0,
                       transition: 'max-height 0.4s ease 0.05s, opacity 0.35s ease 0.05s, margin 0.3s ease',
@@ -183,7 +183,7 @@ export default function Services() {
                       <span
                         key={tag}
                         style={{
-                          fontSize: '0.6rem',
+                          fontSize: '0.85rem',
                           fontWeight: 700,
                           letterSpacing: '0.12em',
                           textTransform: 'uppercase',

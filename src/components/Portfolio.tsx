@@ -3,177 +3,64 @@ import { useEffect, useRef, useState } from 'react'
 const projects = [
   {
     id: 'p1', num: '01', year: '2026',
-    title: 'Origin', titleEm: 'Café',
-    tags: ['web', 'brand'], tagLabel: 'Web Design · Branding',
-    variant: 'pc--cream',
-    url: 'https://origincafe.co.il',
-    desc: 'אתר תדמית לבית קפה שמרגישים בו עוד לפני שהקפה מגיע. אווירה חמה, עיצוב שמזמין להישאר.',
-    stack: ['UI / UX', 'Branding', 'Next.js'],
-    Mock: () => (
-      <div style={{ background: '#FFF8F0', color: '#2A1A0E', fontFamily: 'var(--f-serif), serif', display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
-        <div style={{ display: 'flex', gap: 14, alignItems: 'center', fontSize: 11, fontFamily: 'var(--f-hebrew)', color: '#5C4332', padding: '0 0 10px' }}>
-          <span>תפריט</span><span>פינות</span><span>אודות</span>
-          <span style={{ marginInlineStart: 'auto', fontFamily: 'var(--f-serif)', fontStyle: 'italic', fontSize: 16 }}>Origin <i style={{ color: '#C8924A', fontStyle: 'normal', fontSize: 8 }}>✦</i></span>
-        </div>
-        <p style={{ textAlign: 'center', fontFamily: 'var(--f-hebrew)', fontSize: 12, color: '#8B6B4F', margin: '14px 0 6px', letterSpacing: '0.06em' }}>בית קפה שכונתי · פינה חמה</p>
-        <h3 style={{ margin: 0, textAlign: 'center', fontFamily: 'var(--f-serif)', fontStyle: 'italic', fontSize: 'clamp(44px,8vw,84px)', lineHeight: 0.9, fontWeight: 400 }}>Origin</h3>
-        <p style={{ textAlign: 'center', fontFamily: 'var(--f-hebrew)', fontSize: 13, color: '#5C4332', margin: '12px 0 0' }}>קפה טוב, אנשים טובים.</p>
-      </div>
-    ),
+    title: 'Origin Café',
+    tagLabel: 'Web Design · Branding',
+    url: 'https://origin-fvun.vercel.app/',
+    img: '/images/portfolio-1.png',
+    desc: 'אתר תדמית לבית קפה שמרגישים בו עוד לפני שהקפה מגיע.',
+    tags: ['web', 'brand'],
+    accent: '#C8924A',
+    bg: 'linear-gradient(160deg,#F9EFE0,#F0E0C4)',
   },
   {
     id: 'p2', num: '02', year: '2025',
-    title: 'Komorebi', titleEm: 'Spa',
-    tags: ['web'], tagLabel: 'Web Design · Landing',
-    variant: 'pc--sand',
-    url: 'https://komorebi-spa.com',
-    desc: 'Landing page לספא יפני. שקט ויזואלי, טיפוגרפיה יפנית ואווירה שמשדרת קצב איטי ומכוון.',
-    stack: ['Web Design', 'Strategy', 'Motion'],
-    Mock: () => (
-      <div style={{ background: '#EDE7DD', color: '#1A1A1A', display: 'grid', gridTemplateColumns: 'auto 1fr', gap: 16, alignItems: 'center', fontFamily: 'var(--f-latin)', height: '100%', overflow: 'hidden' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 3, fontSize: 9, letterSpacing: '0.12em', color: '#8B7355', textTransform: 'uppercase' }}>
-          <span>komorebi</span><span>·</span><span>spa</span>
-        </div>
-        <div>
-          <h3 style={{ margin: 0, fontFamily: 'var(--f-serif)', fontSize: 44, lineHeight: 0.95, fontWeight: 400 }}>木<br/>漏<br/>れ<br/>日</h3>
-          <p style={{ fontFamily: 'var(--f-hebrew)', fontSize: 13, color: '#5C4F3D', lineHeight: 1.6, margin: '8px 0 14px' }}>אור שעובר דרך עצים.<br/>ספא יפני בלב העיר.</p>
-          <div style={{ display: 'inline-block', padding: '8px 16px', background: '#1A1A1A', color: '#EDE7DD', fontFamily: 'var(--f-hebrew)', fontSize: 12, borderRadius: 999 }}>לחץ לקביעת</div>
-        </div>
-      </div>
-    ),
+    title: 'Komorebi Spa',
+    tagLabel: 'Web Design · Landing',
+    url: 'https://komorebi-liard.vercel.app/',
+    img: '/images/portfolio-2.png',
+    desc: 'Landing page לספא יפני. שקט ויזואלי ואווירה שמשדרת קצב מכוון.',
+    tags: ['web'],
+    accent: '#6B5A47',
+    bg: 'linear-gradient(160deg,#EFE6D4,#D9C9AC)',
   },
   {
     id: 'p3', num: '03', year: '2025',
-    title: 'Skej', titleEm: 'Boards',
-    tags: ['brand', 'ecom'], tagLabel: 'Branding · E-commerce',
-    variant: 'pc--bone',
-    url: 'https://skej.co.il',
-    desc: 'אתר לסקייטבורדים ואקססוריז עם עיצוב עירוני, UX נקי וחנות אונליין שפועלת.',
-    stack: ['Branding', 'Shopify', 'E-commerce'],
-    Mock: () => (
-      <div style={{ background: '#F5F5F0', color: '#0A0A0A', fontFamily: 'var(--f-latin)', height: '100%', overflow: 'hidden' }}>
-        <div style={{ display: 'flex', gap: 12, fontWeight: 700, fontSize: 11, letterSpacing: '0.06em', paddingBottom: 10, borderBottom: '2px solid #0A0A0A', marginBottom: 14 }}>
-          <span style={{ background: '#FF3A00', color: '#fff', padding: '3px 10px', marginInlineEnd: 'auto' }}>SKEJ</span>
-          <span>SHOP</span><span>CART</span>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10 }}>
-          {[
-            { bg: 'linear-gradient(135deg,#FF3A00,#2A0F00)', label: 'Cruiser', price: '₪480' },
-            { bg: 'radial-gradient(circle,#0A0A0A 40%,#2A2A2A)', label: 'גלגלים', price: '₪120' },
-            { bg: '#E8E6DF', label: 'ציוד', price: '₪35' },
-          ].map(c => (
-            <div key={c.label} style={{ background: '#fff', padding: 10, borderRadius: 4, border: '1px solid rgba(0,0,0,0.08)', fontSize: 11, display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <div style={{ aspectRatio: '1', borderRadius: 3, background: c.bg }} />
-              <span>{c.label}</span>
-              <b style={{ color: '#FF3A00' }}>{c.price}</b>
-            </div>
-          ))}
-        </div>
-      </div>
-    ),
+    title: 'Skej Boards',
+    tagLabel: 'Branding · E-commerce',
+    url: 'https://skej-one.vercel.app',
+    img: '/images/portfolio-3.png',
+    desc: 'חנות אונליין לסקייטבורדים — עיצוב עירוני ו-UX נקי.',
+    tags: ['brand', 'ecom'],
+    accent: '#FF3A00',
+    bg: 'linear-gradient(160deg,#F5F4ED,#E4E2D8)',
   },
   {
     id: 'p4', num: '04', year: '2025',
-    title: 'Japanis', titleEm: 'Sushi',
-    tags: ['web'], tagLabel: 'UI / UX · Web Design',
-    variant: 'pc--blush',
-    url: 'https://japanis.co.il',
-    desc: 'אתר למסעדת סושי. תפריט נקי, סימפל, סגנון וטעם. Mobile-first ולוקים ראשונים.',
-    stack: ['UI / UX', 'Design System', 'Mobile'],
-    Mock: () => (
-      <div style={{ background: '#FAFAFA', color: '#0F1419', fontFamily: 'var(--f-hebrew)', height: '100%', overflow: 'hidden' }}>
-        <div style={{ display: 'flex', gap: 14, fontSize: 12, alignItems: 'center', marginBottom: 14 }}>
-          <span style={{ fontWeight: 800, color: '#E63946', marginInlineEnd: 'auto', fontSize: 16 }}>Japanis</span>
-          <span>תפריט</span><span>סניפים</span>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 22, alignItems: 'center' }}>
-          <h3 style={{ margin: 0, fontSize: 'clamp(32px,5vw,50px)', fontWeight: 800, lineHeight: 0.95, letterSpacing: '-0.03em' }}>סושי<br/>טרי.</h3>
-          <div>
-            <p style={{ color: '#5C5C5C', fontSize: 13, lineHeight: 1.55, margin: 0 }}>ב-25 דקות ספורות. טעם שמדבר בעצמו.</p>
-            <div style={{ display: 'inline-block', background: '#E63946', color: '#fff', padding: '8px 16px', borderRadius: 999, fontSize: 12, marginTop: 10 }}>הזמן עכשיו</div>
-          </div>
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: 'p5', num: '05', year: '2024',
-    title: 'Lior', titleEm: 'Bar',
-    tags: ['brand', 'web'], tagLabel: 'Branding · Portfolio',
-    variant: 'pc--ink',
-    url: 'https://liorbar.com',
-    desc: 'פורטפוליו לצלם-במאי. אתר שמכניס את הסיסמה ואת החוויה — אסתטיקה שקפה שהעבודה שם.',
-    stack: ['Branding', 'Portfolio', 'SEO'],
-    Mock: () => (
-      <div style={{ background: '#0E0E0E', color: '#E8E2D5', fontFamily: 'var(--f-latin)', height: '100%', overflow: 'hidden' }}>
-        <div style={{ display: 'flex', gap: 14, fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#9C9890', marginBottom: 16 }}>
-          <span style={{ color: '#E8E2D5', fontWeight: 700, marginInlineEnd: 'auto' }}>LIOR<i style={{ color: '#9C7C50', fontStyle: 'normal' }}>·</i>BAR</span>
-          <span>WORK</span><span>CONTACT</span>
-        </div>
-        <h3 style={{ margin: 0, fontFamily: 'var(--f-hebrew)', fontSize: 'clamp(38px,6vw,58px)', lineHeight: 0.95, fontWeight: 800, letterSpacing: '-0.02em' }}>צלם<br/>במאי.</h3>
-        <p style={{ fontFamily: 'var(--f-hebrew)', fontSize: 13, color: '#9C9890', margin: '10px 0 16px' }}>סינמה וויזואל.</p>
-        <div style={{ display: 'flex', gap: 8, fontFamily: 'var(--f-hebrew)', fontSize: 12, paddingTop: 10, borderTop: '1px solid rgba(232,226,213,0.15)' }}>
-          <span>תיעוד</span><span style={{ color: '#9C7C50' }}>·</span><span>מסחרי</span><span style={{ color: '#9C7C50' }}>·</span><span>ברנד</span>
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: 'p6', num: '06', year: '2024',
-    title: 'Pilates', titleEm: 'Loft',
-    tags: ['web', 'ecom'], tagLabel: 'Web · Booking System',
-    variant: 'pc--clay',
-    url: 'https://pilatesloft.co.il',
-    desc: 'סטודיו פילאטיס עם מערכת הזמנות אונליין. עיצוב עפר, טיפוגרפיה רומנטית ואווירה אמיתית.',
-    stack: ['UX / UI', 'Booking', 'Arbox'],
-    Mock: () => (
-      <div style={{ background: '#F4EFE8', color: '#3D332A', fontFamily: 'var(--f-hebrew)', height: '100%', overflow: 'hidden' }}>
-        <div style={{ display: 'flex', gap: 14, fontSize: 12, color: '#6B5A47', marginBottom: 16 }}>
-          <span style={{ fontFamily: 'var(--f-serif)', fontStyle: 'italic', fontSize: 18, color: '#3D332A', marginInlineEnd: 'auto' }}>PilatesLoft</span>
-          <span>שעות</span><span>צרפות</span>
-        </div>
-        <h3 style={{ margin: '0 0 14px', fontFamily: 'var(--f-serif)', fontSize: 'clamp(26px,4vw,40px)', lineHeight: 1, fontWeight: 400 }}>
-          תרגול שקט, <em style={{ color: '#B5896A' }}>שישנה אותך.</em>
-        </h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-          {[
-            { time: '07:00', name: 'פילאטיס בוקר', status: 'פנוי' },
-            { time: '09:00', name: 'Reformer Mid', status: 'שמורה', hi: true },
-            { time: '18:30', name: 'Mat Flow', status: 'תפוס' },
-          ].map(r => (
-            <div key={r.time} style={{ display: 'grid', gridTemplateColumns: '44px 1fr auto', gap: 10, padding: '9px 13px', background: r.hi ? '#B5896A' : 'rgba(255,255,255,0.6)', borderRadius: 10, fontSize: 12, alignItems: 'center', color: r.hi ? '#F4EFE8' : 'inherit' }}>
-              <b style={{ fontFamily: 'var(--f-latin)', color: r.hi ? 'rgba(255,255,255,0.85)' : '#B5896A' }}>{r.time}</b>
-              <span>{r.name}</span>
-              <i style={{ fontStyle: 'normal', fontSize: 11, color: r.hi ? 'rgba(255,255,255,0.7)' : '#6B5A47' }}>{r.status}</i>
-            </div>
-          ))}
-        </div>
-      </div>
-    ),
+    title: 'Japanis Sushi',
+    tagLabel: 'UI / UX · Web Design',
+    url: 'https://japanis.vercel.app/',
+    img: '/images/portfolio-4.png',
+    desc: 'אתר למסעדת סושי. סימפל, נקי, Mobile-first.',
+    tags: ['web'],
+    accent: '#E63946',
+    bg: 'linear-gradient(160deg,#FFF5F5,#FFE0E2)',
   },
 ]
 
 const filters = [
-  { label: 'הכל', value: 'all', count: 6 },
-  { label: 'Web', value: 'web', count: 4 },
-  { label: 'Branding', value: 'brand', count: 3 },
-  { label: 'E-commerce', value: 'ecom', count: 2 },
+  { label: 'הכל', value: 'all' },
+  { label: 'Web', value: 'web' },
+  { label: 'Branding', value: 'brand' },
+  { label: 'E-commerce', value: 'ecom' },
 ]
-
-const bgMap: Record<string, string> = {
-  'pc--ink':   'linear-gradient(160deg,#1A1A1A 0%,#0A0A0A 100%)',
-  'pc--cream': 'linear-gradient(160deg,#F9EFE0,#F5E6D0)',
-  'pc--sand':  'linear-gradient(160deg,#EFE6D4,#D9C9AC)',
-  'pc--bone':  'linear-gradient(160deg,#F5F4ED,#E8E5DA)',
-  'pc--blush': 'linear-gradient(160deg,#FFE7E0,#FDD3C6)',
-  'pc--clay':  'linear-gradient(160deg,#F0E4D6,#DCC2A8)',
-}
 
 export default function Portfolio() {
   const sectionRef = useRef<HTMLElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const [filter, setFilter] = useState('all')
   const [index, setIndex] = useState(0)
+  const [hovered, setHovered] = useState<string | null>(null)
+  const [imgLoaded, setImgLoaded] = useState<Record<string, boolean>>({})
 
   const visible = projects.filter(p => filter === 'all' || p.tags.includes(filter))
 
@@ -184,9 +71,7 @@ export default function Portfolio() {
     if (!track) return
     const card = track.children[0] as HTMLElement
     if (!card) return
-    const gap = 28
-    const step = card.offsetWidth + gap
-    track.style.transform = `translateX(${index * step}px)`
+    track.style.transform = `translateX(${index * (card.offsetWidth + 24)}px)`
   }, [index, filter])
 
   useEffect(() => {
@@ -202,127 +87,183 @@ export default function Portfolio() {
   const goTo = (i: number) => setIndex(Math.max(0, Math.min(visible.length - 1, i)))
 
   return (
-    <section id="work" ref={sectionRef} style={{ position: 'relative', zIndex: 1, padding: '80px 20px 80px', maxWidth: 1320, margin: '0 auto' }}>
+    <section id="work" ref={sectionRef} style={{ position: 'relative', zIndex: 1, padding: '80px 24px', maxWidth: 1200, margin: '0 auto' }}>
 
-      {/* Head */}
-      <div data-reveal style={{ marginBottom: 40 }}>
-        <div style={{ marginBottom: 20 }}>
-          <span className="eyebrow" style={{ marginBottom: 14, display: 'inline-block' }}>✦ SELECTED · 2024–2026</span>
-          <h2 className="h-display">
-            תיק עבודות
-            <span style={{ display: 'block', fontFamily: 'var(--f-latin)', fontSize: 13, fontWeight: 400, letterSpacing: '0.18em', color: 'var(--mute)', textTransform: 'uppercase', marginTop: 10 }}>/ made by avigail</span>
-          </h2>
-        </div>
+      {/* Header */}
+      <div data-reveal style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 24, marginBottom: 40 }}>
         <div>
-          <p style={{ fontSize: 15, color: 'var(--mute)', margin: '0 0 16px', lineHeight: 1.6 }}>לחצו על פרויקט לכניסה לאתר.</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-            {filters.map(f => (
+          <span className="eyebrow" style={{ marginBottom: 12, display: 'block' }}>✦ SELECTED WORK · 2024–2026</span>
+          <h2 className="h-display" style={{ margin: 0 }}>תיק עבודות</h2>
+        </div>
+
+        {/* Filters */}
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {filters.map(f => {
+            const count = f.value === 'all' ? projects.length : projects.filter(p => p.tags.includes(f.value)).length
+            const active = filter === f.value
+            return (
               <button key={f.value} onClick={() => setFilter(f.value)} style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6,
-                padding: '8px 14px', fontSize: 14, fontWeight: 500,
-                color: filter === f.value ? '#fff' : 'var(--mute)',
-                background: filter === f.value ? 'var(--ink)' : 'transparent',
-                border: `1px solid ${filter === f.value ? 'var(--ink)' : 'var(--line-2)'}`,
+                padding: '10px 20px', fontSize: 17, fontWeight: 500,
+                color: active ? '#fff' : 'var(--mute)',
+                background: active ? 'var(--ink)' : 'transparent',
+                border: `1px solid ${active ? 'var(--ink)' : 'var(--line-2)'}`,
                 borderRadius: 'var(--r-pill)', transition: 'all .2s', cursor: 'pointer',
               }}>
                 {f.label}
-                <em style={{ fontStyle: 'normal', fontFamily: 'var(--f-latin)', fontSize: 11, color: filter === f.value ? 'rgba(255,255,255,.6)' : 'var(--mute-2)' }}>{f.count}</em>
+                <em style={{ fontStyle: 'normal', fontFamily: 'var(--f-latin)', fontSize: 14, opacity: 0.6 }}>{count}</em>
               </button>
-            ))}
-          </div>
+            )
+          })}
         </div>
       </div>
 
       {/* Carousel */}
-      <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 24, padding: '0 0 32px' }}>
+      <div style={{ overflow: 'hidden', borderRadius: 20 }}>
         <div
           ref={trackRef}
-          style={{ display: 'flex', gap: 28, transition: 'transform .85s cubic-bezier(.7,0,.2,1)', willChange: 'transform' }}
+          style={{ display: 'flex', gap: 24, transition: 'transform .75s cubic-bezier(.7,0,.2,1)', willChange: 'transform' }}
         >
           {visible.map((p, i) => {
             const isActive = i === index
-            const dark = p.variant === 'pc--ink'
             return (
               <article
                 key={p.id}
                 style={{
                   flex: '0 0 100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  minHeight: 'auto',
                   borderRadius: 20,
-                  background: bgMap[p.variant] ?? 'var(--paper)',
-                  border: `1px solid ${dark ? 'rgba(255,255,255,0.08)' : 'var(--line)'}`,
-                  color: dark ? '#F5F4ED' : 'var(--ink)',
-                  opacity: isActive ? 1 : 0.22,
-                  filter: isActive ? 'none' : 'blur(4px) saturate(0.5)',
-                  transform: isActive ? 'scale(1)' : 'scale(0.95)',
-                  transition: 'opacity .6s ease, filter .6s ease, transform .85s cubic-bezier(.7,0,.2,1)',
-                  pointerEvents: isActive ? 'auto' : 'none',
+                  background: p.bg,
+                  border: '1px solid var(--line)',
                   overflow: 'hidden',
+                  opacity: isActive ? 1 : 0.18,
+                  filter: isActive ? 'none' : 'blur(3px) saturate(0.4)',
+                  transform: isActive ? 'scale(1)' : 'scale(0.96)',
+                  transition: 'opacity .6s, filter .6s, transform .75s cubic-bezier(.7,0,.2,1)',
+                  pointerEvents: isActive ? 'auto' : 'none',
                 }}
               >
-                {/* Preview */}
-                <div style={{ padding: '20px 20px 0', display: 'flex', flexDirection: 'column' }}>
+                {/* Screenshot — full width, browser frame */}
+                <a
+                  href={p.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onMouseEnter={() => setHovered(p.id)}
+                  onMouseLeave={() => setHovered(null)}
+                  style={{ display: 'block', position: 'relative', background: 'rgba(0,0,0,0.04)' }}
+                >
+                  {/* Browser chrome */}
                   <div style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 8,
-                    padding: '6px 12px', alignSelf: 'flex-start',
-                    background: dark ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.8)',
-                    border: `1px solid ${dark ? 'rgba(255,255,255,0.18)' : 'rgba(10,10,10,0.08)'}`,
-                    borderRadius: 'var(--r-pill)', fontSize: 12, fontWeight: 500,
-                    backdropFilter: 'blur(10px)',
-                    marginBottom: 16,
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    padding: '11px 18px',
+                    background: 'rgba(255,255,255,0.88)',
+                    backdropFilter: 'blur(12px)',
+                    borderBottom: '1px solid rgba(0,0,0,0.07)',
                   }}>
-                    <span className="status-dot" aria-hidden="true" />
-                    {p.tagLabel}
+                    {['#FF5F57','#FEBC2E','#28C840'].map(c => (
+                      <span key={c} style={{ width: 11, height: 11, borderRadius: '50%', background: c, flexShrink: 0 }} />
+                    ))}
+                    <span style={{
+                      flex: 1, textAlign: 'center',
+                      background: 'rgba(0,0,0,0.06)', borderRadius: 6,
+                      padding: '5px 14px', fontSize: 15,
+                      fontFamily: 'var(--f-latin)', color: 'var(--mute)',
+                      overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                    }}>
+                      {p.url.replace('https://', '').replace(/\/$/, '')}
+                    </span>
+                    <svg viewBox="0 0 24 24" width={14} height={14} fill="none" stroke="rgba(0,0,0,0.28)" strokeWidth={2}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
                   </div>
-                  <div style={{ borderRadius: 12, overflow: 'hidden', background: 'rgba(255,255,255,0.35)', height: 220 }}>
-                    <div style={{ height: '100%', padding: '14px 16px', display: 'flex', flexDirection: 'column' }}>
-                      <p.Mock />
+
+                  {/* Image */}
+                  <div style={{ position: 'relative', height: 380, overflow: 'hidden' }}>
+                    {!imgLoaded[p.id] && (
+                      <div style={{ position: 'absolute', inset: 0, background: p.bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span style={{ fontFamily: 'var(--f-latin)', fontSize: 64, fontWeight: 900, color: 'rgba(0,0,0,0.05)' }}>GS</span>
+                      </div>
+                    )}
+                    <img
+                      src={p.img}
+                      alt={`${p.title} screenshot`}
+                      onLoad={() => setImgLoaded(prev => ({ ...prev, [p.id]: true }))}
+                      style={{
+                        width: '100%', height: '100%',
+                        objectFit: 'cover', objectPosition: 'top center',
+                        display: 'block',
+                        transform: hovered === p.id ? 'scale(1.02)' : 'scale(1)',
+                        transition: 'transform 0.5s cubic-bezier(.2,.8,.2,1), opacity 0.35s',
+                        opacity: imgLoaded[p.id] ? 1 : 0,
+                      }}
+                    />
+                    {/* Hover overlay */}
+                    <div style={{
+                      position: 'absolute', inset: 0,
+                      background: 'rgba(0,0,0,0.22)',
+                      opacity: hovered === p.id ? 1 : 0,
+                      transition: 'opacity 0.3s',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                      color: '#fff', fontSize: 17, fontWeight: 700,
+                    }}>
+                      <svg viewBox="0 0 24 24" width={20} height={20} fill="none" stroke="currentColor" strokeWidth={2}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+                      כניסה לאתר
                     </div>
                   </div>
-                </div>
+                </a>
 
-                {/* Info */}
-                <div style={{ padding: '20px 24px 28px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, fontFamily: 'var(--f-latin)' }}>
-                    <span style={{ fontSize: 40, fontWeight: 900, color: 'var(--accent)', letterSpacing: '-0.04em', lineHeight: 1 }}>{p.num}</span>
-                    <span style={{ fontSize: 11, letterSpacing: '0.16em', color: dark ? 'rgba(255,255,255,0.4)' : 'var(--mute)', textTransform: 'uppercase' }}>{p.year}</span>
+                {/* Info row — clean & minimal */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'auto 1fr auto',
+                  alignItems: 'center',
+                  gap: 20,
+                  padding: '22px 28px',
+                }}>
+                  {/* Number */}
+                  <span style={{
+                    fontFamily: 'var(--f-latin)', fontWeight: 900,
+                    fontSize: 17, letterSpacing: '0.04em',
+                    color: 'var(--accent)', opacity: 0.7,
+                  }}>{p.num}</span>
+
+                  {/* Title + desc */}
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 4 }}>
+                      <h3 style={{ margin: 0, fontFamily: 'var(--f-hebrew)', fontWeight: 800, fontSize: 'clamp(20px,2.2vw,26px)', letterSpacing: '-0.02em', lineHeight: 1 }}>
+                        {p.title}
+                      </h3>
+                      <span style={{
+                        fontSize: 15, fontFamily: 'var(--f-latin)',
+                        color: 'var(--mute)', letterSpacing: '0.04em',
+                        padding: '4px 12px',
+                        background: 'rgba(10,10,10,0.05)',
+                        border: '1px solid var(--line-2)',
+                        borderRadius: 'var(--r-pill)',
+                        whiteSpace: 'nowrap',
+                      }}>{p.tagLabel}</span>
+                    </div>
+                    <p style={{ margin: 0, fontSize: 17, color: 'var(--mute)', lineHeight: 1.6 }}>{p.desc}</p>
                   </div>
 
-                  <h3 style={{ margin: 0, fontFamily: 'var(--f-hebrew)', fontWeight: 800, fontSize: 'clamp(28px,6vw,40px)', lineHeight: 1, letterSpacing: '-0.02em' }}>
-                    {p.title}{' '}
-                    <em style={{ fontStyle: 'italic', fontFamily: 'var(--f-serif)', fontWeight: 400, color: 'var(--accent)', fontSize: '0.82em' }}>{p.titleEm}</em>
-                  </h3>
-
-                  <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6, color: dark ? 'rgba(245,244,237,0.65)' : 'var(--mute)' }}>{p.desc}</p>
-
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                    {p.stack.map(s => (
-                      <span key={s} style={{ padding: '5px 12px', background: dark ? 'rgba(255,255,255,0.07)' : 'rgba(10,10,10,0.05)', border: `1px solid ${dark ? 'rgba(255,255,255,0.12)' : 'rgba(10,10,10,0.07)'}`, borderRadius: 'var(--r-pill)', fontSize: 12, color: dark ? 'rgba(245,244,237,0.85)' : 'var(--ink-2)' }}>{s}</span>
-                    ))}
-                  </div>
-
+                  {/* CTA */}
                   <a
                     href={p.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
-                      marginTop: 4,
-                      display: 'inline-flex', alignItems: 'center', gap: 10,
-                      padding: '14px 22px',
-                      background: dark ? '#F5F4ED' : 'var(--ink)',
-                      color: dark ? '#0A0A0A' : '#fff',
+                      display: 'inline-flex', alignItems: 'center', gap: 8,
+                      padding: '12px 22px',
+                      background: 'var(--ink)', color: '#fff',
                       borderRadius: 'var(--r-pill)',
-                      fontSize: 15, fontWeight: 700,
-                      alignSelf: 'flex-start',
-                      transition: 'transform .2s, box-shadow .2s',
-                      boxShadow: '0 6px 24px -8px rgba(10,10,10,0.25)',
+                      fontSize: 17, fontWeight: 700,
+                      whiteSpace: 'nowrap',
                       textDecoration: 'none',
+                      transition: 'transform .2s',
+                      flexShrink: 0,
                     }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)' }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)' }}
                   >
                     כניסה לאתר
-                    <svg viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="currentColor" strokeWidth={2}><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+                    <svg viewBox="0 0 24 24" width={14} height={14} fill="none" stroke="currentColor" strokeWidth={2.5}><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
                   </a>
                 </div>
               </article>
@@ -331,58 +272,53 @@ export default function Portfolio() {
         </div>
       </div>
 
-      {/* Nav */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, marginTop: 16, padding: '0 4px' }}>
-        {/* Dot nav */}
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+      {/* Nav controls */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 20, padding: '0 4px' }}>
+        {/* Dots */}
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           {visible.map((_, i) => (
             <button key={i} onClick={() => goTo(i)} aria-label={`פרויקט ${i + 1}`} style={{
-              width: i === index ? 32 : 8,
-              height: 8, borderRadius: 999,
-              background: i === index ? 'var(--accent)' : 'rgba(10,10,10,0.12)',
+              width: i === index ? 28 : 7, height: 7,
+              borderRadius: 999,
+              background: i === index ? 'var(--accent)' : 'rgba(10,10,10,0.14)',
               border: 0, cursor: 'pointer', transition: 'all .3s', padding: 0,
             }} />
           ))}
         </div>
 
-        {/* Counter */}
-        <div style={{ fontFamily: 'var(--f-latin)', fontSize: 13, letterSpacing: '0.04em', color: 'var(--mute)', flexShrink: 0 }}>
-          <b style={{ fontWeight: 800, fontSize: 22, color: 'var(--accent)', letterSpacing: '-0.03em' }}>
-            {String(index + 1).padStart(2, '0')}
-          </b>
-          <span style={{ color: 'var(--mute-2)', margin: '0 4px' }}>/</span>
-          <span>{String(visible.length).padStart(2, '0')}</span>
-        </div>
-
-        {/* Arrow buttons */}
-        <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
-          {[
-            { label: 'הקודם', dir: -1, icon: <path d="M15 6l6 6-6 6M21 12H3"/> },
-            { label: 'הבא', dir: 1, icon: <path d="M9 6l-6 6 6 6M3 12h18"/> },
-          ].map(btn => (
-            <button key={btn.label} onClick={() => goTo(index + btn.dir)} aria-label={btn.label}
-              disabled={(btn.dir === -1 ? index === 0 : index >= visible.length - 1)}
-              style={{
-                width: 48, height: 48, borderRadius: '50%', background: 'var(--ink)', color: '#fff',
-                display: 'grid', placeItems: 'center', border: 0, cursor: 'pointer',
-                transition: 'background .25s',
-                opacity: (btn.dir === -1 && index === 0) || (btn.dir === 1 && index >= visible.length - 1) ? 0.3 : 1,
-              }}
-            >
-              <svg viewBox="0 0 24 24" width={18} height={18} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                {btn.icon}
-              </svg>
-            </button>
-          ))}
+        {/* Counter + arrows */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <span style={{ fontFamily: 'var(--f-latin)', fontSize: 17, color: 'var(--mute)' }}>
+            <b style={{ fontSize: 24, fontWeight: 800, color: 'var(--accent)', letterSpacing: '-0.03em' }}>{String(index + 1).padStart(2,'0')}</b>
+            <span style={{ color: 'var(--mute-2)', margin: '0 4px' }}>/</span>
+            {String(visible.length).padStart(2,'0')}
+          </span>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {[{dir:-1,label:'הקודם',path:'M15 6l6 6-6 6M21 12H3'},{dir:1,label:'הבא',path:'M9 6l-6 6 6 6M3 12h18'}].map(btn => (
+              <button key={btn.dir} onClick={() => goTo(index + btn.dir)} aria-label={btn.label}
+                disabled={btn.dir === -1 ? index === 0 : index >= visible.length - 1}
+                style={{
+                  width: 48, height: 48, borderRadius: '50%',
+                  background: 'var(--ink)', color: '#fff',
+                  display: 'grid', placeItems: 'center', border: 0, cursor: 'pointer',
+                  opacity: (btn.dir === -1 && index === 0) || (btn.dir === 1 && index >= visible.length - 1) ? 0.25 : 1,
+                  transition: 'opacity .2s',
+                }}>
+                <svg viewBox="0 0 24 24" width={17} height={17} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                  <path d={btn.path}/>
+                </svg>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Footer CTA */}
-      <div data-reveal style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, padding: '48px 0 0', marginTop: 48, borderTop: '1px solid var(--line)', textAlign: 'center' }}>
-        <p style={{ margin: 0, fontSize: 20, fontWeight: 600, color: 'var(--ink)' }}>רוצה שהפרויקט הבא יהיה האתר שלך?</p>
-        <a href="#contact" className="btn btn--primary" style={{ fontSize: 15, padding: '14px 28px' }}>
+      {/* CTA bottom */}
+      <div data-reveal style={{ marginTop: 56, paddingTop: 48, borderTop: '1px solid var(--line)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, textAlign: 'center' }}>
+        <p style={{ margin: 0, fontSize: 22, fontWeight: 600, color: 'var(--ink)' }}>רוצה שהפרויקט הבא יהיה האתר שלך?</p>
+        <a href="#contact" className="btn btn--primary" style={{ fontSize: 16, padding: '15px 30px' }}>
           <span>בואו נדבר</span>
-          <svg viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="currentColor" strokeWidth={2}><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+          <svg viewBox="0 0 24 24" width={15} height={15} fill="none" stroke="currentColor" strokeWidth={2}><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
         </a>
       </div>
     </section>

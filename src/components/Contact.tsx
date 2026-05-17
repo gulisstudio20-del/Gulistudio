@@ -32,7 +32,7 @@ const labelStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   gap: 8,
-  fontSize: 13,
+  fontSize: 16,
   fontWeight: 600,
   letterSpacing: '0.04em',
   color: 'var(--mute)',
@@ -126,7 +126,7 @@ export default function Contact() {
                   style={{ ...inputStyle, borderColor: fieldErrors.name ? '#b3261e' : 'var(--line-2)' }}
                   {...focusStyle(!!fieldErrors.name)}
                 />
-                {fieldErrors.name && <span style={{ color: '#b3261e', fontSize: 13, marginTop: 2 }}>{fieldErrors.name}</span>}
+                {fieldErrors.name && <span style={{ color: '#b3261e', fontSize: 15, marginTop: 2 }}>{fieldErrors.name}</span>}
               </label>
               <label style={labelStyle}>
                 אימייל *
@@ -136,7 +136,7 @@ export default function Contact() {
                   style={{ ...inputStyle, borderColor: fieldErrors.email ? '#b3261e' : 'var(--line-2)' }}
                   {...focusStyle(!!fieldErrors.email)}
                 />
-                {fieldErrors.email && <span style={{ color: '#b3261e', fontSize: 13, marginTop: 2 }}>{fieldErrors.email}</span>}
+                {fieldErrors.email && <span style={{ color: '#b3261e', fontSize: 15, marginTop: 2 }}>{fieldErrors.email}</span>}
               </label>
             </div>
 
@@ -149,7 +149,7 @@ export default function Contact() {
                 style={{ ...inputStyle, borderColor: fieldErrors.phone ? '#b3261e' : 'var(--line-2)' }}
                 {...focusStyle(!!fieldErrors.phone)}
               />
-              {fieldErrors.phone && <span style={{ color: '#b3261e', fontSize: 13, marginTop: 2 }}>{fieldErrors.phone}</span>}
+              {fieldErrors.phone && <span style={{ color: '#b3261e', fontSize: 15, marginTop: 2 }}>{fieldErrors.phone}</span>}
             </label>
 
             {/* סוג פרויקט */}
@@ -161,7 +161,7 @@ export default function Contact() {
                     style={{
                       padding: '10px 18px',
                       border: `1px solid ${form.service === chip ? 'var(--ink)' : 'var(--line-2)'}`,
-                      borderRadius: 'var(--r-pill)', fontSize: 15,
+                      borderRadius: 'var(--r-pill)', fontSize: 16,
                       background: form.service === chip ? 'var(--ink)' : '#fff',
                       color: form.service === chip ? '#fff' : 'var(--ink-2)',
                       transition: 'all .2s', cursor: 'pointer',
@@ -180,7 +180,7 @@ export default function Contact() {
                 style={{ ...inputStyle, resize: 'vertical', borderColor: fieldErrors.message ? '#b3261e' : 'var(--line-2)' }}
                 {...focusStyle(!!fieldErrors.message)}
               />
-              {fieldErrors.message && <span style={{ color: '#b3261e', fontSize: 13, marginTop: 2 }}>{fieldErrors.message}</span>}
+              {fieldErrors.message && <span style={{ color: '#b3261e', fontSize: 15, marginTop: 2 }}>{fieldErrors.message}</span>}
             </label>
 
             {status === 'error' && (

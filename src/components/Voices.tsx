@@ -79,23 +79,23 @@ export default function Voices() {
             {v.big && (
               <span style={{ fontFamily: 'var(--f-serif)', fontSize: 80, lineHeight: 0.6, color: 'var(--accent)', fontStyle: 'italic', display: 'block' }}>"</span>
             )}
-            <blockquote style={{ margin: 0, fontSize: v.big ? 'clamp(17px,4vw,24px)' : 'clamp(14px,3vw,17px)', lineHeight: 1.5, fontWeight: v.big ? 500 : 400, letterSpacing: v.big ? '-0.01em' : 0 }}>
+            <blockquote style={{ margin: 0, fontSize: v.big ? 'clamp(20px,4vw,28px)' : 'clamp(17px,3vw,20px)', lineHeight: 1.6, fontWeight: v.big ? 500 : 400, letterSpacing: v.big ? '-0.01em' : 0 }}>
               {v.quote}
             </blockquote>
-            <figcaption style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 13 }}>
+            <figcaption style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 15 }}>
               <span style={{
                 display: 'inline-grid', placeItems: 'center',
-                width: 38, height: 38,
+                width: 42, height: 42,
                 borderRadius: '50%', background: 'var(--accent)', color: '#fff',
-                fontWeight: 700, fontSize: 15, flexShrink: 0,
+                fontWeight: 700, fontSize: 17, flexShrink: 0,
               }}>
                 {v.initials}
               </span>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <strong style={{ fontWeight: 600, fontSize: 14 }}>{v.name}</strong>
-                <span style={{ color: v.big ? 'rgba(255,255,255,0.55)' : 'var(--mute)', fontSize: 12 }}>{v.role}</span>
+                <strong style={{ fontWeight: 600, fontSize: 18 }}>{v.name}</strong>
+                <span style={{ color: v.big ? 'rgba(255,255,255,0.65)' : 'var(--mute)', fontSize: 16 }}>{v.role}</span>
               </div>
-              {v.stars && <span style={{ marginInlineStart: 'auto', color: 'var(--accent)', fontSize: 13 }}>★★★★★</span>}
+              {v.stars && <span style={{ marginInlineStart: 'auto', color: 'var(--accent)', fontSize: 15 }}>★★★★★</span>}
             </figcaption>
           </figure>
         ))}
@@ -111,7 +111,7 @@ export default function Voices() {
         {stats.map((s, i) => (
           <div key={s.label} style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: '10px 8px' }}>
             <b style={{ fontFamily: 'var(--f-latin)', fontSize: 'clamp(28px,6vw,40px)', fontWeight: 700, color: i === 0 ? 'var(--accent)' : 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1 }}>{s.value}</b>
-            <span style={{ fontSize: 12, color: 'var(--mute)', letterSpacing: '0.04em' }}>{s.label}</span>
+            <span style={{ fontSize: 16, color: 'var(--mute)', letterSpacing: '0.04em' }}>{s.label}</span>
           </div>
         ))}
       </div>

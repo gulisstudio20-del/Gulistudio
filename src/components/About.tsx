@@ -62,12 +62,12 @@ export default function About() {
             אתר הוא <em>הפנים הדיגיטליות</em> של העסק שלך.
           </h2>
 
-          <p data-reveal style={{ fontSize: 'clamp(15px,1.05vw,17px)', lineHeight: 1.7, color: 'var(--ink-2)', maxWidth: '56ch', marginBottom: 18 }}>
+          <p data-reveal style={{ fontSize: 'clamp(18px,1.3vw,21px)', lineHeight: 1.75, color: 'var(--ink-2)', maxWidth: '56ch', marginBottom: 18 }}>
             אתר שעובד נכון לא צריך לצעוק כדי שישימו לב אליו. הוא צריך
             להיות מדויק — כל דבר במקום שלו. כל כפתור במקומו הנכון. כל פיקסל מחושב.
           </p>
 
-          <p data-reveal style={{ fontSize: 'clamp(15px,1.05vw,17px)', lineHeight: 1.7, color: 'var(--mute)', maxWidth: '52ch' }}>
+          <p data-reveal style={{ fontSize: 'clamp(18px,1.3vw,21px)', lineHeight: 1.75, color: 'var(--mute)', maxWidth: '52ch' }}>
             אני מתמחה בבניית חוויות דיגיטליות שמשלבות עיצוב מדויק עם ביצועים
             אמיתיים — מהאסטרטגיה ועד הפיקסל האחרון. ובניית אתרים שהגולש ירגיש כמו אמנות.
           </p>
@@ -79,10 +79,10 @@ export default function About() {
           }}>
             {pillars.map(p => (
               <div key={p.title} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                <span style={{ color: 'var(--accent)', fontSize: 14, marginTop: 4 }}>{p.mark}</span>
+                <span style={{ color: 'var(--accent)', fontSize: 18, marginTop: 4 }}>{p.mark}</span>
                 <div>
-                  <strong style={{ display: 'block', fontSize: 15, fontWeight: 700, marginBottom: 4 }}>{p.title}</strong>
-                  <p style={{ margin: 0, fontSize: 14, color: 'var(--mute)', lineHeight: 1.6 }}>{p.desc}</p>
+                  <strong style={{ display: 'block', fontSize: 20, fontWeight: 700, marginBottom: 6 }}>{p.title}</strong>
+                  <p style={{ margin: 0, fontSize: 17, color: 'var(--mute)', lineHeight: 1.65 }}>{p.desc}</p>
                 </div>
               </div>
             ))}
@@ -92,7 +92,7 @@ export default function About() {
             display: 'inline-flex', alignItems: 'center', gap: 8,
             marginTop: 32, color: 'var(--accent)',
             borderBottom: '1px solid var(--accent)',
-            paddingBottom: 4, fontWeight: 600, fontSize: 15,
+            paddingBottom: 4, fontWeight: 600, fontSize: 18,
           }}>
             נדבר
             <svg viewBox="0 0 24 24" width={14} height={14} fill="none" stroke="currentColor" strokeWidth={2}><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
@@ -120,7 +120,7 @@ export default function About() {
             {['#FF5F57', '#FEBC2E', '#28C840'].map(c => (
               <span key={c} style={{ width: 11, height: 11, borderRadius: '50%', background: c, display: 'block' }} />
             ))}
-            <span style={{ fontFamily: 'var(--f-latin)', fontSize: 11, color: 'var(--mute)', margin: '0 auto', letterSpacing: '0.04em' }}>
+            <span style={{ fontFamily: 'var(--f-latin)', fontSize: 14, color: 'var(--mute)', margin: '0 auto', letterSpacing: '0.04em' }}>
               avigail.studio/portfolio
             </span>
           </div>
@@ -150,7 +150,7 @@ export default function About() {
                 { label: 'שנות ניסיון', target: 5, suffix: '+', color: 'var(--mute)' },
               ].map(s => (
                 <div key={s.label} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  <span style={{ fontFamily: 'var(--f-latin)', fontSize: 9, letterSpacing: '0.12em', color: 'var(--mute)', textTransform: 'uppercase' }}>{s.label}</span>
+                  <span style={{ fontFamily: 'var(--f-latin)', fontSize: 15, letterSpacing: '0.10em', color: 'var(--mute)', textTransform: 'uppercase' }}>{s.label}</span>
                   <span style={{ fontFamily: 'var(--f-latin)', fontSize: 'clamp(28px,5vw,42px)', fontWeight: 700, color: s.color, lineHeight: 1, letterSpacing: '-0.03em' }}>
                     <CountUp target={s.target} suffix={s.suffix} />
                   </span>
@@ -160,18 +160,18 @@ export default function About() {
 
             {/* Stack */}
             <div style={{ position: 'relative', zIndex: 1, marginTop: 22 }}>
-              <span style={{ display: 'block', fontFamily: 'var(--f-latin)', fontSize: 10, letterSpacing: '0.18em', color: 'var(--mute)', textTransform: 'uppercase', marginBottom: 10 }}>STACK</span>
+              <span style={{ display: 'block', fontFamily: 'var(--f-latin)', fontSize: 15, letterSpacing: '0.14em', color: 'var(--mute)', textTransform: 'uppercase', marginBottom: 10 }}>STACK</span>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                 {['React', 'Next.js', 'Tailwind', 'Framer', 'Figma', 'Webflow'].map(t => (
-                  <span key={t} style={{ padding: '5px 12px', border: '1px solid var(--line-2)', borderRadius: 'var(--r-pill)', fontSize: 12, color: 'var(--ink-2)', background: 'rgba(255,255,255,0.5)' }}>{t}</span>
+                  <span key={t} style={{ padding: '7px 16px', border: '1px solid var(--line-2)', borderRadius: 'var(--r-pill)', fontSize: 16, color: 'var(--ink-2)', background: 'rgba(255,255,255,0.5)' }}>{t}</span>
                 ))}
               </div>
             </div>
 
             {/* Services */}
             <div style={{ position: 'relative', zIndex: 1, marginTop: 22 }}>
-              <span style={{ display: 'block', fontFamily: 'var(--f-latin)', fontSize: 10, letterSpacing: '0.18em', color: 'var(--mute)', textTransform: 'uppercase', marginBottom: 10 }}>SERVICES</span>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontFamily: 'var(--f-latin)', fontSize: 13, color: 'var(--ink-2)' }}>
+              <span style={{ display: 'block', fontFamily: 'var(--f-latin)', fontSize: 15, letterSpacing: '0.14em', color: 'var(--mute)', textTransform: 'uppercase', marginBottom: 10 }}>SERVICES</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontFamily: 'var(--f-latin)', fontSize: 17, color: 'var(--ink-2)' }}>
                 {['01 → Web Design', '02 → UI / UX', '03 → Branding', '04 → Development'].map(s => (
                   <span key={s}>{s}</span>
                 ))}

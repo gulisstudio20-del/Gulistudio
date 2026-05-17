@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 
 const steps = [
-  { num: '01', title: 'שיחת אפיון', desc: '30 דקות. לא מכירות. מקשיבה. ספרו לי על העסק שלכם ואני אבין מה דרוש.', time: '~ שעה ראשונה' },
-  { num: '02', title: 'תכנון מבנה האתר', desc: 'מפת האתר, ארכיטקטורת המידע ו-wireframes. כל עמוד עובד — קודם בשחור ולבן.', time: '~ שבוע שני' },
-  { num: '03', title: 'עיצוב ואישור', desc: 'עיצוב מלא ב-Figma. שני סבבי תיקונים כלולים בכל פרויקט.', time: '~ שבועות שלישי–רביעי' },
-  { num: '04', title: 'בניית האתר', desc: 'קוד נקי, מהיר, רספונסיבי. אנימציות, SEO בסיס, ומסירה.', time: '~ שבועות חמישי–שישי' },
-  { num: '05', title: 'העלאה ומסירה', desc: 'בדיקות סופיות, SSL, מניטורינג ומסירה. שירות תחזוקה לאחר מכן.', time: '~ שבוע שביעי' },
+  { num: '01', title: 'שיחת אפיון', desc: 'רק אתם ואני. כל מה שיש לכם להגיד — תזרקו רעיונות. אני כאן בשביל להקשיב.', time: '~ שעה ראשונה' },
+  { num: '02', title: 'תכנון מבנה האתר', desc: 'בואו נקשקש, אבל לא ככה — הרי כבר דיברנו מספיק. התכוונתי במחברת. תנו לי להכין לכם סקיצה יפה למבנה האתר החדש שלכם.', time: '~ שבוע שני' },
+  { num: '03', title: 'עיצוב ואישור', desc: 'כן, הנה צבעתי ואפילו העברתי למחשב — מה אתם אומרים? מתחיל להיראות כמו אתר, לא?', time: '~ שבועות שלישי–רביעי' },
+  { num: '04', title: 'בניית האתר', desc: 'הופה — איך הציור הפך לקוד מסובך במחשב? אל תדאגו, נחזיר אותו חזרה להיות יפיפה על המסך שלכם.', time: '~ שבועות חמישי–שישי' },
+  { num: '05', title: 'העלאה ומסירה', desc: 'בדיקות סופיות, חיבור למערכות סליקה, טפסים ורספונסיביות מובייל. ואל תדאגו — לא אשאיר אתכם ככה לבד. אסביר לכם כל מה שאתם צריכים לדעת על האתר החדש שלכם.', time: '~ שבוע שביעי' },
 ]
 
 export default function WorkProcess() {
@@ -137,9 +137,9 @@ export default function WorkProcess() {
                     opacity: 0.7,
                   }} />
                 )}
-                <h3 style={{ margin: '0 0 10px', fontSize: isMobile ? 'clamp(18px,4.5vw,24px)' : 'clamp(22px,2vw,30px)', fontWeight: 700, letterSpacing: '-0.015em', lineHeight: 1.2 }}>{step.title}</h3>
-                <p style={{ margin: '0 0 12px', fontSize: isMobile ? 13 : 15, color: 'var(--mute)', lineHeight: 1.7 }}>{step.desc}</p>
-                <span style={{ fontFamily: 'var(--f-latin)', fontSize: 11, letterSpacing: '0.16em', color: 'var(--accent)', textTransform: 'uppercase', fontWeight: 600 }}>{step.time}</span>
+                <h3 style={{ margin: '0 0 12px', fontSize: isMobile ? 'clamp(20px,4.5vw,26px)' : 'clamp(24px,2vw,32px)', fontWeight: 700, letterSpacing: '-0.015em', lineHeight: 1.2 }}>{step.title}</h3>
+                <p style={{ margin: '0 0 14px', fontSize: isMobile ? 17 : 19, color: 'var(--mute)', lineHeight: 1.75 }}>{step.desc}</p>
+                <span style={{ fontFamily: 'var(--f-latin)', fontSize: 16, letterSpacing: '0.14em', color: 'var(--accent)', textTransform: 'uppercase', fontWeight: 600 }}>{step.time}</span>
               </div>
             </li>
           )
