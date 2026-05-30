@@ -192,19 +192,38 @@ function AccessibilityModal({ onClose }: { onClose: () => void }) {
 }
 
 function LegalModal({ title, content, onClose }: { title: string; content: string; onClose: () => void }) {
+  const scrollRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
+    const t = setTimeout(() => scrollRef.current?.focus(), 50)
     return () => {
+      clearTimeout(t)
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
     }
   }, [onClose])
 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    const el = scrollRef.current
+    if (!el) return
+    const step = 80
+    if (e.key === 'ArrowDown') { e.preventDefault(); el.scrollBy({ top: step, behavior: 'smooth' }) }
+    if (e.key === 'ArrowUp')   { e.preventDefault(); el.scrollBy({ top: -step, behavior: 'smooth' }) }
+    if (e.key === 'PageDown')  { e.preventDefault(); el.scrollBy({ top: el.clientHeight * 0.85, behavior: 'smooth' }) }
+    if (e.key === 'PageUp')    { e.preventDefault(); el.scrollBy({ top: -el.clientHeight * 0.85, behavior: 'smooth' }) }
+    if (e.key === 'End')       { e.preventDefault(); el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' }) }
+    if (e.key === 'Home')      { e.preventDefault(); el.scrollTo({ top: 0, behavior: 'smooth' }) }
+  }
+
   return (
     <div
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
       style={{
         position: 'fixed', inset: 0, zIndex: 9000,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -214,8 +233,28 @@ function LegalModal({ title, content, onClose }: { title: string; content: strin
         animation: 'fadeInModal .25s ease',
       }}
     >
+      <button
+        onClick={onClose}
+        aria-label="סגור"
+        style={{
+          position: 'fixed', top: 24, left: 24,
+          width: 40, height: 40, borderRadius: '50%',
+          background: 'rgba(255,255,255,0.18)',
+          border: '1.5px solid rgba(255,255,255,0.45)',
+          color: '#fff', fontSize: 22, lineHeight: 1,
+          cursor: 'pointer', display: 'grid', placeItems: 'center',
+          transition: 'background .2s, transform .15s',
+          zIndex: 9001,
+        }}
+        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.32)'; e.currentTarget.style.transform = 'scale(1.1)' }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.18)'; e.currentTarget.style.transform = 'scale(1)' }}
+      >×</button>
+
       <div
+        ref={scrollRef}
         onClick={e => e.stopPropagation()}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
         style={{
           background: 'rgba(255,90,30,0.18)',
           backdropFilter: 'blur(28px) saturate(160%)',
@@ -226,31 +265,19 @@ function LegalModal({ title, content, onClose }: { title: string; content: strin
           maxWidth: 640, width: '100%',
           maxHeight: '80vh',
           overflowY: 'auto',
+          overscrollBehavior: 'contain',
           color: '#fff',
           boxShadow: '0 24px 80px -10px rgba(255,60,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15)',
           position: 'relative',
+          outline: 'none',
+          direction: 'rtl',
         }}
       >
-        <button
-          onClick={onClose}
-          aria-label="סגור"
-          style={{
-            position: 'absolute', top: 18, left: 18,
-            width: 36, height: 36, borderRadius: '50%',
-            background: 'rgba(255,255,255,0.15)',
-            border: '1px solid rgba(255,255,255,0.25)',
-            color: '#fff', fontSize: 18, lineHeight: 1,
-            cursor: 'pointer', display: 'grid', placeItems: 'center',
-            transition: 'background .2s',
-          }}
-          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.28)')}
-          onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.15)')}
-        >×</button>
         <h2 style={{ fontFamily: 'var(--f-hebrew)', fontWeight: 900, fontSize: 28, color: '#fff', margin: '0 0 28px' }}>{title}</h2>
         <pre style={{
           fontFamily: 'var(--f-hebrew)', fontSize: 17, lineHeight: 1.9,
           color: 'rgba(255,255,255,0.88)',
-          whiteSpace: 'pre-wrap', margin: 0,
+          whiteSpace: 'pre-wrap', margin: 0, textAlign: 'right',
         }}>{content}</pre>
       </div>
     </div>
