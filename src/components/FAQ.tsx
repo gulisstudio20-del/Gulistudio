@@ -30,7 +30,7 @@ export default function FAQ() {
         <span className="eyebrow">✦ FAQ · 06</span>
       </div>
 
-      <h2 data-reveal className="h-display" style={{ marginBottom: 36 }}>שאלות שכולם שואלות בדרך כלל.</h2>
+      <h2 data-reveal className="h-display" style={{ marginBottom: 36 }}>שאלות שכולם שואלים בדרך כלל.</h2>
 
       <ul data-reveal style={{ borderTop: '1px solid var(--line-2)', listStyle: 'none', padding: 0, margin: 0 }}>
         {faqs.map((faq, i) => (
