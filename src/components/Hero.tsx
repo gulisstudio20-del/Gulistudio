@@ -16,7 +16,29 @@ export default function Hero() {
   const heroRef = useRef<HTMLElement>(null)
   const rowTopRef = useRef<HTMLSpanElement>(null)
   const rowBotRef = useRef<HTMLSpanElement>(null)
+  const guliIRef = useRef<HTMLSpanElement>(null)
+  const studioIRef = useRef<HTMLSpanElement>(null)
+  const baseOffsetRef = useRef(0)
 
+  // Align the I in GULI directly above the I in STUDIO
+  useEffect(() => {
+    const alignI = () => {
+      const gi = guliIRef.current
+      const si = studioIRef.current
+      const top = rowTopRef.current
+      if (!gi || !si || !top) return
+      const giCx = gi.getBoundingClientRect().left + gi.getBoundingClientRect().width / 2
+      const siCx = si.getBoundingClientRect().left + si.getBoundingClientRect().width / 2
+      const offset = siCx - giCx
+      baseOffsetRef.current = offset
+      top.style.transform = `translateX(${offset}px)`
+    }
+    document.fonts.ready.then(alignI)
+    window.addEventListener('resize', alignI)
+    return () => window.removeEventListener('resize', alignI)
+  }, [])
+
+  // Mouse parallax — preserve the I-alignment base offset
   useEffect(() => {
     const hero = heroRef.current
     if (!hero) return
@@ -24,11 +46,13 @@ export default function Hero() {
       const r = hero.getBoundingClientRect()
       const mx = ((e.clientX - r.left) / r.width - 0.5) * 2
       const my = ((e.clientY - r.top) / r.height - 0.5) * 2
-      if (rowTopRef.current) rowTopRef.current.style.transform = `translate(${mx * 0.04 * 30}px, ${my * 0.04 * 16}px)`
+      const px = mx * 0.04 * 30
+      const py = my * 0.04 * 16
+      if (rowTopRef.current) rowTopRef.current.style.transform = `translate(${baseOffsetRef.current + px}px, ${py}px)`
       if (rowBotRef.current) rowBotRef.current.style.transform = `translate(${mx * -0.04 * 30}px, ${my * -0.04 * 16}px)`
     }
     const onLeave = () => {
-      if (rowTopRef.current) rowTopRef.current.style.transform = ''
+      if (rowTopRef.current) rowTopRef.current.style.transform = `translateX(${baseOffsetRef.current}px)`
       if (rowBotRef.current) rowBotRef.current.style.transform = ''
     }
     hero.addEventListener('mousemove', onMove)
@@ -86,20 +110,34 @@ export default function Hero() {
             letterSpacing: '-0.04em',
             margin: 0,
             pointerEvents: 'none',
+            overflow: 'visible',
           }}
           aria-label="Guli Studio"
         >
+          {/* GULI — shifted so its I aligns with STUDIO's I */}
           <span
             ref={rowTopRef}
-            style={{ display: 'block', color: 'var(--ink)', willChange: 'transform', transition: 'transform 200ms cubic-bezier(.2,.8,.2,1)' }}
+            style={{
+              display: 'block',
+              color: 'var(--ink)',
+              willChange: 'transform',
+              transition: 'transform 200ms cubic-bezier(.2,.8,.2,1)',
+            }}
           >
-            GULI
+            GUL<span ref={guliIRef}>I</span>
           </span>
+
+          {/* STUDIO — STU in accent, D, I, O — I serves as the connecting anchor */}
           <span
             ref={rowBotRef}
-            style={{ display: 'block', marginTop: '-0.18em', willChange: 'transform', transition: 'transform 200ms cubic-bezier(.2,.8,.2,1)' }}
+            style={{
+              display: 'block',
+              marginTop: '-0.18em',
+              willChange: 'transform',
+              transition: 'transform 200ms cubic-bezier(.2,.8,.2,1)',
+            }}
           >
-            <span style={{ color: 'var(--accent)' }}>STU</span>DIO
+            <span style={{ color: 'var(--accent)' }}>STU</span>D<span ref={studioIRef}>I</span>O
           </span>
         </motion.h1>
 
@@ -125,7 +163,7 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Coords — bottom right */}
+      {/* Coords */}
       <div style={{
         position: 'absolute', bottom: 50, right: 36,
         display: 'flex', flexDirection: 'column', gap: 4,
