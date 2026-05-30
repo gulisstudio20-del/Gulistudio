@@ -51,19 +51,25 @@ function AccessibilityModal({ onClose }: { onClose: () => void }) {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
-    scrollRef.current?.focus()
+    // Small timeout so the element is painted before focusing
+    const t = setTimeout(() => scrollRef.current?.focus(), 50)
     return () => {
+      clearTimeout(t)
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
     }
   }, [onClose])
 
-  function stopWheelPropagation(e: React.WheelEvent<HTMLDivElement>) {
+  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     const el = scrollRef.current
     if (!el) return
-    const atTop = el.scrollTop === 0 && e.deltaY < 0
-    const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight && e.deltaY > 0
-    if (!atTop && !atBottom) e.stopPropagation()
+    const step = 80
+    if (e.key === 'ArrowDown') { e.preventDefault(); el.scrollBy({ top: step, behavior: 'smooth' }) }
+    if (e.key === 'ArrowUp')   { e.preventDefault(); el.scrollBy({ top: -step, behavior: 'smooth' }) }
+    if (e.key === 'PageDown')  { e.preventDefault(); el.scrollBy({ top: el.clientHeight * 0.85, behavior: 'smooth' }) }
+    if (e.key === 'PageUp')    { e.preventDefault(); el.scrollBy({ top: -el.clientHeight * 0.85, behavior: 'smooth' }) }
+    if (e.key === 'End')       { e.preventDefault(); el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' }) }
+    if (e.key === 'Home')      { e.preventDefault(); el.scrollTo({ top: 0, behavior: 'smooth' }) }
   }
 
   const h3Style: React.CSSProperties = {
@@ -116,7 +122,7 @@ function AccessibilityModal({ onClose }: { onClose: () => void }) {
       <div
         ref={scrollRef}
         onClick={e => e.stopPropagation()}
-        onWheel={stopWheelPropagation}
+        onKeyDown={handleKeyDown}
         tabIndex={0}
         style={{
           background: 'rgba(255,90,30,0.18)',
@@ -128,6 +134,7 @@ function AccessibilityModal({ onClose }: { onClose: () => void }) {
           maxWidth: 680, width: '100%',
           maxHeight: '82vh',
           overflowY: 'auto',
+          overscrollBehavior: 'contain',
           color: '#fff',
           boxShadow: '0 24px 80px -10px rgba(255,60,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15)',
           position: 'relative',
