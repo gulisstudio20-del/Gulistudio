@@ -138,8 +138,7 @@ export default function WorkProcess() {
                   }} />
                 )}
                 <h3 style={{ margin: '0 0 12px', fontSize: isMobile ? 'clamp(20px,4.5vw,26px)' : 'clamp(24px,2vw,32px)', fontWeight: 700, letterSpacing: '-0.015em', lineHeight: 1.2 }}>{step.title}</h3>
-                <p style={{ margin: '0 0 14px', fontSize: isMobile ? 17 : 19, color: 'var(--mute)', lineHeight: 1.75 }}>{step.desc}</p>
-                <span style={{ fontFamily: 'var(--f-hebrew)', fontSize: 16, color: 'var(--accent)', fontWeight: 600 }}>{step.time}</span>
+                <p style={{ margin: 0, fontSize: isMobile ? 17 : 19, color: 'var(--mute)', lineHeight: 1.75 }}>{step.desc}</p>
               </div>
             </li>
           )
