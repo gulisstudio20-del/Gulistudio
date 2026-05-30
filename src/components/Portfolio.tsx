@@ -45,6 +45,18 @@ const projects = [
     accent: '#E63946',
     bg: 'linear-gradient(160deg,#FFF5F5,#FFE0E2)',
   },
+  {
+    id: 'p5', num: '05', year: '2026',
+    title: 'Kaizen',
+    tagLabel: 'Web Design · Restaurant',
+    url: 'https://kaizen-zeta-woad.vercel.app',
+    img: '/images/portfolio-5.png',
+    desc: 'Landing page למסעדת אומקאסה יפנית. אפלולי, מדויק, ומרגיש יוקרה עוד לפני שמגיעים.',
+    tags: ['web'],
+    accent: '#C8924A',
+    bg: 'linear-gradient(160deg,#2A2222,#1A1818)',
+    dark: true,
+  },
 ]
 
 const filters = [
@@ -155,18 +167,18 @@ export default function Portfolio() {
                   <div style={{
                     display: 'flex', alignItems: 'center', gap: 8,
                     padding: '11px 18px',
-                    background: 'rgba(255,255,255,0.88)',
+                    background: p.dark ? 'rgba(30,24,24,0.92)' : 'rgba(255,255,255,0.88)',
                     backdropFilter: 'blur(12px)',
-                    borderBottom: '1px solid rgba(0,0,0,0.07)',
+                    borderBottom: `1px solid ${p.dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)'}`,
                   }}>
                     {['#FF5F57','#FEBC2E','#28C840'].map(c => (
                       <span key={c} style={{ width: 11, height: 11, borderRadius: '50%', background: c, flexShrink: 0 }} />
                     ))}
                     <span style={{
                       flex: 1, textAlign: 'center',
-                      background: 'rgba(0,0,0,0.06)', borderRadius: 6,
+                      background: p.dark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)', borderRadius: 6,
                       padding: '5px 14px', fontSize: 15,
-                      fontFamily: 'var(--f-latin)', color: 'var(--mute)',
+                      fontFamily: 'var(--f-latin)', color: p.dark ? 'rgba(255,235,210,0.5)' : 'var(--mute)',
                       overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                     }}>
                       {p.url.replace('https://', '').replace(/\/$/, '')}
@@ -221,26 +233,26 @@ export default function Portfolio() {
                   <span style={{
                     fontFamily: 'var(--f-latin)', fontWeight: 900,
                     fontSize: 17, letterSpacing: '0.04em',
-                    color: 'var(--accent)', opacity: 0.7,
+                    color: p.accent, opacity: 0.9,
                   }}>{p.num}</span>
 
                   {/* Title + desc */}
                   <div style={{ minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 4 }}>
-                      <h3 style={{ margin: 0, fontFamily: 'var(--f-hebrew)', fontWeight: 800, fontSize: 'clamp(20px,2.2vw,26px)', letterSpacing: '-0.02em', lineHeight: 1 }}>
+                      <h3 style={{ margin: 0, fontFamily: 'var(--f-hebrew)', fontWeight: 800, fontSize: 'clamp(20px,2.2vw,26px)', letterSpacing: '-0.02em', lineHeight: 1, color: p.dark ? '#fff' : 'var(--ink)' }}>
                         {p.title}
                       </h3>
                       <span style={{
                         fontSize: 15, fontFamily: 'var(--f-latin)',
-                        color: 'var(--mute)', letterSpacing: '0.04em',
+                        color: p.dark ? 'rgba(255,235,210,0.6)' : 'var(--mute)', letterSpacing: '0.04em',
                         padding: '4px 12px',
-                        background: 'rgba(10,10,10,0.05)',
-                        border: '1px solid var(--line-2)',
+                        background: p.dark ? 'rgba(255,255,255,0.08)' : 'rgba(10,10,10,0.05)',
+                        border: `1px solid ${p.dark ? 'rgba(255,255,255,0.15)' : 'var(--line-2)'}`,
                         borderRadius: 'var(--r-pill)',
                         whiteSpace: 'nowrap',
                       }}>{p.tagLabel}</span>
                     </div>
-                    <p style={{ margin: 0, fontSize: 17, color: 'var(--mute)', lineHeight: 1.6 }}>{p.desc}</p>
+                    <p style={{ margin: 0, fontSize: 17, color: p.dark ? 'rgba(255,235,210,0.55)' : 'var(--mute)', lineHeight: 1.6 }}>{p.desc}</p>
                   </div>
 
                   {/* CTA */}
@@ -251,7 +263,7 @@ export default function Portfolio() {
                     style={{
                       display: 'inline-flex', alignItems: 'center', gap: 8,
                       padding: '12px 22px',
-                      background: 'var(--ink)', color: '#fff',
+                      background: p.dark ? p.accent : 'var(--ink)', color: '#fff',
                       borderRadius: 'var(--r-pill)',
                       fontSize: 17, fontWeight: 700,
                       whiteSpace: 'nowrap',
