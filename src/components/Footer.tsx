@@ -186,7 +186,7 @@ export default function Footer() {
           gap: 40,
         }}>
           {/* Heading */}
-          <div>
+          <div style={{ textAlign: 'center' }}>
             <span style={{ display: 'block', fontSize: 16, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: 20, fontFamily: 'var(--f-latin)' }}>
               ✦ מוכנים להתחיל?
             </span>
@@ -200,7 +200,7 @@ export default function Footer() {
               <em style={{ fontFamily: 'var(--f-serif)', fontWeight: 400, fontStyle: 'italic', color: 'rgba(255,255,255,0.85)' }}>רעיון</em>
               {' '}לאתר
             </h2>
-            <p style={{ fontSize: 19, color: 'rgba(255,255,255,0.7)', lineHeight: 1.65, maxWidth: 380 }}>
+            <p style={{ fontSize: 19, color: 'rgba(255,255,255,0.7)', lineHeight: 1.65, maxWidth: 380, margin: '0 auto' }}>
               הפרוייקט החדש שלכם במרחק שיחה אחת — תשאירו הודעה ואחזור אליכם בהקדם.
             </p>
           </div>
@@ -298,11 +298,18 @@ export default function Footer() {
             <p style={{ fontFamily: 'var(--f-latin)', fontSize: 15, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: 16 }}>קשר</p>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
               <li>
-                <a href="https://instagram.com/gulistudio" target="_blank" rel="noopener noreferrer"
+                <a href="https://instagram.com/gulisstudio" target="_blank" rel="noopener noreferrer"
                   style={{ fontSize: 17, color: 'rgba(255,255,255,0.75)', textDecoration: 'none', transition: 'color .2s' }}
                   onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
                   onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
                 >Instagram</a>
+              </li>
+              <li>
+                <a href="https://wa.me/972501234567" target="_blank" rel="noopener noreferrer"
+                  style={{ fontSize: 17, color: 'rgba(255,255,255,0.75)', textDecoration: 'none', transition: 'color .2s' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
+                >WhatsApp</a>
               </li>
             </ul>
           </div>

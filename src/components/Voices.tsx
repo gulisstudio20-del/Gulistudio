@@ -3,10 +3,10 @@ import { useEffect, useRef } from 'react'
 const voices = [
   {
     big: true,
-    quote: 'לא רק שיפרה לי את האתר. היא הבינה את העסק. התקשורת והאמינות מרגישות כמו שלא חשבנו שאפשר להגיע למקום הזה ברגע.',
-    name: 'שירית כ.',
-    role: 'בעלים, Pilates Loft',
-    initials: 'ש',
+    quote: 'הגענו לאביגיל עם קונספט אמנותי ומורכב — מסעדת אומקאסה תת-קרקעית ביפנית מלאה. מה שקיבלנו בסוף עלה על כל ציפייה. האתר מרגיש כמו חלק מהחוויה עצמה.',
+    name: 'יאיר מ.',
+    role: 'בעלים, Kaizen Restaurant',
+    initials: 'י',
     stars: true,
   },
   {
@@ -18,7 +18,7 @@ const voices = [
   {
     quote: 'קיבלתי את האתר הראשון שלי לעסק, להגיד את האמת לא ציפיתי למשהו ברמה הזאת.',
     name: 'רונן נ.',
-    role: 'בעלים, Komorebi Spa',
+    role: 'בעלים, Komorebi',
     initials: 'ר',
   },
   {
@@ -27,13 +27,6 @@ const voices = [
     role: 'Origin Café',
     initials: 'א',
   },
-]
-
-const stats = [
-  { value: '4.9', label: 'דירוג ממוצע' },
-  { value: '24+', label: 'פרויקטים' },
-  { value: '92%', label: 'חוזרים לפרויקט' },
-  { value: '100%', label: 'נמסר בזמן' },
 ]
 
 export default function Voices() {
@@ -49,6 +42,18 @@ export default function Voices() {
     return () => obs.disconnect()
   }, [])
 
+  function handle3D(e: React.MouseEvent<HTMLElement>) {
+    const el = e.currentTarget
+    const rect = el.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width - 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5
+    el.style.transform = `perspective(600px) rotateY(${x * 8}deg) rotateX(${-y * 6}deg) scale(1.02)`
+  }
+
+  function reset3D(e: React.MouseEvent<HTMLElement>) {
+    e.currentTarget.style.transform = ''
+  }
+
   return (
     <section id="voices" ref={sectionRef} style={{ position: 'relative', zIndex: 1, padding: '80px 20px', maxWidth: 1320, margin: '0 auto' }}>
 
@@ -60,26 +65,30 @@ export default function Voices() {
         מה שלקוחות אומרים אחרי שהאתר עולה לאוויר.
       </h2>
 
-      {/* Mobile: stack, Desktop: grid */}
       <div data-reveal style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         {voices.map((v, i) => (
           <figure
             key={i}
+            onMouseMove={handle3D}
+            onMouseLeave={reset3D}
             style={{
               margin: 0,
-              background: v.big ? 'var(--ink)' : 'var(--paper)',
-              color: v.big ? '#fff' : 'var(--ink)',
-              border: `1px solid ${v.big ? 'var(--ink)' : 'var(--line)'}`,
+              background: '#141414',
+              color: '#fff',
+              border: '1px solid rgba(255,255,255,0.08)',
               borderRadius: 'var(--r-lg)',
               padding: v.big ? 28 : 24,
               display: 'flex', flexDirection: 'column',
               justifyContent: 'space-between', gap: 20,
+              transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+              cursor: 'default',
+              willChange: 'transform',
             }}
           >
             {v.big && (
               <span style={{ fontFamily: 'var(--f-serif)', fontSize: 80, lineHeight: 0.6, color: 'var(--accent)', fontStyle: 'italic', display: 'block' }}>"</span>
             )}
-            <blockquote style={{ margin: 0, fontSize: v.big ? 'clamp(20px,4vw,28px)' : 'clamp(17px,3vw,20px)', lineHeight: 1.6, fontWeight: v.big ? 500 : 400, letterSpacing: v.big ? '-0.01em' : 0 }}>
+            <blockquote style={{ margin: 0, fontSize: v.big ? 'clamp(20px,4vw,28px)' : 'clamp(17px,3vw,20px)', lineHeight: 1.6, fontWeight: v.big ? 500 : 400, letterSpacing: v.big ? '-0.01em' : 0, color: '#fff' }}>
               {v.quote}
             </blockquote>
             <figcaption style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 15 }}>
@@ -92,8 +101,8 @@ export default function Voices() {
                 {v.initials}
               </span>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <strong style={{ fontWeight: 600, fontSize: 18 }}>{v.name}</strong>
-                <span style={{ color: v.big ? 'rgba(255,255,255,0.65)' : 'var(--mute)', fontSize: 16 }}>{v.role}</span>
+                <strong style={{ fontWeight: 600, fontSize: 18, color: '#fff' }}>{v.name}</strong>
+                <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 16 }}>{v.role}</span>
               </div>
               {v.stars && <span style={{ marginInlineStart: 'auto', color: 'var(--accent)', fontSize: 15 }}>★★★★★</span>}
             </figcaption>
@@ -101,20 +110,6 @@ export default function Voices() {
         ))}
       </div>
 
-      {/* Stats foot */}
-      <div data-reveal style={{
-        display: 'grid', gridTemplateColumns: 'repeat(2,1fr)',
-        gap: 12, marginTop: 32, padding: 20,
-        background: 'var(--paper)', border: '1px solid var(--line)',
-        borderRadius: 'var(--r-lg)',
-      }}>
-        {stats.map((s, i) => (
-          <div key={s.label} style={{ display: 'flex', flexDirection: 'column', gap: 4, padding: '10px 8px' }}>
-            <b style={{ fontFamily: 'var(--f-latin)', fontSize: 'clamp(28px,6vw,40px)', fontWeight: 700, color: i === 0 ? 'var(--accent)' : 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1 }}>{s.value}</b>
-            <span style={{ fontSize: 16, color: 'var(--mute)', letterSpacing: '0.04em' }}>{s.label}</span>
-          </div>
-        ))}
-      </div>
     </section>
   )
 }
