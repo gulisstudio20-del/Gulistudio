@@ -44,6 +44,128 @@ GULISTUDIO מחויבת לשמירה על פרטיותכם. מדיניות זו 
 
 עדכון אחרון: מאי 2026`
 
+function AccessibilityModal({ onClose }: { onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [onClose])
+
+  const h3Style: React.CSSProperties = {
+    fontFamily: 'var(--f-hebrew)', fontWeight: 800, fontSize: 20,
+    color: '#fff', margin: '28px 0 12px', borderBottom: '1px solid rgba(255,255,255,0.15)', paddingBottom: 8,
+  }
+  const pStyle: React.CSSProperties = {
+    fontFamily: 'var(--f-hebrew)', fontSize: 16, lineHeight: 1.85,
+    color: 'rgba(255,255,255,0.88)', margin: '0 0 10px', textAlign: 'right',
+  }
+  const liStyle: React.CSSProperties = {
+    fontFamily: 'var(--f-hebrew)', fontSize: 16, lineHeight: 1.85,
+    color: 'rgba(255,255,255,0.85)', marginBottom: 6,
+  }
+  const boldStyle: React.CSSProperties = { fontWeight: 700, color: '#fff' }
+
+  return (
+    <div
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="הצהרת נגישות"
+      style={{
+        position: 'fixed', inset: 0, zIndex: 9000,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: 'rgba(0,0,0,0.55)',
+        backdropFilter: 'blur(6px)',
+        padding: '24px',
+        animation: 'fadeInModal .25s ease',
+      }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          background: 'rgba(255,90,30,0.18)',
+          backdropFilter: 'blur(28px) saturate(160%)',
+          WebkitBackdropFilter: 'blur(28px) saturate(160%)',
+          border: '1px solid rgba(255,120,60,0.35)',
+          borderRadius: 20,
+          padding: '44px 48px',
+          maxWidth: 680, width: '100%',
+          maxHeight: '82vh',
+          overflowY: 'auto',
+          color: '#fff',
+          boxShadow: '0 24px 80px -10px rgba(255,60,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15)',
+          position: 'relative',
+          direction: 'rtl',
+          textAlign: 'center',
+        }}
+      >
+        <button
+          onClick={onClose}
+          aria-label="סגור"
+          style={{
+            position: 'absolute', top: 18, right: 18,
+            width: 36, height: 36, borderRadius: '50%',
+            background: 'rgba(255,255,255,0.15)',
+            border: '1px solid rgba(255,255,255,0.25)',
+            color: '#fff', fontSize: 18, lineHeight: 1,
+            cursor: 'pointer', display: 'grid', placeItems: 'center',
+            transition: 'background .2s',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.28)')}
+          onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.15)')}
+        >×</button>
+
+        <h2 style={{ fontFamily: 'var(--f-hebrew)', fontWeight: 900, fontSize: 28, color: '#fff', margin: '0 0 8px' }}>
+          הצהרת נגישות
+        </h2>
+        <p style={{ ...pStyle, textAlign: 'center', marginBottom: 24, color: 'rgba(255,255,255,0.6)', fontSize: 14 }}>
+          עודכן לאחרונה: 1.6.2026
+        </p>
+
+        <p style={pStyle}>
+          GULISTUDIO מאמין בשוויון הזכות לגישה למידע ולשירותים עבור כלל המשתמשים, לרבות אנשים עם מוגבלויות.
+        </p>
+        <p style={pStyle}>
+          אתר זה פועל בהתאם לדרישות <span style={boldStyle}>חוק שוויון זכויות לאנשים עם מוגבלות, התשנ"ח-1998</span>, ותקנות שוויון זכויות לאנשים עם מוגבלות (התאמות נגישות לשירות), התשע"ג-2013.
+        </p>
+
+        <h3 style={h3Style}>מצב הנגישות הנוכחי</h3>
+        <p style={pStyle}>
+          אנו נמצאים בתהליך שיפור מתמשך של נגישות האתר לעמידה בדרישות <span style={boldStyle}>תקן ישראלי 5568</span> ורמת AA של WCAG 2.1.
+        </p>
+        <p style={{ ...pStyle, marginBottom: 8 }}>אנו פועלים לשפר בין היתר את התחומים הבאים:</p>
+        <ul style={{ textAlign: 'right', paddingRight: 20, paddingLeft: 0, margin: '0 0 16px' }}>
+          {[
+            'תמיכה בניווט באמצעות מקלדת בלבד',
+            'תמיכה בקוראי מסך',
+            'חלופות טקסטואליות לתמונות ואלמנטים ויזואליים',
+            'יחסי ניגוד צבע עומדים בדרישות התקן',
+            'מבנה כותרות ברור וסדור',
+          ].map(item => (
+            <li key={item} style={liStyle}>{item}</li>
+          ))}
+        </ul>
+        <p style={pStyle}>
+          ייתכן שחלק מהתכנים או הדפים באתר טרם הותאמו במלואם. אנו עושים כמיטב יכולתנו לאתר ולתקן כל ליקוי.
+        </p>
+
+        <h3 style={h3Style}>פנייה בנושא נגישות — רכז/ת נגישות</h3>
+        <p style={pStyle}>נתקלת בקושי לגשת לתוכן כלשהו? נשמח לעזור ולטפל בפנייתך בהקדם.</p>
+        <p style={pStyle}><span style={boldStyle}>שם רכז/ת הנגישות:</span> [שם מלא]</p>
+        <p style={pStyle}><span style={boldStyle}>טלפון:</span> [מספר]</p>
+        <p style={pStyle}><span style={boldStyle}>דוא"ל:</span> [מייל]</p>
+        <p style={{ ...pStyle, marginTop: 16, color: 'rgba(255,255,255,0.7)', fontSize: 15 }}>
+          פניות יטופלו תוך <span style={boldStyle}>5 ימי עסקים</span>.
+        </p>
+      </div>
+    </div>
+  )
+}
+
 function LegalModal({ title, content, onClose }: { title: string; content: string; onClose: () => void }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -113,7 +235,7 @@ function LegalModal({ title, content, onClose }: { title: string; content: strin
 export default function Footer() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' })
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
-  const [modal, setModal] = useState<null | 'terms' | 'privacy'>(null)
+  const [modal, setModal] = useState<null | 'terms' | 'privacy' | 'accessibility'>(null)
   const watermarkRef = useRef<HTMLDivElement>(null)
   const footerRef = useRef<HTMLElement>(null)
 
@@ -154,7 +276,10 @@ export default function Footer() {
 
   return (
     <>
-    {modal && (
+    {modal === 'accessibility' && (
+      <AccessibilityModal onClose={() => setModal(null)} />
+    )}
+    {(modal === 'terms' || modal === 'privacy') && (
       <LegalModal
         title={modal === 'terms' ? 'תנאי שימוש' : 'מדיניות פרטיות'}
         content={modal === 'terms' ? TERMS_CONTENT : PRIVACY_CONTENT}
@@ -330,6 +455,13 @@ export default function Footer() {
                   onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
                   onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
                 >מדיניות פרטיות</button>
+              </li>
+              <li>
+                <button onClick={() => setModal('accessibility')}
+                  style={{ fontSize: 17, color: 'rgba(255,255,255,0.75)', background: 'none', border: 'none', cursor: 'pointer', transition: 'color .2s', fontFamily: 'var(--f-hebrew)', padding: 0 }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
+                >הצהרת נגישות</button>
               </li>
             </ul>
           </div>
