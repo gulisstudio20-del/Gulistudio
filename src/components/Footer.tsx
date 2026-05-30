@@ -45,15 +45,26 @@ GULISTUDIO מחויבת לשמירה על פרטיותכם. מדיניות זו 
 עדכון אחרון: מאי 2026`
 
 function AccessibilityModal({ onClose }: { onClose: () => void }) {
+  const scrollRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
+    scrollRef.current?.focus()
     return () => {
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
     }
   }, [onClose])
+
+  function stopWheelPropagation(e: React.WheelEvent<HTMLDivElement>) {
+    const el = scrollRef.current
+    if (!el) return
+    const atTop = el.scrollTop === 0 && e.deltaY < 0
+    const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight && e.deltaY > 0
+    if (!atTop && !atBottom) e.stopPropagation()
+  }
 
   const h3Style: React.CSSProperties = {
     fontFamily: 'var(--f-hebrew)', fontWeight: 800, fontSize: 20,
@@ -84,8 +95,29 @@ function AccessibilityModal({ onClose }: { onClose: () => void }) {
         animation: 'fadeInModal .25s ease',
       }}
     >
+      {/* X button — outside the modal box, top-right corner of overlay */}
+      <button
+        onClick={onClose}
+        aria-label="סגור"
+        style={{
+          position: 'fixed', top: 24, left: 24,
+          width: 40, height: 40, borderRadius: '50%',
+          background: 'rgba(255,255,255,0.18)',
+          border: '1.5px solid rgba(255,255,255,0.45)',
+          color: '#fff', fontSize: 22, lineHeight: 1,
+          cursor: 'pointer', display: 'grid', placeItems: 'center',
+          transition: 'background .2s, transform .15s',
+          zIndex: 9001,
+        }}
+        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.32)'; e.currentTarget.style.transform = 'scale(1.1)' }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.18)'; e.currentTarget.style.transform = 'scale(1)' }}
+      >×</button>
+
       <div
+        ref={scrollRef}
         onClick={e => e.stopPropagation()}
+        onWheel={stopWheelPropagation}
+        tabIndex={0}
         style={{
           background: 'rgba(255,90,30,0.18)',
           backdropFilter: 'blur(28px) saturate(160%)',
@@ -101,23 +133,9 @@ function AccessibilityModal({ onClose }: { onClose: () => void }) {
           position: 'relative',
           direction: 'rtl',
           textAlign: 'center',
+          outline: 'none',
         }}
       >
-        <button
-          onClick={onClose}
-          aria-label="סגור"
-          style={{
-            position: 'absolute', top: 18, right: 18,
-            width: 36, height: 36, borderRadius: '50%',
-            background: 'rgba(255,255,255,0.15)',
-            border: '1px solid rgba(255,255,255,0.25)',
-            color: '#fff', fontSize: 18, lineHeight: 1,
-            cursor: 'pointer', display: 'grid', placeItems: 'center',
-            transition: 'background .2s',
-          }}
-          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.28)')}
-          onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.15)')}
-        >×</button>
 
         <h2 style={{ fontFamily: 'var(--f-hebrew)', fontWeight: 900, fontSize: 28, color: '#fff', margin: '0 0 8px' }}>
           הצהרת נגישות
