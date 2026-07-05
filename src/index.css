@@ -3,19 +3,19 @@
 @tailwind utilities;
 
 :root {
-  --bg: #F6F4EF;
-  --bg-2: #EFECE5;
-  --paper: #FAF8F3;
-  --ink: #0A0A0A;
-  --ink-2: #1A1A1A;
-  --mute: #6B665E;
-  --mute-2: #9C9890;
-  --line: rgba(10,10,10,0.08);
-  --line-2: rgba(10,10,10,0.14);
+  --bg: #F6F2EA;
+  --bg-2: #EFEAE0;
+  --paper: #FDFBF7;
+  --ink: #1C1914;
+  --ink-2: #45403A;
+  --mute: #6E675C;
+  --mute-2: #9A9285;
+  --line: rgba(28,25,20,0.08);
+  --line-2: rgba(28,25,20,0.15);
   --accent: #FF4D14;
   --accent-2: #FF6B35;
-  --accent-soft: #FFE8DD;
-  --accent-glow: rgba(255,77,20,0.18);
+  --accent-soft: rgba(255,77,20,0.14);
+  --accent-glow: rgba(255,77,20,0.25);
 
   --f-hebrew: "Heebo", "Assistant", system-ui, sans-serif;
   --f-latin: "Space Grotesk", system-ui, sans-serif;
@@ -26,16 +26,9 @@
   --r-lg: 22px;
   --r-pill: 999px;
 
-  --shadow-sm: 0 1px 0 rgba(10,10,10,.04), 0 2px 8px rgba(10,10,10,.04);
-  --shadow-md: 0 1px 0 rgba(10,10,10,.04), 0 10px 30px -10px rgba(10,10,10,.12);
+  --shadow-sm: 0 1px 0 rgba(28,25,20,.04), 0 2px 8px rgba(28,25,20,.06);
+  --shadow-md: 0 1px 0 rgba(28,25,20,.04), 0 10px 30px -10px rgba(28,25,20,.18);
   --shadow-glow: 0 24px 48px -16px var(--accent-glow);
-
-  /* legacy compat */
-  --orange: #FF4D14;
-  --text: #0A0A0A;
-  --text-mid: #6B665E;
-  --text-lt: #9C9890;
-  --border: rgba(10,10,10,0.08);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -129,12 +122,12 @@ img { display: block; max-width: 100%; }
   gap: 4px;
   z-index: 50;
   padding: 14px 10px;
-  background: rgba(246,244,239,0.72);
+  background: rgba(253,251,247,0.85);
   backdrop-filter: blur(14px) saturate(120%);
   -webkit-backdrop-filter: blur(14px) saturate(120%);
   border: 1px solid var(--line);
   border-radius: 22px;
-  box-shadow: 0 6px 24px -10px rgba(10,10,10,0.12);
+  box-shadow: 0 6px 24px -10px rgba(28,25,20,0.12);
 }
 .rail-item {
   display: flex;
@@ -149,7 +142,6 @@ img { display: block; max-width: 100%; }
   transition: color .2s, background .2s;
   text-decoration: none;
 }
-.rail-num { display: inline-block; width: 22px; font-weight: 600; }
 .rail-label {
   font-family: var(--f-hebrew);
   font-size: 13px;
@@ -198,25 +190,6 @@ img { display: block; max-width: 100%; }
   60%  { top: 56px; }
   100% { top: 56px; }
 }
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(36px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes float-slow {
-  0%, 100% { transform: translate(0,0); }
-  50%       { transform: translate(0,-8px); }
-}
-@keyframes marquee-rtl {
-  from { transform: translateX(0); }
-  to   { transform: translateX(50%); }
-}
-@keyframes shimmer {
-  0%   { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-.float-slow { animation: float-slow 8s ease-in-out infinite; }
-
 .status-dot {
   display: inline-block;
   width: 8px; height: 8px;
@@ -254,19 +227,6 @@ img { display: block; max-width: 100%; }
 }
 .btn--ghost:hover { background: rgba(10,10,10,0.04); }
 
-/* ── Eyebrow ── */
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--f-latin);
-  font-size: 13px;
-  letter-spacing: 0.18em;
-  color: var(--accent);
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
 /* ── h-display ── */
 .h-display {
   font-family: var(--f-hebrew);
@@ -281,10 +241,24 @@ img { display: block; max-width: 100%; }
 /* ── Section reveal ── */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity .9s cubic-bezier(.2,.8,.2,1), transform .9s cubic-bezier(.2,.8,.2,1);
+  transform: translateY(24px);
+  transition: opacity .8s cubic-bezier(.2,.8,.2,1), transform .8s cubic-bezier(.2,.8,.2,1);
 }
-[data-reveal].is-in { opacity: 1; transform: translateY(0); }
+[data-reveal].is-in { opacity: 1; transform: none; }
+
+[data-reveal="scale"] {
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1);
+}
+[data-reveal="scale"].is-in { opacity: 1; transform: scale(1); }
+
+[data-reveal="slide"] {
+  opacity: 0;
+  transform: translateX(36px);
+  transition: opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1);
+}
+[data-reveal="slide"].is-in { opacity: 1; transform: translateX(0); }
 
 /* ── Noise grain ── */
 body::before {

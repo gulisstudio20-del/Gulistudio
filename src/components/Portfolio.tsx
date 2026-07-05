@@ -63,6 +63,7 @@ const filters = [
 export default function Portfolio() {
   const headerRef = useRef<HTMLDivElement>(null)
   const ctaRef = useRef<HTMLDivElement>(null)
+  const gridRef = useRef<HTMLDivElement>(null)
   const [filter, setFilter] = useState('all')
   const [hovered, setHovered] = useState<string | null>(null)
 
@@ -77,12 +78,28 @@ export default function Portfolio() {
     return () => obs.disconnect()
   }, [])
 
+  useEffect(() => {
+    const articles = gridRef.current?.querySelectorAll<HTMLElement>('article')
+    if (!articles) return
+    articles.forEach(a => { a.style.opacity = '0' })
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return
+        const art = entry.target as HTMLElement
+        const i = [...articles].indexOf(art)
+        setTimeout(() => { art.style.opacity = '1' }, i * 90)
+        obs.unobserve(entry.target)
+      })
+    }, { threshold: 0.06 })
+    articles.forEach(a => obs.observe(a))
+    return () => obs.disconnect()
+  }, [filter])
+
   return (
     <section id="work" style={{ position: 'relative', zIndex: 1, padding: '100px 24px 80px', maxWidth: 1200, margin: '0 auto' }}>
 
       {/* ── Header ── */}
       <div ref={headerRef} data-reveal style={{ marginBottom: 52 }}>
-        <span className="eyebrow" style={{ marginBottom: 14, display: 'block' }}>✦ SELECTED WORK · 2024–2026</span>
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20 }}>
           <h2 className="h-display" style={{ margin: 0 }}>תיק עבודות</h2>
 
@@ -109,7 +126,7 @@ export default function Portfolio() {
       </div>
 
       {/* ── Grid ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
+      <div ref={gridRef} className="portfolio-card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
         {visible.map((p, i) => {
           const isFeatured = i === 0 && filter === 'all'
           const isHov = hovered === p.id
@@ -123,17 +140,17 @@ export default function Portfolio() {
                 gridColumn: isFeatured ? '1 / -1' : undefined,
                 borderRadius: 20,
                 overflow: 'hidden',
-                border: '1px solid rgba(255,255,255,0.06)',
-                background: '#141414',
-                boxShadow: isHov ? '0 20px 56px rgba(0,0,0,0.5)' : '0 4px 20px rgba(0,0,0,0.25)',
+                border: '1px solid var(--line)',
+                background: 'var(--paper)',
+                boxShadow: isHov ? '0 20px 56px rgba(28,25,20,0.18)' : '0 4px 20px rgba(28,25,20,0.08)',
                 transform: isHov ? 'translateY(-5px)' : 'translateY(0)',
-                transition: 'transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s',
+                transition: 'opacity 0.6s ease, transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s',
               }}
             >
               {/* Image */}
               <a href={p.url} target="_blank" rel="noopener noreferrer"
                 style={{ display: 'block', position: 'relative', overflow: 'hidden' }}>
-                <div style={{ height: isFeatured ? 460 : 280, overflow: 'hidden', position: 'relative' }}>
+                <div className="portfolio-card-img" style={{ height: isFeatured ? 460 : 280, overflow: 'hidden', position: 'relative' }}>
                   <img
                     src={p.img}
                     alt={`${p.title} screenshot`}
@@ -162,15 +179,15 @@ export default function Portfolio() {
                 {/* Meta */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
                   <span style={{ fontFamily: 'var(--f-latin)', fontWeight: 900, fontSize: 12, letterSpacing: '0.1em', color: p.accent }}>{p.num}</span>
-                  <span style={{ width: 1, height: 10, background: 'rgba(255,255,255,0.12)', flexShrink: 0 }} />
-                  <span style={{ fontFamily: 'var(--f-latin)', fontSize: 12, letterSpacing: '0.06em', color: 'rgba(255,255,255,0.3)' }}>{p.year}</span>
+                  <span style={{ width: 1, height: 10, background: 'var(--line-2)', flexShrink: 0 }} />
+                  <span style={{ fontFamily: 'var(--f-latin)', fontSize: 12, letterSpacing: '0.06em', color: 'var(--mute)' }}>{p.year}</span>
                   <span style={{ flex: 1 }} />
                   <span style={{
                     fontSize: 12, fontFamily: 'var(--f-latin)', letterSpacing: '0.04em',
-                    color: 'rgba(255,255,255,0.45)',
+                    color: 'var(--mute)',
                     padding: '3px 11px',
-                    background: 'rgba(255,255,255,0.06)',
-                    border: '1px solid rgba(255,255,255,0.1)',
+                    background: 'rgba(28,25,20,0.04)',
+                    border: '1px solid var(--line-2)',
                     borderRadius: 'var(--r-pill)', whiteSpace: 'nowrap',
                   }}>{p.tagLabel}</span>
                 </div>
@@ -179,13 +196,13 @@ export default function Portfolio() {
                   margin: '0 0 8px',
                   fontFamily: 'var(--f-hebrew)', fontWeight: 800,
                   fontSize: isFeatured ? 'clamp(24px,2.8vw,34px)' : 'clamp(20px,2vw,26px)',
-                  letterSpacing: '-0.02em', lineHeight: 1.1, color: '#fff',
+                  letterSpacing: '-0.02em', lineHeight: 1.1, color: 'var(--ink)',
                 }}>
                   {p.title}
                 </h3>
 
                 <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
-                  <p style={{ margin: 0, fontSize: 15, lineHeight: 1.65, flex: 1, minWidth: 0, color: 'rgba(255,255,255,0.42)' }}>
+                  <p style={{ margin: 0, fontSize: 15, lineHeight: 1.65, flex: 1, minWidth: 0, color: 'var(--mute)' }}>
                     {p.desc}
                   </p>
                   <a
@@ -226,12 +243,6 @@ export default function Portfolio() {
         </a>
       </div>
 
-      <style>{`
-        @media (max-width: 700px) {
-          #work > div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
-          #work article { grid-column: 1 !important; }
-        }
-      `}</style>
     </section>
   )
 }

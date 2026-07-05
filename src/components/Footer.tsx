@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
+import { openWhatsApp } from '../lib/whatsapp'
 
-const WEB3FORMS_KEY = '2881ff54-8e38-43d3-af24-fbd128e3842f'
+// טקסט כהה שעומד ב-AA (≥4.5:1) על רקע הכתום
+const onAccentDark = 'rgba(46,18,6,0.9)'
 
 const TERMS_CONTENT = `תנאי שימוש
 
@@ -44,9 +46,7 @@ GULISTUDIO מחויבת לשמירה על פרטיותכם. מדיניות זו 
 
 עדכון אחרון: מאי 2026`
 
-function AccessibilityModal({ onClose }: { onClose: () => void }) {
-  const scrollRef = useRef<HTMLDivElement>(null)
-
+function useModalKeys(onClose: () => void, scrollRef: React.RefObject<HTMLDivElement | null>) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', onKey)
@@ -58,7 +58,7 @@ function AccessibilityModal({ onClose }: { onClose: () => void }) {
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
     }
-  }, [onClose])
+  }, [onClose, scrollRef])
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     const el = scrollRef.current
@@ -72,82 +72,89 @@ function AccessibilityModal({ onClose }: { onClose: () => void }) {
     if (e.key === 'Home')      { e.preventDefault(); el.scrollTo({ top: 0, behavior: 'smooth' }) }
   }
 
+  return handleKeyDown
+}
+
+const modalOverlayStyle: React.CSSProperties = {
+  position: 'fixed', inset: 0, zIndex: 9000,
+  display: 'flex', alignItems: 'center', justifyContent: 'center',
+  background: 'rgba(28,25,20,0.45)',
+  backdropFilter: 'blur(6px)',
+  padding: '24px',
+  animation: 'fadeInModal .25s ease',
+}
+
+const modalCloseStyle: React.CSSProperties = {
+  position: 'fixed', top: 24, left: 24,
+  width: 40, height: 40, borderRadius: '50%',
+  background: 'rgba(253,251,247,0.9)',
+  border: '1px solid rgba(28,25,20,0.25)',
+  color: 'var(--ink)', fontSize: 22, lineHeight: 1,
+  cursor: 'pointer', display: 'grid', placeItems: 'center',
+  transition: 'background .2s, transform .15s',
+  zIndex: 9001,
+}
+
+const modalBoxStyle: React.CSSProperties = {
+  background: 'var(--paper)',
+  border: '1px solid var(--line-2)',
+  borderRadius: 20,
+  padding: '44px 48px',
+  width: '100%',
+  overflowY: 'auto',
+  overscrollBehavior: 'contain',
+  color: 'var(--ink)',
+  boxShadow: '0 24px 80px -10px rgba(28,25,20,0.3)',
+  position: 'relative',
+  direction: 'rtl',
+  outline: 'none',
+}
+
+function ModalClose({ onClose }: { onClose: () => void }) {
+  return (
+    <button
+      onClick={onClose}
+      aria-label="סגור"
+      style={modalCloseStyle}
+      onMouseEnter={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.transform = 'scale(1.1)' }}
+      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(253,251,247,0.9)'; e.currentTarget.style.transform = 'scale(1)' }}
+    >×</button>
+  )
+}
+
+function AccessibilityModal({ onClose }: { onClose: () => void }) {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const handleKeyDown = useModalKeys(onClose, scrollRef)
+
   const h3Style: React.CSSProperties = {
     fontFamily: 'var(--f-hebrew)', fontWeight: 800, fontSize: 20,
-    color: '#fff', margin: '28px 0 12px', borderBottom: '1px solid rgba(255,255,255,0.15)', paddingBottom: 8,
+    color: 'var(--ink)', margin: '28px 0 12px', borderBottom: '1px solid var(--line-2)', paddingBottom: 8,
   }
   const pStyle: React.CSSProperties = {
     fontFamily: 'var(--f-hebrew)', fontSize: 16, lineHeight: 1.85,
-    color: 'rgba(255,255,255,0.88)', margin: '0 0 10px', textAlign: 'right',
+    color: 'var(--ink-2)', margin: '0 0 10px', textAlign: 'right',
   }
   const liStyle: React.CSSProperties = {
     fontFamily: 'var(--f-hebrew)', fontSize: 16, lineHeight: 1.85,
-    color: 'rgba(255,255,255,0.85)', marginBottom: 6,
+    color: 'var(--ink-2)', marginBottom: 6,
   }
-  const boldStyle: React.CSSProperties = { fontWeight: 700, color: '#fff' }
+  const boldStyle: React.CSSProperties = { fontWeight: 700, color: 'var(--ink)' }
 
   return (
-    <div
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-label="הצהרת נגישות"
-      style={{
-        position: 'fixed', inset: 0, zIndex: 9000,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: 'rgba(0,0,0,0.55)',
-        backdropFilter: 'blur(6px)',
-        padding: '24px',
-        animation: 'fadeInModal .25s ease',
-      }}
-    >
-      {/* X button — outside the modal box, top-right corner of overlay */}
-      <button
-        onClick={onClose}
-        aria-label="סגור"
-        style={{
-          position: 'fixed', top: 24, left: 24,
-          width: 40, height: 40, borderRadius: '50%',
-          background: 'rgba(255,255,255,0.18)',
-          border: '1.5px solid rgba(255,255,255,0.45)',
-          color: '#fff', fontSize: 22, lineHeight: 1,
-          cursor: 'pointer', display: 'grid', placeItems: 'center',
-          transition: 'background .2s, transform .15s',
-          zIndex: 9001,
-        }}
-        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.32)'; e.currentTarget.style.transform = 'scale(1.1)' }}
-        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.18)'; e.currentTarget.style.transform = 'scale(1)' }}
-      >×</button>
+    <div onClick={onClose} role="dialog" aria-modal="true" aria-label="הצהרת נגישות" style={modalOverlayStyle}>
+      <ModalClose onClose={onClose} />
 
       <div
         ref={scrollRef}
         onClick={e => e.stopPropagation()}
         onKeyDown={handleKeyDown}
         tabIndex={0}
-        style={{
-          background: 'rgba(255,90,30,0.18)',
-          backdropFilter: 'blur(28px) saturate(160%)',
-          WebkitBackdropFilter: 'blur(28px) saturate(160%)',
-          border: '1px solid rgba(255,120,60,0.35)',
-          borderRadius: 20,
-          padding: '44px 48px',
-          maxWidth: 680, width: '100%',
-          maxHeight: '82vh',
-          overflowY: 'auto',
-          overscrollBehavior: 'contain',
-          color: '#fff',
-          boxShadow: '0 24px 80px -10px rgba(255,60,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15)',
-          position: 'relative',
-          direction: 'rtl',
-          textAlign: 'center',
-          outline: 'none',
-        }}
+        style={{ ...modalBoxStyle, maxWidth: 680, maxHeight: '82vh', textAlign: 'center' }}
       >
-
-        <h2 style={{ fontFamily: 'var(--f-hebrew)', fontWeight: 900, fontSize: 28, color: '#fff', margin: '0 0 8px' }}>
+        <h2 style={{ fontFamily: 'var(--f-hebrew)', fontWeight: 900, fontSize: 28, color: 'var(--ink)', margin: '0 0 8px' }}>
           הצהרת נגישות
         </h2>
-        <p style={{ ...pStyle, textAlign: 'center', marginBottom: 24, color: 'rgba(255,255,255,0.6)', fontSize: 14 }}>
+        <p style={{ ...pStyle, textAlign: 'center', marginBottom: 24, color: 'var(--mute)', fontSize: 14 }}>
           עודכן לאחרונה: 1.6.2026
         </p>
 
@@ -180,10 +187,9 @@ function AccessibilityModal({ onClose }: { onClose: () => void }) {
 
         <h3 style={h3Style}>פנייה בנושא נגישות — רכז/ת נגישות</h3>
         <p style={pStyle}>נתקלת בקושי לגשת לתוכן כלשהו? נשמח לעזור ולטפל בפנייתך בהקדם.</p>
-        <p style={pStyle}><span style={boldStyle}>שם רכז/ת הנגישות:</span> [שם מלא]</p>
-        <p style={pStyle}><span style={boldStyle}>טלפון:</span> [מספר]</p>
-        <p style={pStyle}><span style={boldStyle}>דוא"ל:</span> [מייל]</p>
-        <p style={{ ...pStyle, marginTop: 16, color: 'rgba(255,255,255,0.7)', fontSize: 15 }}>
+        <p style={pStyle}><span style={boldStyle}>שם רכזת הנגישות:</span> אביגיל</p>
+        <p style={pStyle}><span style={boldStyle}>דוא"ל:</span> gulisstudio20@gmail.com</p>
+        <p style={{ ...pStyle, marginTop: 16, color: 'var(--mute)', fontSize: 15 }}>
           פניות יטופלו תוך <span style={boldStyle}>5 ימי עסקים</span>.
         </p>
       </div>
@@ -193,90 +199,23 @@ function AccessibilityModal({ onClose }: { onClose: () => void }) {
 
 function LegalModal({ title, content, onClose }: { title: string; content: string; onClose: () => void }) {
   const scrollRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
-    document.addEventListener('keydown', onKey)
-    document.body.style.overflow = 'hidden'
-    const t = setTimeout(() => scrollRef.current?.focus(), 50)
-    return () => {
-      clearTimeout(t)
-      document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
-    }
-  }, [onClose])
-
-  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
-    const el = scrollRef.current
-    if (!el) return
-    const step = 80
-    if (e.key === 'ArrowDown') { e.preventDefault(); el.scrollBy({ top: step, behavior: 'smooth' }) }
-    if (e.key === 'ArrowUp')   { e.preventDefault(); el.scrollBy({ top: -step, behavior: 'smooth' }) }
-    if (e.key === 'PageDown')  { e.preventDefault(); el.scrollBy({ top: el.clientHeight * 0.85, behavior: 'smooth' }) }
-    if (e.key === 'PageUp')    { e.preventDefault(); el.scrollBy({ top: -el.clientHeight * 0.85, behavior: 'smooth' }) }
-    if (e.key === 'End')       { e.preventDefault(); el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' }) }
-    if (e.key === 'Home')      { e.preventDefault(); el.scrollTo({ top: 0, behavior: 'smooth' }) }
-  }
+  const handleKeyDown = useModalKeys(onClose, scrollRef)
 
   return (
-    <div
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-label={title}
-      style={{
-        position: 'fixed', inset: 0, zIndex: 9000,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: 'rgba(0,0,0,0.55)',
-        backdropFilter: 'blur(6px)',
-        padding: '24px',
-        animation: 'fadeInModal .25s ease',
-      }}
-    >
-      <button
-        onClick={onClose}
-        aria-label="סגור"
-        style={{
-          position: 'fixed', top: 24, left: 24,
-          width: 40, height: 40, borderRadius: '50%',
-          background: 'rgba(255,255,255,0.18)',
-          border: '1.5px solid rgba(255,255,255,0.45)',
-          color: '#fff', fontSize: 22, lineHeight: 1,
-          cursor: 'pointer', display: 'grid', placeItems: 'center',
-          transition: 'background .2s, transform .15s',
-          zIndex: 9001,
-        }}
-        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.32)'; e.currentTarget.style.transform = 'scale(1.1)' }}
-        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.18)'; e.currentTarget.style.transform = 'scale(1)' }}
-      >×</button>
+    <div onClick={onClose} role="dialog" aria-modal="true" aria-label={title} style={modalOverlayStyle}>
+      <ModalClose onClose={onClose} />
 
       <div
         ref={scrollRef}
         onClick={e => e.stopPropagation()}
         onKeyDown={handleKeyDown}
         tabIndex={0}
-        style={{
-          background: 'rgba(255,90,30,0.18)',
-          backdropFilter: 'blur(28px) saturate(160%)',
-          WebkitBackdropFilter: 'blur(28px) saturate(160%)',
-          border: '1px solid rgba(255,120,60,0.35)',
-          borderRadius: 20,
-          padding: '44px 48px',
-          maxWidth: 640, width: '100%',
-          maxHeight: '80vh',
-          overflowY: 'auto',
-          overscrollBehavior: 'contain',
-          color: '#fff',
-          boxShadow: '0 24px 80px -10px rgba(255,60,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15)',
-          position: 'relative',
-          outline: 'none',
-          direction: 'rtl',
-        }}
+        style={{ ...modalBoxStyle, maxWidth: 640, maxHeight: '80vh' }}
       >
-        <h2 style={{ fontFamily: 'var(--f-hebrew)', fontWeight: 900, fontSize: 28, color: '#fff', margin: '0 0 28px' }}>{title}</h2>
+        <h2 style={{ fontFamily: 'var(--f-hebrew)', fontWeight: 900, fontSize: 28, color: 'var(--ink)', margin: '0 0 28px' }}>{title}</h2>
         <pre style={{
           fontFamily: 'var(--f-hebrew)', fontSize: 17, lineHeight: 1.9,
-          color: 'rgba(255,255,255,0.88)',
+          color: 'var(--ink-2)',
           whiteSpace: 'pre-wrap', margin: 0, textAlign: 'right',
         }}>{content}</pre>
       </div>
@@ -285,8 +224,6 @@ function LegalModal({ title, content, onClose }: { title: string; content: strin
 }
 
 export default function Footer() {
-  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' })
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
   const [modal, setModal] = useState<null | 'terms' | 'privacy' | 'accessibility'>(null)
   const watermarkRef = useRef<HTMLDivElement>(null)
   const footerRef = useRef<HTMLElement>(null)
@@ -305,26 +242,6 @@ export default function Footer() {
     onScroll()
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setStatus('sending')
-    try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          access_key: WEB3FORMS_KEY,
-          subject: 'פנייה חדשה מה-Footer',
-          from_name: form.name,
-          ...form,
-        }),
-      })
-      const data = await res.json()
-      setStatus(data.success ? 'sent' : 'error')
-      if (data.success) setForm({ name: '', email: '', phone: '', message: '' })
-    } catch { setStatus('error') }
-  }
 
   return (
     <>
@@ -354,167 +271,84 @@ export default function Footer() {
 
       <div style={{ position: 'relative', zIndex: 1, maxWidth: 1320, margin: '0 auto', padding: '0 20px' }}>
 
-        {/* Top */}
+        {/* Top — CTA */}
         <div style={{
-          padding: '60px 0 48px',
-          borderBottom: '1px solid rgba(255,255,255,0.15)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 40,
+          padding: '72px 0 60px',
+          borderBottom: '1px solid rgba(255,255,255,0.2)',
+          textAlign: 'center',
         }}>
-          {/* Heading */}
-          <div style={{ textAlign: 'center' }}>
-            <span style={{ display: 'block', fontSize: 16, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: 20, fontFamily: 'var(--f-latin)' }}>
-              ✦ מוכנים להתחיל?
-            </span>
-            <h2 style={{
-              fontFamily: 'var(--f-hebrew)', fontWeight: 900,
-              fontSize: 'clamp(36px,8vw,90px)',
-              lineHeight: 1.05, letterSpacing: '-0.03em',
-              color: '#fff', margin: '0 0 16px',
-            }}>
-              בואו נהפוך<br />
-              <em style={{ fontFamily: 'var(--f-serif)', fontWeight: 400, fontStyle: 'italic', color: 'rgba(255,255,255,0.85)' }}>רעיון</em>
-              {' '}לאתר
-            </h2>
-            <p style={{ fontSize: 19, color: 'rgba(255,255,255,0.7)', lineHeight: 1.65, maxWidth: 380, margin: '0 auto' }}>
-              הפרוייקט החדש שלכם במרחק שיחה אחת — תשאירו הודעה ואחזור אליכם בהקדם.
-            </p>
-          </div>
-
-          {/* Right — full form */}
-          <div>
-            {status === 'sent' ? (
-              <div style={{ padding: 60, textAlign: 'center', background: 'rgba(0,0,0,0.15)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 'var(--r-lg)' }}>
-                <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.4)', display: 'grid', placeItems: 'center', margin: '0 auto 20px' }}>
-                  <svg width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={2}><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
-                <p style={{ fontWeight: 700, fontSize: 20, color: '#fff', marginBottom: 8 }}>ההודעה נשלחה!</p>
-                <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 16 }}>אחזור אליכם בהקדם.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14, padding: '28px 24px', background: 'rgba(0,0,0,0.18)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: 'var(--r-lg)', backdropFilter: 'blur(8px)' }}>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 14 }}>
-                  {[
-                    { name: 'name', label: 'שם', type: 'text', placeholder: 'ישראל ישראלי' },
-                    { name: 'email', label: 'אימייל', type: 'email', placeholder: 'hello@example.com' },
-                  ].map(f => (
-                    <label key={f.name} style={{ display: 'flex', flexDirection: 'column', gap: 7, fontSize: 16, fontWeight: 600, letterSpacing: '0.06em', color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', fontFamily: 'var(--f-latin)' }}>
-                      {f.label}
-                      <input
-                        type={f.type} placeholder={f.placeholder} required
-                        value={form[f.name as 'name' | 'email']}
-                        onChange={e => setForm(p => ({ ...p, [f.name]: e.target.value }))}
-                        style={{ padding: '13px 16px', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 10, background: 'rgba(255,255,255,0.1)', fontFamily: 'var(--f-hebrew)', fontSize: 16, color: '#fff', outline: 'none', transition: 'border-color .2s, background .2s' }}
-                        onFocus={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.6)'; e.currentTarget.style.background = 'rgba(255,255,255,0.15)' }}
-                        onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)' }}
-                      />
-                    </label>
-                  ))}
-                </div>
-
-                <label style={{ display: 'flex', flexDirection: 'column', gap: 7, fontSize: 16, fontWeight: 600, letterSpacing: '0.06em', color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', fontFamily: 'var(--f-latin)' }}>
-                  טלפון
-                  <input
-                    type="tel" placeholder="050-000-0000" required
-                    value={form.phone}
-                    onChange={e => setForm(p => ({ ...p, phone: e.target.value }))}
-                    style={{ padding: '13px 16px', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 10, background: 'rgba(255,255,255,0.1)', fontFamily: 'var(--f-hebrew)', fontSize: 16, color: '#fff', outline: 'none', transition: 'border-color .2s, background .2s' }}
-                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.6)'; e.currentTarget.style.background = 'rgba(255,255,255,0.15)' }}
-                    onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)' }}
-                  />
-                </label>
-
-                <label style={{ display: 'flex', flexDirection: 'column', gap: 7, fontSize: 16, fontWeight: 600, letterSpacing: '0.06em', color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', fontFamily: 'var(--f-latin)' }}>
-                  הודעה
-                  <textarea
-                    rows={4} placeholder="ספר/י לי על הפרויקט..."
-                    value={form.message}
-                    onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
-                    style={{ padding: '13px 16px', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 10, background: 'rgba(255,255,255,0.1)', fontFamily: 'var(--f-hebrew)', fontSize: 16, color: '#fff', resize: 'vertical', outline: 'none', transition: 'border-color .2s, background .2s' }}
-                    onFocus={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.6)'; e.currentTarget.style.background = 'rgba(255,255,255,0.15)' }}
-                    onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)' }}
-                  />
-                </label>
-
-                {status === 'error' && (
-                  <p style={{ color: 'rgba(255,200,185,1)', fontSize: 16 }}>משהו השתבש. נסה שוב.</p>
-                )}
-
-                <button type="submit" disabled={status === 'sending'}
-                  style={{
-                    width: '100%', padding: '17px 20px',
-                    background: '#fff', color: 'var(--accent)',
-                    border: 'none', borderRadius: 'var(--r-pill)',
-                    fontSize: 16, fontWeight: 700, fontFamily: 'var(--f-hebrew)',
-                    cursor: status === 'sending' ? 'wait' : 'pointer',
-                    opacity: status === 'sending' ? 0.7 : 1,
-                    transition: 'opacity .2s, transform .15s',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                  }}
-                  onMouseEnter={e => { if (status !== 'sending') e.currentTarget.style.transform = 'translateY(-1px)' }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = '' }}
-                >
-                  <span>{status === 'sending' ? 'שולח...' : 'שלח הודעה'}</span>
-                  <svg viewBox="0 0 24 24" width={18} height={18} fill="none" stroke="currentColor" strokeWidth={2}><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
-                </button>
-              </form>
-            )}
-          </div>
+          <span style={{ display: 'block', fontSize: 16, letterSpacing: '0.18em', textTransform: 'uppercase', color: onAccentDark, marginBottom: 20, fontFamily: 'var(--f-latin)', fontWeight: 600 }}>
+            ✦ מוכנים להתחיל?
+          </span>
+          <h2 style={{
+            fontFamily: 'var(--f-hebrew)', fontWeight: 900,
+            fontSize: 'clamp(36px,8vw,90px)',
+            lineHeight: 1.05, letterSpacing: '-0.03em',
+            color: '#fff', margin: '0 0 16px',
+          }}>
+            בואו נהפוך<br />
+            <em style={{ fontFamily: 'var(--f-serif)', fontWeight: 400, fontStyle: 'italic', color: 'rgba(255,255,255,0.9)' }}>רעיון</em>
+            {' '}לאתר
+          </h2>
+          <p style={{ fontSize: 19, fontWeight: 600, color: '#fff', lineHeight: 1.65, maxWidth: 420, margin: '0 auto 32px' }}>
+            הפרוייקט החדש שלכם במרחק שיחה אחת — תשאירו הודעה ואחזור אליכם בהקדם.
+          </p>
+          <a href="#contact" style={{
+            display: 'inline-flex', alignItems: 'center', gap: 10,
+            padding: '18px 38px',
+            background: '#fff', color: 'var(--accent)',
+            borderRadius: 'var(--r-pill)',
+            fontSize: 18, fontWeight: 700, textDecoration: 'none',
+            boxShadow: '0 12px 32px rgba(0,0,0,0.18)',
+            transition: 'transform .2s cubic-bezier(.16,1,.3,1), box-shadow .2s',
+          }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 18px 40px rgba(0,0,0,0.24)' }}
+            onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.18)' }}
+          >
+            <span>להשארת הודעה</span>
+            <svg viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="currentColor" strokeWidth={2.5} aria-hidden><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+          </a>
         </div>
 
         {/* Mid — links */}
         <div style={{
           display: 'flex', justifyContent: 'center', gap: 40, flexWrap: 'wrap',
           padding: '36px 0',
-          borderBottom: '1px solid rgba(255,255,255,0.1)',
+          borderBottom: '1px solid rgba(255,255,255,0.15)',
         }}>
           {/* קשר */}
           <div style={{ textAlign: 'center' }}>
-            <p style={{ fontFamily: 'var(--f-latin)', fontSize: 15, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: 16 }}>קשר</p>
+            <p style={{ fontFamily: 'var(--f-latin)', fontSize: 15, letterSpacing: '0.14em', textTransform: 'uppercase', color: onAccentDark, fontWeight: 600, marginBottom: 16 }}>קשר</p>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
               <li>
                 <a href="https://instagram.com/gulisstudio" target="_blank" rel="noopener noreferrer"
-                  style={{ fontSize: 17, color: 'rgba(255,255,255,0.75)', textDecoration: 'none', transition: 'color .2s' }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
+                  style={{ fontSize: 17, fontWeight: 600, color: '#fff', textDecoration: 'none', transition: 'opacity .2s' }}
+                  onMouseEnter={e => (e.currentTarget.style.opacity = '0.75')}
+                  onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
                 >Instagram</a>
               </li>
               <li>
-                <a href="https://wa.me/972501234567" target="_blank" rel="noopener noreferrer"
-                  style={{ fontSize: 17, color: 'rgba(255,255,255,0.75)', textDecoration: 'none', transition: 'color .2s' }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
-                >WhatsApp</a>
+                <button onClick={openWhatsApp}
+                  style={{ fontSize: 17, fontWeight: 600, color: '#fff', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'var(--f-hebrew)', transition: 'opacity .2s' }}
+                  onMouseEnter={e => (e.currentTarget.style.opacity = '0.75')}
+                  onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+                >WhatsApp</button>
               </li>
             </ul>
           </div>
           {/* משפטי */}
           <div style={{ textAlign: 'center' }}>
-            <p style={{ fontFamily: 'var(--f-latin)', fontSize: 15, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: 16 }}>משפטי</p>
+            <p style={{ fontFamily: 'var(--f-latin)', fontSize: 15, letterSpacing: '0.14em', textTransform: 'uppercase', color: onAccentDark, fontWeight: 600, marginBottom: 16 }}>משפטי</p>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
-              <li>
-                <button onClick={() => setModal('terms')}
-                  style={{ fontSize: 17, color: 'rgba(255,255,255,0.75)', background: 'none', border: 'none', cursor: 'pointer', transition: 'color .2s', fontFamily: 'var(--f-hebrew)', padding: 0 }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
-                >תנאי שימוש</button>
-              </li>
-              <li>
-                <button onClick={() => setModal('privacy')}
-                  style={{ fontSize: 17, color: 'rgba(255,255,255,0.75)', background: 'none', border: 'none', cursor: 'pointer', transition: 'color .2s', fontFamily: 'var(--f-hebrew)', padding: 0 }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
-                >מדיניות פרטיות</button>
-              </li>
-              <li>
-                <button onClick={() => setModal('accessibility')}
-                  style={{ fontSize: 17, color: 'rgba(255,255,255,0.75)', background: 'none', border: 'none', cursor: 'pointer', transition: 'color .2s', fontFamily: 'var(--f-hebrew)', padding: 0 }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.7)')}
-                >הצהרת נגישות</button>
-              </li>
+              {([['terms', 'תנאי שימוש'], ['privacy', 'מדיניות פרטיות'], ['accessibility', 'הצהרת נגישות']] as const).map(([key, label]) => (
+                <li key={key}>
+                  <button onClick={() => setModal(key)}
+                    style={{ fontSize: 17, fontWeight: 600, color: '#fff', background: 'none', border: 'none', cursor: 'pointer', transition: 'opacity .2s', fontFamily: 'var(--f-hebrew)', padding: 0 }}
+                    onMouseEnter={e => (e.currentTarget.style.opacity = '0.75')}
+                    onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+                  >{label}</button>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -527,9 +361,9 @@ export default function Footer() {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ fontFamily: 'var(--f-latin)', fontWeight: 900, letterSpacing: '0.2em', fontSize: 16, color: '#fff' }}>GULISTUDIO</span>
-            <span style={{ fontSize: 15, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.05em' }}>Web Architecture</span>
+            <span style={{ fontSize: 15, fontWeight: 500, color: onAccentDark, letterSpacing: '0.05em' }}>Web Architecture</span>
           </div>
-          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.4)', margin: 0 }}>
+          <p style={{ fontSize: 15, fontWeight: 500, color: onAccentDark, margin: 0 }}>
             © {new Date().getFullYear()} GULISTUDIO · Built with care in Israel
           </p>
         </div>
@@ -543,7 +377,7 @@ export default function Footer() {
         fontSize: 'clamp(60px,10vw,140px)',
         letterSpacing: '0.15em', lineHeight: 1,
         color: 'transparent',
-        WebkitTextStroke: '1px rgba(255,255,255,0.12)',
+        WebkitTextStroke: '1px rgba(255,255,255,0.18)',
         userSelect: 'none', pointerEvents: 'none',
         whiteSpace: 'nowrap',
         zIndex: 0,

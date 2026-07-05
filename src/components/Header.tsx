@@ -4,7 +4,7 @@ const navLinks = [
   { label: 'אודות', href: '#about' },
   { label: 'עבודות', href: '#work' },
   { label: 'תהליך', href: '#process' },
-  { label: 'צור קשר', href: '#contact' },
+  { label: 'שאלות', href: '#faq' },
 ]
 
 export default function Header() {
@@ -31,8 +31,8 @@ export default function Header() {
     top: 0, left: 0, right: 0,
     zIndex: 80,
     background: scrolled
-      ? 'rgba(246,244,239,0.95)'
-      : 'linear-gradient(to bottom, var(--bg) 60%, rgba(246,244,239,0))',
+      ? 'rgba(246,242,234,0.92)'
+      : 'linear-gradient(to bottom, var(--bg) 60%, transparent)',
     backdropFilter: scrolled ? 'blur(20px)' : 'none',
     WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
     borderBottom: scrolled ? '1px solid var(--line)' : '1px solid transparent',
@@ -75,7 +75,7 @@ export default function Header() {
         {menuOpen && (
           <div style={{
             position: 'absolute', top: '100%', left: 0, right: 0,
-            background: 'rgba(246,244,239,0.97)',
+            background: 'rgba(246,242,234,0.97)',
             backdropFilter: 'blur(20px)',
             borderBottom: '1px solid var(--line)',
             padding: '24px 24px 32px',
@@ -131,7 +131,7 @@ export default function Header() {
       <nav style={{
         display: 'flex',
         alignItems: 'center', gap: 4, padding: 6,
-        background: 'rgba(255,255,255,0.72)',
+        background: 'rgba(28,25,20,0.04)',
         backdropFilter: 'blur(14px)',
         WebkitBackdropFilter: 'blur(14px)',
         borderRadius: 'var(--r-pill)',
@@ -144,7 +144,7 @@ export default function Header() {
             fontSize: 17, fontWeight: 500, color: 'var(--ink-2)',
             transition: 'background .2s',
           }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(10,10,10,0.05)')}
+            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(28,25,20,0.06)')}
             onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
             {link.label}

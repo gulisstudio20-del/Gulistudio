@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-const WEB3FORMS_KEY = '2881ff54-8e38-43d3-af24-fbd128e3842f'
+const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY as string
 
 const serviceChips = ['אתר תדמית', 'חנות', 'מיתוג', 'UI/UX', 'אחר']
 
@@ -19,7 +19,7 @@ const inputStyle = {
   padding: '15px 18px',
   border: '1px solid var(--line-2)',
   borderRadius: 12,
-  background: '#fff',
+  background: 'var(--bg-2)',
   fontFamily: 'var(--f-hebrew)',
   fontSize: 16,
   color: 'var(--ink)',
@@ -40,6 +40,7 @@ const labelStyle: React.CSSProperties = {
 
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null)
+  const botcheckRef = useRef<HTMLInputElement>(null)
   const empty: FormState = { name: '', email: '', phone: '', service: 'אתר תדמית', message: '' }
   const [form, setForm] = useState<FormState>(empty)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
@@ -57,6 +58,8 @@ export default function Contact() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    // honeypot — בוטים ממלאים את השדה המוסתר; בני אדם לא
+    if (botcheckRef.current?.checked) return
     const errs = validate(form)
     if (Object.keys(errs).length > 0) { setFieldErrors(errs); return }
     setFieldErrors({})
@@ -98,8 +101,7 @@ export default function Contact() {
     <section id="contact" ref={sectionRef} style={{ position: 'relative', zIndex: 1, padding: '120px 36px', maxWidth: 860, margin: '0 auto' }}>
 
       <div data-reveal style={{ marginBottom: 50 }}>
-        <span className="eyebrow" style={{ marginBottom: 18, display: 'inline-block' }}>✦ GET IN TOUCH</span>
-        <h2 className="h-display" style={{ marginTop: 18 }}>
+        <h2 className="h-display">
           נבנה <em>משהו יחד</em>
         </h2>
       </div>
@@ -116,6 +118,9 @@ export default function Contact() {
         ) : (
           <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '48px 52px', background: 'var(--paper)', border: '1px solid var(--line)', borderRadius: 'var(--r-lg)', boxShadow: 'var(--shadow-sm)' }}>
 
+            {/* honeypot נגד ספאם — מוסתר מבני אדם ומקוראי מסך */}
+            <input ref={botcheckRef} type="checkbox" name="botcheck" tabIndex={-1} aria-hidden="true" style={{ position: 'absolute', width: 1, height: 1, opacity: 0, pointerEvents: 'none' }} />
+
             {/* שם + אימייל */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
               <label style={labelStyle}>
@@ -123,20 +128,24 @@ export default function Contact() {
                 <input
                   type="text" placeholder="ישראל ישראלי"
                   value={form.name} onChange={set('name')}
+                  aria-invalid={!!fieldErrors.name}
+                  aria-describedby={fieldErrors.name ? 'err-name' : undefined}
                   style={{ ...inputStyle, borderColor: fieldErrors.name ? '#b3261e' : 'var(--line-2)' }}
                   {...focusStyle(!!fieldErrors.name)}
                 />
-                {fieldErrors.name && <span style={{ color: '#b3261e', fontSize: 15, marginTop: 2 }}>{fieldErrors.name}</span>}
+                {fieldErrors.name && <span id="err-name" role="alert" style={{ color: '#b3261e', fontSize: 15, marginTop: 2 }}>{fieldErrors.name}</span>}
               </label>
               <label style={labelStyle}>
                 אימייל *
                 <input
                   type="email" placeholder="hello@example.com"
                   value={form.email} onChange={set('email')}
+                  aria-invalid={!!fieldErrors.email}
+                  aria-describedby={fieldErrors.email ? 'err-email' : undefined}
                   style={{ ...inputStyle, borderColor: fieldErrors.email ? '#b3261e' : 'var(--line-2)' }}
                   {...focusStyle(!!fieldErrors.email)}
                 />
-                {fieldErrors.email && <span style={{ color: '#b3261e', fontSize: 15, marginTop: 2 }}>{fieldErrors.email}</span>}
+                {fieldErrors.email && <span id="err-email" role="alert" style={{ color: '#b3261e', fontSize: 15, marginTop: 2 }}>{fieldErrors.email}</span>}
               </label>
             </div>
 
@@ -146,10 +155,12 @@ export default function Contact() {
               <input
                 type="tel" placeholder="050-000-0000"
                 value={form.phone} onChange={set('phone')}
+                aria-invalid={!!fieldErrors.phone}
+                aria-describedby={fieldErrors.phone ? 'err-phone' : undefined}
                 style={{ ...inputStyle, borderColor: fieldErrors.phone ? '#b3261e' : 'var(--line-2)' }}
                 {...focusStyle(!!fieldErrors.phone)}
               />
-              {fieldErrors.phone && <span style={{ color: '#b3261e', fontSize: 15, marginTop: 2 }}>{fieldErrors.phone}</span>}
+              {fieldErrors.phone && <span id="err-phone" role="alert" style={{ color: '#b3261e', fontSize: 15, marginTop: 2 }}>{fieldErrors.phone}</span>}
             </label>
 
             {/* סוג פרויקט */}
@@ -162,8 +173,8 @@ export default function Contact() {
                       padding: '10px 18px',
                       border: `1px solid ${form.service === chip ? 'var(--ink)' : 'var(--line-2)'}`,
                       borderRadius: 'var(--r-pill)', fontSize: 16,
-                      background: form.service === chip ? 'var(--ink)' : '#fff',
-                      color: form.service === chip ? '#fff' : 'var(--ink-2)',
+                      background: form.service === chip ? 'var(--ink)' : 'var(--bg-2)',
+                      color: form.service === chip ? 'var(--bg)' : 'var(--ink-2)',
                       transition: 'all .2s', cursor: 'pointer',
                     }}
                   >{chip}</button>
@@ -177,10 +188,12 @@ export default function Contact() {
               <textarea
                 rows={5} placeholder="מה מחפשים? מה חסר?"
                 value={form.message} onChange={set('message')}
+                aria-invalid={!!fieldErrors.message}
+                aria-describedby={fieldErrors.message ? 'err-message' : undefined}
                 style={{ ...inputStyle, resize: 'vertical', borderColor: fieldErrors.message ? '#b3261e' : 'var(--line-2)' }}
                 {...focusStyle(!!fieldErrors.message)}
               />
-              {fieldErrors.message && <span style={{ color: '#b3261e', fontSize: 15, marginTop: 2 }}>{fieldErrors.message}</span>}
+              {fieldErrors.message && <span id="err-message" role="alert" style={{ color: '#b3261e', fontSize: 15, marginTop: 2 }}>{fieldErrors.message}</span>}
             </label>
 
             {status === 'error' && (

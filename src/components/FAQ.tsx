@@ -24,11 +24,7 @@ export default function FAQ() {
   }, [])
 
   return (
-    <section ref={sectionRef} style={{ position: 'relative', zIndex: 1, padding: '80px 20px', maxWidth: 1320, margin: '0 auto' }}>
-
-      <div data-reveal style={{ marginBottom: 24 }}>
-        <span className="eyebrow">✦ FAQ · 06</span>
-      </div>
+    <section id="faq" ref={sectionRef} style={{ position: 'relative', zIndex: 1, padding: '80px 20px', maxWidth: 1320, margin: '0 auto' }}>
 
       <h2 data-reveal className="h-display" style={{ marginBottom: 36 }}>שאלות שכולם שואלים בדרך כלל.</h2>
 

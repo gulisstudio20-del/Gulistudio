@@ -67,7 +67,7 @@ export default function Hero() {
       style={{
         position: 'relative',
         minHeight: '100vh',
-        padding: '120px 36px 60px',
+        padding: '120px 36px 150px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -166,7 +166,7 @@ export default function Hero() {
       {/* Coords */}
       <div style={{
         position: 'absolute', bottom: 50, right: 36,
-        display: 'flex', flexDirection: 'column', gap: 4,
+        flexDirection: 'column', gap: 4,
         fontFamily: 'var(--f-latin)', fontSize: 15, letterSpacing: '0.14em',
         color: 'var(--mute)', textTransform: 'uppercase', textAlign: 'right',
       }} className="hidden md:flex">

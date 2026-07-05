@@ -34,10 +34,6 @@ export default function About() {
       {/* ── Top: light zone ── */}
       <div style={{ padding: '100px 24px 80px', maxWidth: 1200, margin: '0 auto' }}>
 
-        <div data-reveal style={{ marginBottom: 40 }}>
-          <span className="eyebrow">✦ ABOUT · 01</span>
-        </div>
-
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px,1fr))', gap: 56, alignItems: 'start' }}>
 
           {/* Left: Text */}
@@ -83,28 +79,28 @@ export default function About() {
             </a>
           </div>
 
-          {/* Right: Dark process card */}
+          {/* Right: process card */}
           <div data-reveal style={{
-            background: '#141414',
+            background: 'var(--paper)',
             borderRadius: 24,
             overflow: 'hidden',
-            border: '1px solid rgba(255,255,255,0.07)',
-            boxShadow: '0 12px 48px rgba(0,0,0,0.28)',
+            border: '1px solid var(--line)',
+            boxShadow: 'var(--shadow-md)',
           }}>
             {/* Card header */}
             <div style={{
               padding: '28px 32px 24px',
-              borderBottom: '1px solid rgba(255,255,255,0.07)',
+              borderBottom: '1px solid var(--line)',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
               <span style={{
                 fontFamily: 'var(--f-latin)', fontSize: 12,
                 letterSpacing: '0.14em', textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.3)',
+                color: 'var(--mute-2)',
               }}>THE PROCESS</span>
               <span style={{
                 fontFamily: 'var(--f-latin)', fontSize: 12,
-                color: 'rgba(255,130,60,0.7)', letterSpacing: '0.08em',
+                color: 'var(--accent)', letterSpacing: '0.08em',
               }}>✦ GULISTUDIO</span>
             </div>
 
@@ -119,22 +115,22 @@ export default function About() {
                     gap: 16,
                     alignItems: 'center',
                     padding: '20px 32px',
-                    borderBottom: i < process.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                    borderBottom: i < process.length - 1 ? '1px solid var(--line)' : 'none',
                   }}
                 >
                   <span style={{
                     fontFamily: 'var(--f-latin)', fontWeight: 900,
                     fontSize: 13, letterSpacing: '0.08em',
-                    color: 'rgba(255,130,60,0.65)',
+                    color: 'var(--accent)',
                   }}>{step.n}</span>
                   <div>
                     <strong style={{
                       display: 'block', fontSize: 18, fontWeight: 700,
-                      color: '#fff', marginBottom: 3, letterSpacing: '-0.01em',
+                      color: 'var(--ink)', marginBottom: 3, letterSpacing: '-0.01em',
                       fontFamily: 'var(--f-hebrew)',
                     }}>{step.title}</strong>
                     <span style={{
-                      fontSize: 14, color: 'rgba(255,255,255,0.38)',
+                      fontSize: 14, color: 'var(--mute)',
                       lineHeight: 1.55,
                     }}>{step.desc}</span>
                   </div>
@@ -145,10 +141,10 @@ export default function About() {
             {/* Card footer */}
             <div style={{
               padding: '20px 32px',
-              borderTop: '1px solid rgba(255,255,255,0.07)',
+              borderTop: '1px solid var(--line)',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
-              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--f-latin)', letterSpacing: '0.04em' }}>
+              <span style={{ fontSize: 13, color: 'var(--mute)', fontFamily: 'var(--f-latin)', letterSpacing: '0.04em' }}>
                 מהרעיון ועד ההשקה
               </span>
               <a href="#contact" style={{
@@ -171,31 +167,40 @@ export default function About() {
         </div>
       </div>
 
-      {/* ── Dark band: statement ── */}
+      {/* ── Accent band: statement ── */}
       <div data-reveal style={{
-        background: '#141414',
+        background: 'var(--accent)',
         padding: '72px 24px',
         textAlign: 'center',
       }}>
-        <div style={{ maxWidth: 800, margin: '0 auto' }}>
+        <div style={{ margin: '0 auto' }}>
           <span style={{
             display: 'block', fontFamily: 'var(--f-latin)',
-            fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase',
-            color: 'rgba(255,130,60,0.6)', marginBottom: 24,
+            fontSize: 12, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase',
+            color: 'rgba(46,18,6,0.9)', marginBottom: 24,
           }}>✦ DESIGN PHILOSOPHY</span>
           <p style={{
             margin: 0,
             fontFamily: 'var(--f-hebrew)',
-            fontSize: 'clamp(22px,2.8vw,36px)',
+            fontSize: 'clamp(13px,3vw,36px)',
             fontWeight: 700, lineHeight: 1.5,
             color: '#fff',
             letterSpacing: '-0.01em',
+            whiteSpace: 'nowrap',
           }}>
-            אני לא מעצבת אתרים — אני בונה את הרושם הראשון <span style={{ whiteSpace: 'nowrap' }}>שלך.</span>
-            <br />
-            <span style={{ color: 'rgba(255,255,255,0.38)', fontWeight: 400, fontSize: '0.78em' }}>
-              כי בעולם שמלא בסתם, טוב לא מספיק.
-            </span>
+            אני לא מעצבת אתרים — אני בונה את{' '}
+            <em style={{ fontStyle: 'normal', fontWeight: 900, color: 'rgba(46,18,6,0.95)' }}>
+              הרושם הראשון שלך.
+            </em>
+          </p>
+          <p style={{
+            margin: '14px 0 0',
+            fontFamily: 'var(--f-hebrew)',
+            fontSize: 'clamp(16px,2vw,26px)',
+            fontWeight: 500, lineHeight: 1.5,
+            color: 'rgba(46,18,6,0.9)',
+          }}>
+            כי בעולם שמלא בסתם, טוב לא מספיק.
           </p>
         </div>
       </div>
