@@ -2,6 +2,26 @@ import { useEffect, useRef, useState } from 'react'
 
 const projects = [
   {
+    id: 'p7', num: '07', year: '2026',
+    title: "Jonny's Matcha",
+    tagLabel: 'Web Design · Branding',
+    url: 'https://jonnys-matcha.vercel.app',
+    img: '/images/portfolio-6.png',
+    desc: 'אתר תדמית למאצ׳ה סרמוניאלית מיפן. אווירה כהה ואינטימית עם נגיעת ירוק תוססת שמדברת בשם המוצר.',
+    tags: ['web', 'brand'],
+    accent: '#8FBF3F',
+  },
+  {
+    id: 'p6', num: '06', year: '2026',
+    title: 'Jeep Tours',
+    tagLabel: 'Web Design · Tourism',
+    url: 'https://jeep-navy.vercel.app',
+    img: '/images/portfolio-7.png',
+    desc: 'אתר לעסק טיולי ג׳יפים בישראל. תמונת שטח דרמטית ו-CTA ברור שמניע ליצירת קשר.',
+    tags: ['web'],
+    accent: '#C1451C',
+  },
+  {
     id: 'p5', num: '05', year: '2026',
     title: 'Kaizen',
     tagLabel: 'Web Design · Restaurant',
